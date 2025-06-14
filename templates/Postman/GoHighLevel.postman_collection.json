@@ -1,0 +1,1912 @@
+{
+	"info": {
+		"_postman_id": "db52909d-6fe3-4235-bab9-20f435d1ccf4",
+		"name": "GoHighLevel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34498841"
+	},
+	"item": [
+		{
+			"name": "Businesses",
+			"item": [
+				{
+					"name": "Get Businesses by Location",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "locationId",
+								"value": "YYXLV6WpBo7IkhlFP97b",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/businesses/YYXLV6WpBo7IkhlFP97b"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Business",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Microsoft\",\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"phone\": \"+18832327657\",\r\n  \"email\": \"john@deo.com\",\r\n  \"website\": \"www.xyz.com\",\r\n  \"address\": \"street adress\",\r\n  \"city\": \"new york\",\r\n  \"postalCode\": \"12312312\",\r\n  \"state\": \"new york\",\r\n  \"country\": \"us\",\r\n  \"description\": \"business description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/businesses/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Business",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/businesses/684c20092986e32f0aa1c3ff"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Business",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Apple\",\r\n        \"city\": \"new york\",\r\n        \"website\": \"www.xyz.com\",\r\n        \"state\": \"new york\",\r\n        \"address\": \"street adress\",\r\n        \"postalCode\": \"12312312\",\r\n        \"country\": \"us\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/businesses/684c20092986e32f0aa1c3ff"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Business",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/businesses/684c20092986e32f0aa1c3ff"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calendars",
+			"item": [
+				{
+					"name": "Calendar Groups",
+					"item": [
+						{
+							"name": "Get Groups",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://services.leadconnectorhq.com/calendars/groups?locationId=YYXLV6WpBo7IkhlFP97b",
+									"protocol": "https",
+									"host": [
+										"services",
+										"leadconnectorhq",
+										"com"
+									],
+									"path": [
+										"calendars",
+										"groups"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": "YYXLV6WpBo7IkhlFP97b"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Calendar Group",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"name\": \"group a\",\r\n  \"description\": \"group description\",\r\n  \"slug\": \"15-mins\",\r\n  \"isActive\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/groups"
+							},
+							"response": []
+						},
+						{
+							"name": "Validate group slug",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"slug\": \"15-mins\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/groups/validate-slug"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Group",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"group\",\r\n  \"description\": \"group description\",\r\n  \"slug\": \"15-mins\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/groups/WLHWBEuumjkMWQ8pAOpE"
+							},
+							"response": []
+						},
+						{
+							"name": "Disable Group",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"isActive\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/groups/WLHWBEuumjkMWQ8pAOpE/status"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Group",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/groups/WLHWBEuumjkMWQ8pAOpE"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Calendar Events",
+					"item": [
+						{
+							"name": "Get Calendar Events",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://services.leadconnectorhq.com/calendars/events?startTime=1718304000000&endTime=1718908800000&locationId=YYXLV6WpBo7IkhlFP97b&userId=CVokAlI8fgw4WYWoCtQz",
+									"protocol": "https",
+									"host": [
+										"services",
+										"leadconnectorhq",
+										"com"
+									],
+									"path": [
+										"calendars",
+										"events"
+									],
+									"query": [
+										{
+											"key": "startTime",
+											"value": "1718304000000"
+										},
+										{
+											"key": "endTime",
+											"value": "1718908800000"
+										},
+										{
+											"key": "locationId",
+											"value": "YYXLV6WpBo7IkhlFP97b"
+										},
+										{
+											"key": "userId",
+											"value": "CVokAlI8fgw4WYWoCtQz"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Blocked Slots",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://services.leadconnectorhq.com/calendars/blocked-slots?startTime=1718304000000&endTime=1718908800000&locationId=YYXLV6WpBo7IkhlFP97b&userId=CVokAlI8fgw4WYWoCtQz",
+									"protocol": "https",
+									"host": [
+										"services",
+										"leadconnectorhq",
+										"com"
+									],
+									"path": [
+										"calendars",
+										"blocked-slots"
+									],
+									"query": [
+										{
+											"key": "startTime",
+											"value": "1718304000000"
+										},
+										{
+											"key": "endTime",
+											"value": "1718908800000"
+										},
+										{
+											"key": "locationId",
+											"value": "YYXLV6WpBo7IkhlFP97b"
+										},
+										{
+											"key": "userId",
+											"value": "CVokAlI8fgw4WYWoCtQz"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Appointment",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Test Event\",\r\n  \"meetingLocationType\": \"custom\",\r\n  \"meetingLocationId\": \"default\",\r\n  \"overrideLocationConfig\": true,\r\n  \"appointmentStatus\": \"new\",\r\n  \"assignedUserId\": \"0007BWpSzSwfiuSl0tR2\",\r\n  \"address\": \"Zoom\",\r\n  \"ignoreDateRange\": false,\r\n  \"toNotify\": false,\r\n  \"ignoreFreeSlotValidation\": true,\r\n  \"rrule\": \"RRULE:FREQ=DAILY;INTERVAL=1;COUNT=5\",\r\n  \"calendarId\": \"cAAqpUfqiKt6IxG3goMT\",\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"contactId\": \"0007BWpSzSwfiuSl0tR2\",\r\n  \"startTime\": \"2021-06-23T03:30:00+05:30\",\r\n  \"endTime\": \"2021-06-23T04:30:00+05:30\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/events/appointments"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Appointment",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/events/appointments/0007BWpSzSwfiuSl0tR2"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Appointment",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Test Event\",\r\n  \"meetingLocationType\": \"custom\",\r\n  \"meetingLocationId\": \"default\",\r\n  \"overrideLocationConfig\": true,\r\n  \"appointmentStatus\": \"new\",\r\n  \"assignedUserId\": \"0007BWpSzSwfiuSl0tR2\",\r\n  \"address\": \"Zoom\",\r\n  \"ignoreDateRange\": false,\r\n  \"toNotify\": false,\r\n  \"ignoreFreeSlotValidation\": true,\r\n  \"rrule\": \"RRULE:FREQ=DAILY;INTERVAL=1;COUNT=5\",\r\n  \"calendarId\": \"CVokAlI8fgw4WYWoCtQz\",\r\n  \"startTime\": \"2021-06-23T03:30:00+05:30\",\r\n  \"endTime\": \"2021-06-23T04:30:00+05:30\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/events/appointments/0007BWpSzSwfiuSl0tR2"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Event",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/events/0007BWpSzSwfiuSl0tR2"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Appointment Notes",
+					"item": [
+						{
+							"name": "Get Notes",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/appointments/0007BWpSzSwfiuSl0tR2/notes"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Note",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": \"GCs5KuzPqTls7vWclkEV\",\r\n  \"body\": \"test\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/appointments/0007BWpSzSwfiuSl0tR2/notes"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": \"GCs5KuzPqTls7vWclkEV\",\r\n  \"body\": \"lorem ipsum\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/appointments/0007BWpSzSwfiuSl0tR2/notes/GCs5KuzPqTls7vWclkFT"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/appointments/0007BWpSzSwfiuSl0tR2/notes/GCs5KuzPqTls7vWclkFT"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Calendar Resources: Rooms& Equipment",
+					"item": [
+						{
+							"name": "Get Calendar Resource",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/resources/rooms/cAAqpUfqiKt6IxG3goMT"
+							},
+							"response": []
+						},
+						{
+							"name": "List Calendar Resources",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://services.leadconnectorhq.com/calendars/resources/rooms?locationId=YYXLV6WpBo7IkhlFP97b&limit=10&skip=0\n",
+									"protocol": "https",
+									"host": [
+										"services",
+										"leadconnectorhq",
+										"com"
+									],
+									"path": [
+										"calendars",
+										"resources",
+										"rooms"
+									],
+									"query": [
+										{
+											"key": "locationId",
+											"value": "YYXLV6WpBo7IkhlFP97b"
+										},
+										{
+											"key": "limit",
+											"value": "10"
+										},
+										{
+											"key": "skip",
+											"value": "0\n"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Calendar Resource",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"name\": \"string\",\r\n  \"description\": \"string\",\r\n  \"quantity\": 0,\r\n  \"outOfService\": 0,\r\n  \"capacity\": 0,\r\n  \"calendarIds\": [\r\n    \"string\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/resources/rooms"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Calendar Resource",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"name\": \"string\",\r\n  \"description\": \"string\",\r\n  \"quantity\": 0,\r\n  \"outOfService\": 0,\r\n  \"capacity\": 0,\r\n  \"calendarIds\": [\r\n    \"string\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/calendars/resources/rooms/cAAqpUfqiKt6IxG3goMT"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Calendar Resource",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/calendars/resources/rooms/cAAqpUfqiKt6IxG3goMT"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Calendar",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/calendars/cAAqpUfqiKt6IxG3goMT"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Calendars",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"locationId\": \"YYXLV6WpBo7IkhlFP97b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/calendars/"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Free Slots",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://services.leadconnectorhq.com/calendars/cAAqpUfqiKt6IxG3goMT/free-slots?startDate=1718304000000&endDate=1718908800000\n",
+							"protocol": "https",
+							"host": [
+								"services",
+								"leadconnectorhq",
+								"com"
+							],
+							"path": [
+								"calendars",
+								"cAAqpUfqiKt6IxG3goMT",
+								"free-slots"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "1718304000000"
+								},
+								{
+									"key": "endDate",
+									"value": "1718908800000\n"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Calendar",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"notifications\": [\r\n    {\r\n      \"type\": \"email\",\r\n      \"shouldSendToContact\": true,\r\n      \"shouldSendToGuest\": true,\r\n      \"shouldSendToUser\": true,\r\n      \"shouldSendToSelectedUsers\": true,\r\n      \"selectedUsers\": \"user1@testemail.com,user2@testemail.com\"\r\n    }\r\n  ],\r\n  \"groupId\": \"BqTwX8QFwXzpegMve9EQ\",\r\n  \"teamMembers\": [\r\n    {\r\n      \"userId\": \"ocQHyuzHvysMo5N5VsXc\",\r\n      \"priority\": 0.5,\r\n      \"isPrimary\": true,\r\n      \"locationConfigurations\": [\r\n        {\r\n          \"kind\": \"custom\",\r\n          \"location\": \"+14455550132\"\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"eventType\": \"RoundRobin_OptimizeForAvailability\",\r\n  \"name\": \"test calendar\",\r\n  \"description\": \"this is used for testing\",\r\n  \"slug\": \"test1\",\r\n  \"widgetSlug\": \"test1\",\r\n  \"widgetType\": \"classic\",\r\n  \"eventTitle\": \"string\",\r\n  \"eventColor\": \"#039be5\",\r\n  \"locationConfigurations\": [\r\n    {\r\n      \"kind\": \"custom\",\r\n      \"location\": \"+14455550132\"\r\n    }\r\n  ],\r\n  \"slotDuration\": 30,\r\n  \"slotDurationUnit\": \"mins\",\r\n  \"preBufferUnit\": \"mins\",\r\n  \"slotInterval\": 30,\r\n  \"slotIntervalUnit\": \"mins\",\r\n  \"slotBuffer\": 0,\r\n  \"preBuffer\": 0,\r\n  \"appoinmentPerSlot\": 0,\r\n  \"appoinmentPerDay\": 0,\r\n  \"allowBookingAfter\": 0,\r\n  \"allowBookingAfterUnit\": \"hours\",\r\n  \"allowBookingFor\": 0,\r\n  \"allowBookingForUnit\": \"days\",\r\n  \"openHours\": [\r\n    {\r\n      \"daysOfTheWeek\": [\r\n        0\r\n      ],\r\n      \"hours\": [\r\n        {\r\n          \"openHour\": 0,\r\n          \"openMinute\": 0,\r\n          \"closeHour\": 0,\r\n          \"closeMinute\": 0\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"enableRecurring\": false,\r\n  \"recurring\": {\r\n    \"freq\": \"DAILY\",\r\n    \"count\": 24,\r\n    \"bookingOption\": \"skip\",\r\n    \"bookingOverlapDefaultStatus\": \"confirmed\"\r\n  },\r\n  \"formId\": \"string\",\r\n  \"stickyContact\": true,\r\n  \"isLivePaymentMode\": true,\r\n  \"autoConfirm\": true,\r\n  \"shouldSendAlertEmailsToAssignedMember\": true,\r\n  \"alertEmail\": \"string\",\r\n  \"googleInvitationEmails\": true,\r\n  \"allowReschedule\": true,\r\n  \"allowCancellation\": true,\r\n  \"shouldAssignContactToTeamMember\": true,\r\n  \"shouldSkipAssigningContactForExisting\": true,\r\n  \"notes\": \"string\",\r\n  \"pixelId\": \"string\",\r\n  \"formSubmitType\": \"ThankYouMessage\",\r\n  \"formSubmitRedirectURL\": \"string\",\r\n  \"formSubmitThanksMessage\": \"string\",\r\n  \"availabilityType\": 0,\r\n  \"availabilities\": [\r\n    {\r\n      \"date\": \"2023-09-24T00:00:00.000Z\",\r\n      \"hours\": [\r\n        {\r\n          \"openHour\": 0,\r\n          \"openMinute\": 0,\r\n          \"closeHour\": 0,\r\n          \"closeMinute\": 0\r\n        }\r\n      ],\r\n      \"deleted\": false,\r\n      \"id\": \"string\"\r\n    }\r\n  ],\r\n  \"guestType\": \"count_only\",\r\n  \"consentLabel\": \"string\",\r\n  \"calendarCoverImage\": \"string\",\r\n  \"lookBusyConfig\": {\r\n    \"enabled\": true,\r\n    \"LookBusyPercentage\": 0\r\n  },\r\n  \"isActive\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/calendars/cAAqpUfqiKt6IxG3goMT"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Calendar",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"isActive\": true,\r\n  \"notifications\": [\r\n    {\r\n      \"type\": \"email\",\r\n      \"shouldSendToContact\": true,\r\n      \"shouldSendToGuest\": true,\r\n      \"shouldSendToUser\": true,\r\n      \"shouldSendToSelectedUsers\": true,\r\n      \"selectedUsers\": \"user1@testemail.com,user2@testemail.com\"\r\n    }\r\n  ],\r\n  \"locationId\": \"ocQHyuzHvysMo5N5VsXc\",\r\n  \"groupId\": \"BqTwX8QFwXzpegMve9EQ\",\r\n  \"teamMembers\": [\r\n    {\r\n      \"userId\": \"ocQHyuzHvysMo5N5VsXc\",\r\n      \"priority\": 0.5,\r\n      \"isPrimary\": true,\r\n      \"locationConfigurations\": [\r\n        {\r\n          \"kind\": \"custom\",\r\n          \"location\": \"+14455550132\"\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"eventType\": \"RoundRobin_OptimizeForAvailability\",\r\n  \"name\": \"test calendar\",\r\n  \"description\": \"this is used for testing\",\r\n  \"slug\": \"test1\",\r\n  \"widgetSlug\": \"test1\",\r\n  \"calendarType\": \"round_robin\",\r\n  \"widgetType\": \"classic\",\r\n  \"eventTitle\": \"{{contact.name}}\",\r\n  \"eventColor\": \"#039be5\",\r\n  \"locationConfigurations\": [\r\n    {\r\n      \"kind\": \"custom\",\r\n      \"location\": \"+14455550132\"\r\n    }\r\n  ],\r\n  \"slotDuration\": 30,\r\n  \"slotDurationUnit\": \"mins\",\r\n  \"slotInterval\": 30,\r\n  \"slotIntervalUnit\": \"mins\",\r\n  \"slotBuffer\": 0,\r\n  \"slotBufferUnit\": \"mins\",\r\n  \"preBuffer\": 0,\r\n  \"preBufferUnit\": \"mins\",\r\n  \"appoinmentPerSlot\": 1,\r\n  \"appoinmentPerDay\": 0,\r\n  \"allowBookingAfter\": 0,\r\n  \"allowBookingAfterUnit\": \"hours\",\r\n  \"allowBookingFor\": 0,\r\n  \"allowBookingForUnit\": \"days\",\r\n  \"openHours\": [\r\n    {\r\n      \"daysOfTheWeek\": [\r\n        0\r\n      ],\r\n      \"hours\": [\r\n        {\r\n          \"openHour\": 0,\r\n          \"openMinute\": 0,\r\n          \"closeHour\": 0,\r\n          \"closeMinute\": 0\r\n        }\r\n      ]\r\n    }\r\n  ],\r\n  \"enableRecurring\": false,\r\n  \"recurring\": {\r\n    \"freq\": \"DAILY\",\r\n    \"count\": 24,\r\n    \"bookingOption\": \"skip\",\r\n    \"bookingOverlapDefaultStatus\": \"confirmed\"\r\n  },\r\n  \"formId\": \"string\",\r\n  \"stickyContact\": true,\r\n  \"isLivePaymentMode\": true,\r\n  \"autoConfirm\": true,\r\n  \"shouldSendAlertEmailsToAssignedMember\": true,\r\n  \"alertEmail\": \"string\",\r\n  \"googleInvitationEmails\": false,\r\n  \"allowReschedule\": true,\r\n  \"allowCancellation\": true,\r\n  \"shouldAssignContactToTeamMember\": true,\r\n  \"shouldSkipAssigningContactForExisting\": true,\r\n  \"notes\": \"string\",\r\n  \"pixelId\": \"string\",\r\n  \"formSubmitType\": \"ThankYouMessage\",\r\n  \"formSubmitRedirectURL\": \"string\",\r\n  \"formSubmitThanksMessage\": \"string\",\r\n  \"availabilityType\": 0,\r\n  \"availabilities\": [\r\n    {\r\n      \"date\": \"2023-09-24T00:00:00.000Z\",\r\n      \"hours\": [\r\n        {\r\n          \"openHour\": 0,\r\n          \"openMinute\": 0,\r\n          \"closeHour\": 0,\r\n          \"closeMinute\": 0\r\n        }\r\n      ],\r\n      \"deleted\": false\r\n    }\r\n  ],\r\n  \"guestType\": \"count_only\",\r\n  \"consentLabel\": \"string\",\r\n  \"calendarCoverImage\": \"https://path-to-image.com\",\r\n  \"lookBusyConfig\": {\r\n    \"enabled\": true,\r\n    \"LookBusyPercentage\": 0\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/calendars/"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Block Slot",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"calendarId\": \"CVokAlI8fgw4WYWoCtQz\",\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"startTime\": \"2021-06-23T03:30:00+05:30\",\r\n  \"endTime\": \"2021-06-23T04:30:00+05:30\",\r\n  \"title\": \"Test Event\",\r\n  \"assignedUserId\": \"CVokAlI8fgw4WYWoCtQz\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/calendars/events/block-slots"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Calendar",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/calendars/cAAqpUfqiKt6IxG3goMT"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Campaigns",
+			"item": [
+				{
+					"name": "Get Campaigns",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/campaigns/YYXLV6WpBo7IkhlFP97b"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Companies",
+			"item": [
+				{
+					"name": "Get Company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/companies/{companyId}"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "Tasks",
+					"item": [
+						{
+							"name": "Get all Tasks",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/mXNaqfQsXoeddAHBVuZu/tasks"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Task",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Flos Task\",\r\n  \"body\": \"Macher sein!\",\r\n  \"dueDate\": \"2020-10-25T11:00:00Z\",\r\n  \"completed\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/mXNaqfQsXoeddAHBVuZu/tasks"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Task From Contact",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/mXNaqfQsXoeddAHBVuZu/tasks/PGccihaimz0LaYlSSPwz"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Task",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Flos Task\",\r\n  \"body\": \"Macher sein!\",\r\n  \"dueDate\": \"2020-10-25T11:00:00Z\",\r\n  \"completed\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/mXNaqfQsXoeddAHBVuZu/tasks/PGccihaimz0LaYlSSPwz"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Tast",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/mXNaqfQsXoeddAHBVuZu/tasks/PGccihaimz0LaYlSSPwz"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Task Completed",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"completed\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/mXNaqfQsXoeddAHBVuZu/tasks/C2NsT7FRLqGayUKNtT4f/completed"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Appointments",
+					"item": [
+						{
+							"name": "Get Appointments for Contact",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/appointments"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Tags",
+					"item": [
+						{
+							"name": "Add Tags",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"tags\": [\r\n    \"Flo is Geil\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/q11wd5eE6SwEmdDMsnYx/tags"
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Tags",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"tags\": [\r\n    \"Flo is Geil\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/q11wd5eE6SwEmdDMsnYx/tags"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Notes",
+					"item": [
+						{
+							"name": "Get All Notes",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/notes"
+							},
+							"response": []
+						},
+						{
+							"name": "Create Note",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"body\": \"lorem ipsum\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/notes"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Note",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/notes/xFNaL7CBbJLNC6saioS0"
+							},
+							"response": []
+						},
+						{
+							"name": "Update Note",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"body\": \"lorem233 ipsum\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/notes/xFNaL7CBbJLNC6saioS0"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Note",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/notes/xFNaL7CBbJLNC6saioS0"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Followers",
+					"item": [
+						{
+							"name": "Add Followers",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"followers\": [\r\n    \"nam4\",\r\n    \"sfg\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/followers"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Followers",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"followers\": [\r\n    \"sx6wyHhbFdRXh302Lunr\",\r\n    \"sx6wyHhbFdRXh302Lunr\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/followers"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Campaigns",
+					"item": [
+						{
+							"name": "Add Contact to Campaign",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/campaigns/{campaignId}"
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Contact From Campaign",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/campaigns/{campaignId}"
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Contact From Every Campaign",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/campaigns/{campaignId}/removeAll"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Workflow",
+					"item": [
+						{
+							"name": "Add Contact to Workflow",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/workflow/{workflowId}"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Contact to Workflow",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX/workflow/{workflowId}"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bluk",
+					"item": [
+						{
+							"name": "Update Contacts Tags",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"contacts\": [\r\n    \"qFSqySFkVvNzOSqgGqFi\",\r\n    \"abcdef\",\r\n    \"qFSqySFkVvNzOSqgGqFi\",\r\n    \"3ualbhnV7j3n3a9r2moD\"\r\n  ],\r\n  \"tags\": [\r\n    \"tag1\",\r\n    \"tag2\"\r\n  ],\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"removeAllTags\": false\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/bulk/tags/update/{type}"
+							},
+							"response": []
+						},
+						{
+							"name": "Add/Remove Contacts From Business",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{authToken}}",
+										"type": "text"
+									},
+									{
+										"key": "Version",
+										"value": "{{APIVersion}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"ids\": [\r\n    \"IDqvFHGColiyK6jiatuz\",\r\n    \"pOC0uJ97VYOKH2m3fkMD\"\r\n  ],\r\n  \"businessId\": \"63b7ec34ea409a9a8bd2a4ff\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "https://services.leadconnectorhq.com/contacts/bulk/business"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get Contact Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/contacts/RD9PFsYCPeyS6a7R32DX"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Contact Details",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"AOIPo\",\r\n  \"lastName\": \"Doe\",\r\n  \"email\": \"Flo.doe@example.com\",\r\n  \"phone\": \"+124567890\",\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/contacts/"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Contact Details",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Flo\",\r\n    \"lastName\": \"Doe\",\r\n  \"name\": \"rosan Deo\",\r\n    \"email\": \"flo.doe@example.com\",\r\n  \"phone\": \"+124567890\",\r\n  \"address1\": \"3535 1st St N\",\r\n    \"city\": \"Dolomite\",\r\n  \"state\": \"AL\",\r\n  \"postalCode\": \"35061\",\r\n  \"website\": \"https://www.tesla.com\",\r\n  \"timezone\": \"America/Chihuahua\",\r\n  \"dnd\": true,\r\n  \"dndSettings\": {\r\n    \"Call\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\",\r\n      \"code\": \"string\"\r\n    },\r\n    \"Email\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\",\r\n      \"code\": \"string\"\r\n    },\r\n    \"SMS\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\",\r\n      \"code\": \"string\"\r\n    },\r\n    \"WhatsApp\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\",\r\n      \"code\": \"string\"\r\n    },\r\n    \"GMB\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\",\r\n      \"code\": \"string\"\r\n    },\r\n    \"FB\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\",\r\n      \"code\": \"string\"\r\n    }\r\n  },\r\n  \"inboundDndSettings\": {\r\n    \"all\": {\r\n      \"status\": \"active\",\r\n      \"message\": \"string\"\r\n    }\r\n  },\r\n  \"tags\": [\r\n    \"nisi sint commodo amet\",\r\n    \"consequat\"\r\n  ],\r\n  \"customFields\": [\r\n    {\r\n      \"id\": \"6dvNaf7VhkQ9snc5vnjJ\",\r\n      \"key\": \"my_custom_field\",\r\n      \"field_value\": \"9039160788\"\r\n    }\r\n  ],\r\n  \"source\": \"public api\",\r\n  \"country\": \"US\",\r\n  \"assignedTo\": \"y0BeYjuRIlDwsDcOHOJo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/contacts/EdFIqsFnN9ntGPHCNsgN"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n    \"pageLimit\": 50\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/contacts/search"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Contacts",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": "https://services.leadconnectorhq.com/contacts/EdFIqsFnN9ntGPHCNsgN"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Custom Fields",
+			"item": [
+				{
+					"name": "Create Custom Field",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"name\": \"Name\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/custom-fields/"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blogs",
+			"item": [
+				{
+					"name": "Create Blog Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{authToken}}",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Your blog title\",\r\n  \"locationId\": \"YYXLV6WpBo7IkhlFP97b\",\r\n  \"blogId\": \"Blog ID\",\r\n  \"imageUrl\": \"Image URl\",\r\n  \"description\": \"A short description\",\r\n  \"rawHTML\": \"<h1>Your blog content</h1>\",\r\n  \"status\": \"DRAFT\",\r\n  \"imageAltText\": \"Alt text for your blog image\",\r\n  \"categories\": [\r\n    \"9c48df2694a849b6089f9d0d3513efe\",\r\n    \"6683abde331c041f32c07aee\"\r\n  ],\r\n  \"tags\": [\r\n    \"blog\",\r\n    \"seo\"\r\n  ],\r\n  \"urlSlug\": \"any-blog-post-url\",\r\n  \"canonicalLink\": \"https://tryghl.blog/post/testing-unsplash\",\r\n  \"publishedAt\": \"2025-02-05T18:30:47.000Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "https://services.leadconnectorhq.com/blogs/posts"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "authToken",
+			"value": "Bearer pit-df626d04-ebd5-45d8-8548-d589f9d5c903",
+			"type": "string"
+		},
+		{
+			"key": "APIVersion",
+			"value": "2021-07-28",
+			"type": "string"
+		}
+	]
+}
