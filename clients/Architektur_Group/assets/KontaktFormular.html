@@ -1,0 +1,638 @@
+<div class="custom-progress-container">
+  <p class="step-label"><span id="step-number">Schritt 1</span> von 4</p>
+  <div class="progress">
+    <div id="progress-bar" class="progress-bar"></div>
+  </div>
+  <h2 id="step-heading" class="step-heading">Willkommen</h2>
+
+  <!-- Hinweistext -->
+  <p id="info-label" class="info-label">
+    *Bitte füllen Sie alle Informationen aus, damit wir Ihre Anfrage bearbeiten können.
+  </p>
+
+  <!-- Persönliche Daten -->
+  <div id="personal-form" class="form-fields">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="firstName">Vorname *</label>
+        <input type="text" id="firstName" placeholder="Geben Sie Ihren Vornamen ein" />
+      </div>
+      <div class="form-group">
+        <label for="lastName">Nachname *</label>
+        <input type="text" id="lastName" placeholder="Geben Sie Ihren Nachnamen ein" />
+      </div>
+    </div>
+    <div class="form-group full">
+      <label for="email">E-Mail-Adresse *</label>
+      <input type="email" id="email" placeholder="Geben Sie Ihre E-Mail-Adresse ein" required />
+    </div>
+    <div class="form-group full">
+      <label for="phone">Telefonnummer *</label>
+      <input type="tel" id="phone" placeholder="Geben Sie Ihre Telefonnummer ein" />
+    </div>
+  </div>
+
+  <!-- Schritt 2: Zimmerdetails -->
+  <div id="room-details" class="room-details" style="display: none;">
+    <div class="form-group full">
+      <label for="roomSelect">Raum wählen</label>
+      <select id="roomSelect">
+        <option>Bitte wählen...</option>
+        <option>Wohnzimmer</option>
+        <option>Schlafzimmer</option>
+        <option>Küche</option>
+        <option>Badezimmer</option>
+      </select>
+    </div>
+
+    <h3 class="materials-heading">Materialvorschläge</h3>
+    <div class="material-grid">
+      <div class="material-card">
+        <img src="https://media.istockphoto.com/id/1318680899/de/foto/leichter-naturholzhintergrund.jpg?s=2048x2048&w=is&k=20&c=BxLs3us-4r5dHJVGdy7fRtUBdd3TFaQXxlF91vW14zs=" alt="Holzboden" />
+        <strong>Holzboden</strong>
+        <p>Klassisch und langlebig</p>
+      </div>
+      <div class="material-card">
+        <img src="https://media.istockphoto.com/id/946593026/de/vektor/vektor-wei%C3%9Fen-modernen-abstrakten-hintergrund.jpg?s=2048x2048&w=is&k=20&c=fesT_EAHphSvTx7HBSUP8MzZkkzstcQVhxWltB36e1c=" alt="Fliese" />
+        <strong>Fliesen</strong>
+        <p>Elegant und wasserfest</p>
+      </div>
+      <div class="material-card">
+        <img src="https://media.istockphoto.com/id/2138862337/de/foto/carpet.jpg?s=2048x2048&w=is&k=20&c=p42TW4njRY436DDwTwm33PWMNlgbcsez5r6fFBi5GgE=" alt="Teppich" />
+        <strong>Teppich</strong>
+        <p>Weich und schallabsorbierend</p>
+      </div>
+      <div class="material-card">
+        <img src="https://media.istockphoto.com/id/185250199/de/foto/h%C3%B6lzerne-hintergrund.jpg?s=2048x2048&w=is&k=20&c=fm0-yurZ419FBpf-GZ_Qxgm6yZuEOkcykam9NbDXl4M=" alt="Laminat" />
+        <strong>Laminat</strong>
+        <p>Vielseitig und pflegeleicht</p>
+      </div>
+      <div class="material-card">
+        <img src="https://media.istockphoto.com/id/2155668586/de/foto/schwarze-matte-kunststoffmaterialstruktur.jpg?s=2048x2048&w=is&k=20&c=e_pF9EQ3zkKR5h2LZdX286mnGYtwVACn8ywU0gPlBeo=" alt="Vinyl" />
+        <strong>Vinyl</strong>
+        <p>Wasserfest und einfach zu reinigen</p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Schritt 3: Bilder hochladen -->
+  <div id="image-upload" class="image-upload" style="display: none;">
+    <h3 class="upload-heading">Bilder hochladen</h3>
+
+    <div id="drop-zone" class="drop-zone">
+      <p><strong>Ziehe deine Bilder hierher</strong><br />oder klicke zum Durchsuchen</p>
+      <input type="file" id="file-input" accept="image/*" multiple hidden />
+      <button type="button" id="upload-button">Hochladen</button>
+    </div>
+
+    <div class="uploaded-images">
+      <h4>Hochgeladene Bilder</h4>
+      <div id="gallery" class="gallery"></div>
+    </div>
+  </div>
+  
+  <!-- Schritt 4: Zusammenfassung -->
+<!-- Schritt 4: Zusammenfassung -->
+<div id="review-summary" class="review-summary" style="display: none;">
+  <div class="review-section">
+    <h4>Persönliche Daten</h4>
+    <ul>
+      <li><strong>Vorname:</strong> <span id="summaryFirstName"></span></li>
+      <li><strong>Nachname:</strong> <span id="summaryLastName"></span></li>
+      <li><strong>E-Mail:</strong> <span id="summaryEmail"></span></li>
+      <li><strong>Telefonnummer:</strong> <span id="summaryPhone"></span></li>
+    </ul>
+  </div>
+
+  <div class="review-section">
+    <h4>Zimmerdetails</h4>
+    <ul>
+      <li><strong>Raum:</strong> <span id="summaryRoom"></span></li>
+      <li><strong>Material:</strong> <span id="summaryMaterial"></span></li>
+    </ul>
+  </div>
+
+  <div class="review-section">
+    <h4>Hochgeladene Bilder</h4>
+    <div id="summaryGallery" class="gallery"></div>
+  </div>
+</div>
+
+<!-- Buttons am Ende des Containers -->
+<button id="start-button" class="start-button" disabled>Weiter</button>
+<button id="submit-button" class="start-button" style="display: none;">Absenden</button>
+
+
+<style>
+  .custom-progress-container {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    padding: 40px 20px;
+    margin: 0 auto;
+  }
+
+  .step-label {
+    font-size: 14px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .progress {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e4e8;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .progress-bar {
+    width: 25%;
+    height: 100%;
+    background-color: #000;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  .step-heading {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 0;
+  }
+
+  .info-label {
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .form-fields {
+    margin-bottom: 30px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .form-group.full {
+    width: 100%;
+  }
+
+  .form-group label {
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+
+  .form-group input,
+  #roomSelect {
+    padding: 10px 12px;
+    border: none;
+    background-color: #f1f3f5;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .start-button {
+    display: block;
+    margin: 30px auto 0 auto;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .start-button:hover:not(:disabled) {
+    background-color: #333;
+  }
+
+  .start-button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+
+  /* Schritt 2 */
+  .room-details {
+    margin-top: 20px;
+  }
+
+  .materials-heading {
+    margin: 30px 0 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .material-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+  }
+
+  .material-card {
+    flex: 1 1 120px;
+    min-width: 120px;
+    max-width: 150px;
+    background: #fff;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.2s ease;
+  }
+
+  .material-card:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .material-card.selected {
+    border: 2px solid #000;
+    background-color: #f0f0f0;
+  }
+
+  .material-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+
+  .material-card p {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+  }
+  
+  .image-upload {
+    margin-top: 30px;
+  }
+
+  .upload-heading {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .drop-zone {
+    border: 2px dashed #ccc;
+    padding: 40px;
+    text-align: center;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-bottom: 30px;
+  }
+
+  .drop-zone:hover {
+    background-color: #f9f9f9;
+  }
+
+  .drop-zone p {
+    margin: 0 0 15px;
+    font-size: 16px;
+  }
+
+  .drop-zone button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #eee;
+    cursor: pointer;
+  }
+
+  .uploaded-images h4 {
+    margin-bottom: 10px;
+  }
+
+  .gallery {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .gallery img {
+    width: 160px;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-summary {
+  margin-top: 30px;
+}
+
+.review-section {
+  margin-bottom: 30px;
+}
+
+.review-section h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.review-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.review-section ul li {
+  padding: 4px 0;
+  font-size: 14px;
+}
+</style>
+
+<script>
+  let currentStep = 1;
+  const maxSteps = 4;
+
+  const stepNumber = document.getElementById('step-number');
+  const progressBar = document.getElementById('progress-bar');
+  const stepHeading = document.getElementById('step-heading');
+  const startButton = document.getElementById('start-button');
+  const submitButton = document.getElementById('submit-button'); // Neuer Absende-Button
+  const infoLabel = document.getElementById('info-label');
+
+  const formFields = document.getElementById('personal-form');
+  const roomDetails = document.getElementById('room-details');
+  const imageUpload = document.getElementById('image-upload');
+  const reviewSummary = document.getElementById('review-summary');
+
+  const firstName = document.getElementById('firstName');
+  const lastName = document.getElementById('lastName');
+  const email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const gallery = document.getElementById('gallery');
+  const uploadButton = document.getElementById('upload-button');
+
+  const summaryFirstName = document.getElementById('summaryFirstName');
+  const summaryLastName = document.getElementById('summaryLastName');
+  const summaryEmail = document.getElementById('summaryEmail');
+  const summaryPhone = document.getElementById('summaryPhone');
+  const summaryRoom = document.getElementById('summaryRoom');
+  const summaryMaterial = document.getElementById('summaryMaterial');
+  const summaryGallery = document.getElementById('summaryGallery');
+
+  const materialCards = document.querySelectorAll('.material-card');
+  let selectedMaterial = null;
+
+  const headings = [
+    "Willkommen",
+    "Zimmerdetails",
+    "Bilder hochladen",
+    "Anfrage überprüfen"
+  ];
+
+  // Schritt 1 validieren
+  function validateStep1() {
+    const isValid =
+      firstName.value.trim() !== "" &&
+      lastName.value.trim() !== "" &&
+      email.value.trim() !== "" &&
+      phone.value.trim() !== "";
+    startButton.disabled = !isValid;
+  }
+
+  // Schritt 2 validieren
+  function validateStep2() {
+    startButton.disabled = !selectedMaterial;
+  }
+
+  // Initiale Validierung bei Ladezeit
+  validateStep1();
+
+  [firstName, lastName, email, phone].forEach(input => {
+    input.addEventListener("input", validateStep1);
+  });
+
+  // Materialauswahl
+  materialCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const isSelected = card.classList.contains('selected');
+      materialCards.forEach(c => c.classList.remove('selected'));
+
+      if (!isSelected) {
+        card.classList.add('selected');
+        selectedMaterial = card.querySelector('strong')?.innerText || null;
+      } else {
+        selectedMaterial = null;
+      }
+
+      if (currentStep === 2) validateStep2();
+    });
+  });
+
+  // Weiter-Button (Schritt 1–3)
+  startButton.addEventListener("click", () => {
+    if ((currentStep === 1 && startButton.disabled) || (currentStep === 2 && startButton.disabled)) {
+      return;
+    }
+
+    if (currentStep < maxSteps) {
+      currentStep++;
+      stepNumber.textContent = `Schritt ${currentStep}`;
+      progressBar.style.width = `${currentStep * 25}%`;
+      stepHeading.textContent = headings[currentStep - 1];
+
+      // Zeige/Verstecke Buttons
+      startButton.style.display = currentStep < maxSteps ? "block" : "none";
+      submitButton.style.display = currentStep === maxSteps ? "block" : "none";
+
+      // Inhalt sichtbar machen
+      formFields.style.display = currentStep === 1 ? "block" : "none";
+      roomDetails.style.display = currentStep === 2 ? "block" : "none";
+      imageUpload.style.display = currentStep === 3 ? "block" : "none";
+      reviewSummary.style.display = currentStep === 4 ? "block" : "none";
+
+      if (currentStep === 2) {
+        validateStep2();
+      } else {
+        startButton.disabled = false;
+      }
+
+      // Schritt 4 zusammenfassen
+      if (currentStep === 4) {
+        summaryFirstName.textContent = firstName.value;
+        summaryLastName.textContent = lastName.value;
+        summaryEmail.textContent = email.value;
+        summaryPhone.textContent = phone.value;
+        summaryRoom.textContent = document.getElementById('roomSelect').value;
+        summaryMaterial.textContent = selectedMaterial || "Keine Auswahl";
+
+        summaryGallery.innerHTML = "";
+        gallery.querySelectorAll("img").forEach(img => {
+          const clone = img.cloneNode();
+          summaryGallery.appendChild(clone);
+        });
+      }
+    }
+  });
+
+  // Bild Uploads
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.backgroundColor = '#f1f1f1';
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.backgroundColor = 'transparent';
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.style.backgroundColor = 'transparent';
+    handleFiles(e.dataTransfer.files);
+  });
+
+  uploadButton.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', () => {
+    handleFiles(fileInput.files);
+  });
+
+  function handleFiles(files) {
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        gallery.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+ configJson = {
+  "baseUrl": "https://marketplace.gohighlevel.com",
+  "clientId": "684738bd49eac24e868b4001-mbpi9wpo",
+  "clientSecret": "e29f60ba-aba5-49ea-a91f-30225d29563e",
+}
+
+// Authentication
+async function initiateAuth(req, res) {
+  const options = {
+    requestType: "code",
+    redirectUri: "http://localhost:3000/oauth/callback",
+    clientId: configJson.clientId,
+    scopes: [
+      "contacts.write",
+      "contacts.readonly"
+    ]
+  }
+  return res.redirect(`${configJson.baseUrl}/oauth/chooselocation?response_type=${options.requestType}&redirect_uri=${options.redirectUri}&client_id=${options.clientId}&scope=${options.scopes.join(' ')}`);
+}
+
+async function loadUserContext() {
+  try {
+    const encryptedUserData = await new Promise((resolve) => {
+      window.parent.postMessage({ message: 'REQUEST_USER_DATA' }, '*');
+
+      const messageHandler = ({ data }) => {
+        if (data.message === 'REQUEST_USER_DATA_RESPONSE') {
+          window.removeEventListener('message', messageHandler);
+          resolve(data.payload);
+        }
+      };
+
+      window.addEventListener('message', messageHandler);
+    });
+
+    const response = await fetch('https://dein-backend.de/decrypt-user-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ encryptedData: encryptedUserData })
+    });
+
+    if (!response.ok) throw new Error('Fehler beim Abrufen der Benutzerdaten');
+
+    const userData = await response.json();
+    console.log('Entschlüsselte Benutzerdaten:', userData);
+    return userData;
+  } catch (error) {
+    console.error('Fehler beim Laden des Benutzerkontexts:', error);
+    return null;
+  }
+}
+
+  // Submit an GoHighLevel
+  submitButton.addEventListener("click", () => {
+    submitToHighLevel();
+  });
+
+  async function submitToHighLevel() {
+    const token = 'DEIN_TOKEN_HIER'; // Bearer Token
+    const contactPayload = {
+      firstName: firstName.value.trim(),
+      lastName: lastName.value.trim(),
+      name: `${firstName.value.trim()} ${lastName.value.trim()}`,
+      email: email.value.trim(),
+      phone: phone.value.trim(),
+      customFields: [
+        { key: 'zimmer', field_value: document.getElementById('roomSelect').value },
+        { key: 'material', field_value: selectedMaterial }
+      ],
+      source: 'Public Form'
+    };
+
+    try {
+      const resp = await fetch('https://services.leadconnectorhq.com/contacts/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28'
+        },
+        body: JSON.stringify(contactPayload)
+      });
+
+      const data = await resp.json();
+      const contactId = data.id;
+      console.log('Kontakt-ID:', contactId);
+
+      // Bilder anhängen
+      const images = gallery.querySelectorAll('img');
+      if (images.length > 0) {
+        const formData = new FormData();
+        for (let [idx, imgEl] of images.entries()) {
+          const blob = await (await fetch(imgEl.src)).blob();
+          formData.append('files', blob, `bild${idx + 1}.jpg`);
+        }
+        formData.append('contactId', contactId);
+
+        const uploadResp = await fetch('https://services.leadconnectorhq.com/contacts/attachments', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+        if (!uploadResp.ok) throw new Error('Bild-Upload fehlgeschlagen');
+      }
+
+      alert('Kontakt erfolgreich erstellt! ✅');
+    } catch (err) {
+      console.error(err);
+      alert('Fehler beim Absenden: ' + err.message);
+    }
+  }
+</script>
