@@ -121,10 +121,17 @@
   </div>
   
   <!-- Schritt 4: Zusammenfassung -->
-<!-- Schritt 4: Zusammenfassung -->
 <div id="review-summary" class="review-summary" style="display: none;">
   <div class="review-section">
-    <h4>Persönliche Daten</h4>
+    <h4 style="display: flex; align-items: center; justify-content: space-between;">
+        Persönliche Daten
+    <div class="tooltip-container">
+      <button class="edit-button" onclick="goToStep(1)">✏️</button>
+    <span class="tooltip-text">Bearbeiten</span>
+  </div>
+
+    </h4>
+
     <ul>
       <li><strong>Vorname:</strong> <span id="summaryFirstName"></span></li>
       <li><strong>Nachname:</strong> <span id="summaryLastName"></span></li>
@@ -134,7 +141,13 @@
   </div>
 
   <div class="review-section">
-    <h4>Zimmerdetails</h4>
+    <h4 style="display: flex; align-items: center; justify-content: space-between;">
+        Zimmerdetails
+        <div class="tooltip-container">
+          <button class="edit-button" onclick="goToStep(2)">✏️</button>
+        <span class="tooltip-text">Bearbeiten</span>
+      </div>
+    </h4>
     <ul>
       <li><span id="summaryRoom"></span></li>
       <li><span id="summaryMaterial"></span></li>
@@ -142,7 +155,13 @@
   </div>
 
   <div class="review-section">
-    <h4>Hochgeladene Bilder</h4>
+    <h4 style="display: flex; align-items: center; justify-content: space-between;">
+        Hochgeladene Bilder
+      <div class="tooltip-container">
+        <button class="edit-button" onclick="goToStep(3)">✏️</button>
+        <span class="tooltip-text">Bearbeiten</span>
+      </div>
+    </h4>
     <div id="summaryGallery" class="gallery"></div>
   </div>
 </div>
@@ -408,6 +427,45 @@ input.touched.valid {
 
 .form-group input.touched.invalid ~ .validation-message {
   display: block;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  color: #000;
+}
+.edit-button:hover {
+  color: #555;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 130%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
 
 </style>
@@ -717,6 +775,27 @@ function updateRoomList() {
   }
     }
   });
+
+  function goToStep(step) {
+      if (step < 1 || step > maxSteps) return;
+
+      currentStep = step;
+      stepNumber.textContent = `Schritt ${currentStep}`;
+      progressBar.style.width = `${currentStep * 25}%`;
+      stepHeading.textContent = headings[currentStep - 1];
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      formFields.style.display = currentStep === 1 ? "block" : "none";
+      roomDetails.style.display = currentStep === 2 ? "block" : "none";
+      imageUpload.style.display = currentStep === 3 ? "block" : "none";
+      reviewSummary.style.display = currentStep === 4 ? "block" : "none";
+
+      startButton.style.display = currentStep < maxSteps ? "block" : "none";
+      submitButton.style.display = currentStep === maxSteps ? "block" : "none";
+
+      if (currentStep === 1) validateStep1();
+      if (currentStep === 2) validateStep2();
+  }
 
   // Bild Uploads
 
