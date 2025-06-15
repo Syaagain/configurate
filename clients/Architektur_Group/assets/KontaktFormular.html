@@ -15,37 +15,64 @@
     <div class="form-row">
       <div class="form-group">
         <label for="firstName">Vorname *</label>
-        <input type="text" id="firstName" placeholder="Geben Sie Ihren Vornamen ein" />
+        <input type="text" id="firstName" placeholder="Geben Sie Ihren Vornamen ein" required />
+        <span class="validation-message">Bitte geben Sie einen gültigen Vornamen ein.</span>
       </div>
       <div class="form-group">
         <label for="lastName">Nachname *</label>
-        <input type="text" id="lastName" placeholder="Geben Sie Ihren Nachnamen ein" />
+        <input type="text" id="lastName" placeholder="Geben Sie Ihren Nachnamen ein" required />
+        <span class="validation-message">Bitte geben Sie einen gültigen Nachnamen ein.</span>
       </div>
     </div>
     <div class="form-group full">
       <label for="email">E-Mail-Adresse *</label>
       <input type="email" id="email" placeholder="Geben Sie Ihre E-Mail-Adresse ein" required />
+      <span class="validation-message">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span>
     </div>
-    <div class="form-group full">
-      <label for="phone">Telefonnummer *</label>
-      <input type="tel" id="phone" placeholder="Geben Sie Ihre Telefonnummer ein" />
-    </div>
+   <div class="form-group full">
+  <label for="phone">Telefonnummer *</label>
+  <div style="display: flex; gap: 10px;">
+    <select id="countryCode" style="flex: 0.4; padding: 10px 12px; border-radius: 8px;">
+      <option value="+49">DE +49</option>
+      <option value="+43">AT +43</option>         <!-- Österreich -->
+      <option value="+41">CH +41</option>         <!-- Schweiz -->
+      <option value="+31">NL +31</option>         <!-- Niederlande -->
+      <option value="+32">BE +32</option>         <!-- Belgien -->
+      <option value="+33">FR +33</option>         <!-- Frankreich -->
+      <option value="+352">LU +352</option>       <!-- Luxemburg -->
+      <option value="+420">CZ +420</option>       <!-- Tschechien -->
+      <option value="+48">PL +48</option>         <!-- Polen -->
+      <option value="+45">DK +45</option>         <!-- Dänemark -->
+      <option value="+1">US +1</option>
+      <!-- Weitere bei Bedarf -->
+    </select>
+    <input type="tel" id="phone" placeholder="1234567890" style="flex: 1;" />
+  </div>
+</div>
+
   </div>
 
   <!-- Schritt 2: Zimmerdetails -->
-  <div id="room-details" class="room-details" style="display: none;">
-    <div class="form-group full">
-      <label for="roomSelect">Raum wählen</label>
-      <select id="roomSelect">
-        <option>Bitte wählen...</option>
-        <option>Wohnzimmer</option>
-        <option>Schlafzimmer</option>
-        <option>Küche</option>
-        <option>Badezimmer</option>
-      </select>
-    </div>
+<div id="room-details" class="room-details" style="display: none;">
+  <div class="form-group full">
+    <label for="roomSelect">Raum wählen *</label>
+    <select id="roomSelect">
+      <option value="">Bitte wählen...</option>
+      <option value="Wohnzimmer">Wohnzimmer</option>
+      <option value="Schlafzimmer">Schlafzimmer</option>
+      <option value="Küche">Küche</option>
+      <option value="Badezimmer">Badezimmer</option>
+      <option value="Sonstiges">Sonstiges</option>
+    </select>
+  </div>
 
-    <h3 class="materials-heading">Materialvorschläge</h3>
+  <div class="form-group full">
+    <label for="roomSize">Quadratmeter *</label>
+    <input type="text" id="roomSize" placeholder="z. B. 25" pattern="\d*" inputmode="numeric" />
+    <span class="validation-message" id="roomSizeValidation">Bitte geben Sie eine gültige Quadratmeterzahl ein.</span>
+  </div>
+
+    <h3 class="materials-heading">Materialvorschläge *</h3>
     <div class="material-grid">
       <div class="material-card">
         <img src="https://media.istockphoto.com/id/1318680899/de/foto/leichter-naturholzhintergrund.jpg?s=2048x2048&w=is&k=20&c=BxLs3us-4r5dHJVGdy7fRtUBdd3TFaQXxlF91vW14zs=" alt="Holzboden" />
@@ -73,15 +100,17 @@
         <p>Wasserfest und einfach zu reinigen</p>
       </div>
     </div>
+
+    <button type="button" id="addRoomButton" class="start-button" style="margin-bottom: 20px;">Hinzufügen</button>
+
+      <div id="roomList" class="room-list"></div>
   </div>
   
   <!-- Schritt 3: Bilder hochladen -->
   <div id="image-upload" class="image-upload" style="display: none;">
-    <h3 class="upload-heading">Bilder hochladen</h3>
-
     <div id="drop-zone" class="drop-zone">
       <p><strong>Ziehe deine Bilder hierher</strong><br />oder klicke zum Durchsuchen</p>
-      <input type="file" id="file-input" accept="image/*" multiple hidden />
+      <input type="file" id="file-input" accept=".pdf,image/jpeg,image/jpg" multiple hidden />
       <button type="button" id="upload-button">Hochladen</button>
     </div>
 
@@ -107,8 +136,8 @@
   <div class="review-section">
     <h4>Zimmerdetails</h4>
     <ul>
-      <li><strong>Raum:</strong> <span id="summaryRoom"></span></li>
-      <li><strong>Material:</strong> <span id="summaryMaterial"></span></li>
+      <li><span id="summaryRoom"></span></li>
+      <li><span id="summaryMaterial"></span></li>
     </ul>
   </div>
 
@@ -356,6 +385,31 @@
   padding: 4px 0;
   font-size: 14px;
 }
+
+input {
+  border: 2px solid #000; /* Standard: schwarz */
+}
+
+input.touched.invalid {
+  border-color: #e74c3c;
+}
+
+input.touched.valid {
+  border-color: #2ecc71;
+}
+
+.validation-message {
+  display: none;
+  font-size: 12px;
+  color: #e74c3c;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.form-group input.touched.invalid ~ .validation-message {
+  display: block;
+}
+
 </style>
 
 <script>
@@ -366,8 +420,9 @@
   const progressBar = document.getElementById('progress-bar');
   const stepHeading = document.getElementById('step-heading');
   const startButton = document.getElementById('start-button');
-  const submitButton = document.getElementById('submit-button'); // Neuer Absende-Button
+  const submitButton = document.getElementById('submit-button'); 
   const infoLabel = document.getElementById('info-label');
+  const countryCode = document.getElementById('countryCode');
 
   const formFields = document.getElementById('personal-form');
   const roomDetails = document.getElementById('room-details');
@@ -378,6 +433,14 @@
   const lastName = document.getElementById('lastName');
   const email = document.getElementById('email');
   const phone = document.getElementById('phone');
+
+  const roomSelect = document.getElementById('roomSelect');
+  const roomSize = document.getElementById('roomSize');
+  const roomSizeValidation = document.getElementById('roomSizeValidation');
+  const addRoomButton = document.getElementById('addRoomButton');
+  const roomList = document.getElementById('roomList');
+  let selectedRooms = [];
+  let selectedMaterial = null;
 
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
@@ -393,7 +456,6 @@
   const summaryGallery = document.getElementById('summaryGallery');
 
   const materialCards = document.querySelectorAll('.material-card');
-  let selectedMaterial = null;
 
   const headings = [
     "Willkommen",
@@ -403,43 +465,172 @@
   ];
 
   // Schritt 1 validieren
-  function validateStep1() {
-    const isValid =
-      firstName.value.trim() !== "" &&
-      lastName.value.trim() !== "" &&
-      email.value.trim() !== "" &&
-      phone.value.trim() !== "";
-    startButton.disabled = !isValid;
+function validateStep1() {
+  let isValid = true;
+
+  // Vorname prüfen (mindestens 2 Buchstaben, nur Buchstaben)
+  const nameRegex = /^[A-Za-zÄÖÜäöüß\s-]{2,}$/;
+  if (!nameRegex.test(firstName.value.trim())) {
+    markInvalid(firstName);
+    isValid = false;
+  } else {
+    markValid(firstName);
   }
 
-  // Schritt 2 validieren
-  function validateStep2() {
-    startButton.disabled = !selectedMaterial;
+  // Nachname prüfen
+  if (!nameRegex.test(lastName.value.trim())) {
+    markInvalid(lastName);
+    isValid = false;
+  } else {
+    markValid(lastName);
   }
 
-  // Initiale Validierung bei Ladezeit
-  validateStep1();
+  // E-Mail prüfen
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.value.trim())) {
+    markInvalid(email);
+    isValid = false;
+  } else {
+    markValid(email);
+  }
 
-  [firstName, lastName, email, phone].forEach(input => {
-    input.addEventListener("input", validateStep1);
+  // Telefonnummer prüfen (nur Ziffern, mindestens 5 Stellen)
+  if (!/^\d{5,}$/.test(phone.value.trim())) {
+    markInvalid(phone);
+    isValid = false;
+  } else {
+    markValid(phone);
+  }
+
+  startButton.disabled = !isValid;
+}
+
+function markInvalid(input) {
+  input.classList.remove("valid");
+  input.classList.add("invalid");
+}
+
+function markValid(input) {
+  input.classList.remove("invalid");
+  input.classList.add("valid");
+}
+
+ // Event-Handler für Schritt 1
+[firstName, lastName, email, phone].forEach(input => {
+  input.addEventListener("blur", () => {
+    input.classList.add("touched");
+    validateStep1();
   });
 
-  // Materialauswahl
+  input.addEventListener("input", () => {
+    validateStep1();
+  });
+});
+
+ // Schritt 2 validieren
+function validateStep2() {
+  let isRoomSelected = roomSelect.value !== '';
+  let sizeValid = parseInt(roomSize.value) > 0;
+  let hasMaterial = selectedMaterial !== null;
+
+  roomSize.classList.add("touched");
+  if (!sizeValid && roomSize.value.trim() !== '') {
+    roomSize.classList.remove("valid");
+    roomSize.classList.add("invalid");
+    roomSizeValidation.style.display = 'block';
+  } else {
+    roomSize.classList.remove("invalid");
+    if (roomSize.value.trim() !== '') {
+      roomSize.classList.add("valid");
+    }
+    roomSizeValidation.style.display = 'none';
+  }
+
+  const enableMaterials = isRoomSelected && sizeValid;
   materialCards.forEach(card => {
-    card.addEventListener('click', () => {
-      const isSelected = card.classList.contains('selected');
-      materialCards.forEach(c => c.classList.remove('selected'));
-
-      if (!isSelected) {
-        card.classList.add('selected');
-        selectedMaterial = card.querySelector('strong')?.innerText || null;
-      } else {
-        selectedMaterial = null;
-      }
-
-      if (currentStep === 2) validateStep2();
-    });
+    card.style.pointerEvents = enableMaterials ? "auto" : "none";
+    card.style.opacity = enableMaterials ? "1" : "0.5";
   });
+
+  // Hinzufügen-Button aktivieren, wenn alle drei gültig sind
+  addRoomButton.disabled = !(isRoomSelected && sizeValid && hasMaterial);
+
+  // Weiter-Button aktivieren, wenn mindestens ein Eintrag gespeichert wurde
+  startButton.disabled = !(selectedRooms.length > 0);
+}
+
+// Initial deaktivieren
+addRoomButton.disabled = true;
+roomSizeValidation.style.display = 'none';
+
+// Events anpassen (z. B. nach Materialauswahl validieren)
+materialCards.forEach(card => {
+  card.addEventListener('click', () => {
+    const isSelected = card.classList.contains('selected');
+    materialCards.forEach(c => c.classList.remove('selected'));
+    if (!isSelected) {
+      card.classList.add('selected');
+      selectedMaterial = card.querySelector('strong')?.innerText || null;
+    } else {
+      selectedMaterial = null;
+    }
+    validateStep2();
+  });
+});
+
+roomSelect.addEventListener("change", validateStep2);
+roomSize.addEventListener("input", validateStep2);
+
+addRoomButton.addEventListener("click", () => {
+  const room = roomSelect.value;
+  const size = roomSize.value;
+  const material = selectedMaterial;
+  if (room && parseInt(size) > 0 && material) {
+    selectedRooms.push({ room, size, material });
+    updateRoomList();
+    roomSelect.value = '';
+    roomSize.value = '';
+    selectedMaterial = null;
+    materialCards.forEach(c => c.classList.remove('selected'));
+    roomSize.classList.remove("valid", "invalid", "touched");
+    validateStep2();
+  }
+});
+
+function updateRoomList() {
+  roomList.innerHTML = '';
+
+  if (selectedRooms.length === 0) return;
+
+  const table = document.createElement('table');
+  table.style.width = '100%';
+  table.style.borderCollapse = 'collapse';
+  table.style.marginTop = '10px';
+
+  const headerRow = document.createElement('tr');
+  ['Raum', 'Größe', 'Material'].forEach(text => {
+    const th = document.createElement('th');
+    th.textContent = text;
+    th.style.borderBottom = '1px solid #ccc';
+    th.style.textAlign = 'left';
+    th.style.padding = '6px';
+    headerRow.appendChild(th);
+  });
+  table.appendChild(headerRow);
+
+  selectedRooms.forEach(entry => {
+    const row = document.createElement('tr');
+    [entry.room, `${entry.size} m²`, entry.material].forEach(val => {
+      const td = document.createElement('td');
+      td.textContent = val;
+      td.style.padding = '6px';
+      row.appendChild(td);
+    });
+    table.appendChild(row);
+  });
+
+  roomList.appendChild(table);
+}
 
   // Weiter-Button (Schritt 1–3)
   startButton.addEventListener("click", () => {
@@ -449,6 +640,7 @@
 
     if (currentStep < maxSteps) {
       currentStep++;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       stepNumber.textContent = `Schritt ${currentStep}`;
       progressBar.style.width = `${currentStep * 25}%`;
       stepHeading.textContent = headings[currentStep - 1];
@@ -470,29 +662,73 @@
       }
 
       // Schritt 4 zusammenfassen
-      if (currentStep === 4) {
-        summaryFirstName.textContent = firstName.value;
-        summaryLastName.textContent = lastName.value;
-        summaryEmail.textContent = email.value;
-        summaryPhone.textContent = phone.value;
-        summaryRoom.textContent = document.getElementById('roomSelect').value;
-        summaryMaterial.textContent = selectedMaterial || "Keine Auswahl";
+     if (currentStep === 4) {
 
-        summaryGallery.innerHTML = "";
-        gallery.querySelectorAll("img").forEach(img => {
-          const clone = img.cloneNode();
-          summaryGallery.appendChild(clone);
+      infoLabel.textContent = "Bitte überprüfen Sie alle Informationen nochmal gründlich.";
+
+      summaryFirstName.textContent = firstName.value;
+      summaryLastName.textContent = lastName.value;
+      summaryEmail.textContent = email.value;
+      summaryPhone.textContent = `${countryCode.value} ${phone.value}`;
+
+    // Raum-Übersicht als Tabelle
+    summaryRoom.innerHTML = '';
+    if (selectedRooms.length > 0) {
+      const table = document.createElement('table');
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+
+      const headerRow = document.createElement('tr');
+      ['Raum', 'Größe', 'Material'].forEach(text => {
+        const th = document.createElement('th');
+        th.textContent = text;
+        th.style.borderBottom = '1px solid #ccc';
+        th.style.textAlign = 'left';
+        th.style.padding = '6px';
+        headerRow.appendChild(th);
+      });
+      table.appendChild(headerRow);
+
+      selectedRooms.forEach(entry => {
+        const row = document.createElement('tr');
+        [entry.room, `${entry.size} m²`, entry.material].forEach(val => {
+          const td = document.createElement('td');
+          td.textContent = val;
+          td.style.padding = '6px';
+          row.appendChild(td);
         });
-      }
+        table.appendChild(row);
+      });
+
+      summaryRoom.appendChild(table);
+    } else {
+      summaryRoom.textContent = 'Keine Angaben gemacht';
+    }
+
+    summaryMaterial.textContent = ''; // wird jetzt in der Tabelle dargestellt
+    summaryGallery.innerHTML = "";
+
+    // Alle Elemente aus dem Gallery-Container (img oder PDF-Karten)
+    gallery.childNodes.forEach(node => {
+      const clone = node.cloneNode(true);
+      summaryGallery.appendChild(clone);
+    });
+
+  }
     }
   });
 
   // Bild Uploads
-  dropZone.addEventListener('click', () => fileInput.click());
 
   dropZone.addEventListener('dragover', (e) => {
     e.preventDefault();
     dropZone.style.backgroundColor = '#f1f1f1';
+  });
+
+  phone.addEventListener("input", () => {
+    // Erlaube nur Zahlen
+    phone.value = phone.value.replace(/\D/g, "");
+   validateStep1();
   });
 
   dropZone.addEventListener('dragleave', () => {
@@ -511,17 +747,60 @@
     handleFiles(fileInput.files);
   });
 
-  function handleFiles(files) {
-    Array.from(files).forEach(file => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
+function handleFiles(files) {
+  const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg'];
+
+  Array.from(files).forEach(file => {
+    if (!allowedTypes.includes(file.type)) {
+      alert(`Dateiformat nicht erlaubt: ${file.name}`);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const wrapper = document.createElement('div');
+      wrapper.style.width = '160px';
+      wrapper.style.border = '1px solid #ddd';
+      wrapper.style.borderRadius = '10px';
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+      wrapper.style.background = '#fff';
+      wrapper.style.textAlign = 'center';
+      wrapper.style.display = 'flex';
+      wrapper.style.flexDirection = 'column';
+      wrapper.style.justifyContent = 'center';
+      wrapper.style.padding = '10px';
+
+      if (file.type === 'application/pdf') {
+        const icon = document.createElement('div');
+        icon.innerHTML = '📄';
+        icon.style.fontSize = '48px';
+        icon.style.marginBottom = '8px';
+
+        const filename = document.createElement('div');
+        filename.textContent = file.name;
+        filename.style.fontSize = '12px';
+        filename.style.overflow = 'hidden';
+        filename.style.textOverflow = 'ellipsis';
+        filename.style.whiteSpace = 'nowrap';
+
+        wrapper.appendChild(icon);
+        wrapper.appendChild(filename);
+      } else {
         const img = document.createElement('img');
         img.src = e.target.result;
-        gallery.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        img.style.objectFit = 'cover';
+        wrapper.appendChild(img);
+      }
+
+      gallery.appendChild(wrapper);
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
 
  configJson = {
   "baseUrl": "https://marketplace.gohighlevel.com",
@@ -543,55 +822,23 @@ async function initiateAuth(req, res) {
   return res.redirect(`${configJson.baseUrl}/oauth/chooselocation?response_type=${options.requestType}&redirect_uri=${options.redirectUri}&client_id=${options.clientId}&scope=${options.scopes.join(' ')}`);
 }
 
-async function loadUserContext() {
-  try {
-    const encryptedUserData = await new Promise((resolve) => {
-      window.parent.postMessage({ message: 'REQUEST_USER_DATA' }, '*');
-
-      const messageHandler = ({ data }) => {
-        if (data.message === 'REQUEST_USER_DATA_RESPONSE') {
-          window.removeEventListener('message', messageHandler);
-          resolve(data.payload);
-        }
-      };
-
-      window.addEventListener('message', messageHandler);
-    });
-
-    const response = await fetch('https://dein-backend.de/decrypt-user-data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ encryptedData: encryptedUserData })
-    });
-
-    if (!response.ok) throw new Error('Fehler beim Abrufen der Benutzerdaten');
-
-    const userData = await response.json();
-    console.log('Entschlüsselte Benutzerdaten:', userData);
-    return userData;
-  } catch (error) {
-    console.error('Fehler beim Laden des Benutzerkontexts:', error);
-    return null;
-  }
-}
-
   // Submit an GoHighLevel
   submitButton.addEventListener("click", () => {
     submitToHighLevel();
   });
 
   async function submitToHighLevel() {
-    const token = 'DEIN_TOKEN_HIER'; // Bearer Token
+    const token = 'Bearer pit-df626d04-ebd5-45d8-8548-d589f9d5c903'; // Bearer Token
     const contactPayload = {
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
-      name: `${firstName.value.trim()} ${lastName.value.trim()}`,
       email: email.value.trim(),
+      locationId:'YYXLV6WpBo7IkhlFP97b',
       phone: phone.value.trim(),
-      customFields: [
+     /* customFields: [
         { key: 'zimmer', field_value: document.getElementById('roomSelect').value },
         { key: 'material', field_value: selectedMaterial }
-      ],
+      ],*/
       source: 'Public Form'
     };
 
@@ -600,34 +847,22 @@ async function loadUserContext() {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': token,
           'Content-Type': 'application/json',
           'Version': '2021-07-28'
         },
         body: JSON.stringify(contactPayload)
       });
 
-      const data = await resp.json();
-      const contactId = data.id;
-      console.log('Kontakt-ID:', contactId);
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      console.error("Fehler beim Erstellen:", data);
+      alert('Fehler beim Erstellen des Kontakts: ' + (data.error || JSON.stringify(data)));
+      return;
+    }
 
       // Bilder anhängen
-      const images = gallery.querySelectorAll('img');
-      if (images.length > 0) {
-        const formData = new FormData();
-        for (let [idx, imgEl] of images.entries()) {
-          const blob = await (await fetch(imgEl.src)).blob();
-          formData.append('files', blob, `bild${idx + 1}.jpg`);
-        }
-        formData.append('contactId', contactId);
-
-        const uploadResp = await fetch('https://services.leadconnectorhq.com/contacts/attachments', {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-        if (!uploadResp.ok) throw new Error('Bild-Upload fehlgeschlagen');
-      }
 
       alert('Kontakt erfolgreich erstellt! ✅');
     } catch (err) {
