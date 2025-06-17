@@ -515,6 +515,20 @@ input.touched.valid {
 
   const materialCards = document.querySelectorAll('.material-card');
 
+  materialCards.forEach(card => {
+    card.addEventListener('click', () => {
+      const isSelected = card.classList.contains('selected');
+      materialCards.forEach(c => c.classList.remove('selected'));
+      if (!isSelected) {
+        card.classList.add('selected');
+        selectedMaterial = card.querySelector('strong')?.innerText || null;
+      } else {
+        selectedMaterial = null;
+      }
+      validateStep2();
+    });
+  });
+
   const headings = [
     "Willkommen",
     "Zimmerdetails",
@@ -621,37 +635,46 @@ function validateStep2() {
 addRoomButton.disabled = true;
 roomSizeValidation.style.display = 'none';
 
-// Events anpassen (z. B. nach Materialauswahl validieren)
-materialCards.forEach(card => {
-  card.addEventListener('click', () => {
-    const isSelected = card.classList.contains('selected');
-    materialCards.forEach(c => c.classList.remove('selected'));
-    if (!isSelected) {
-      card.classList.add('selected');
-      selectedMaterial = card.querySelector('strong')?.innerText || null;
-    } else {
-      selectedMaterial = null;
-    }
-    validateStep2();
-  });
-});
-
 roomSelect.addEventListener("change", validateStep2);
 roomSize.addEventListener("input", validateStep2);
 
+// Events anpassen (z. B. nach Materialauswahl validieren)
 addRoomButton.addEventListener("click", () => {
   const room = roomSelect.value;
   const size = roomSize.value;
   const material = selectedMaterial;
+
   if (room && parseInt(size) > 0 && material) {
-    selectedRooms.push({ room, size, material });
-    updateRoomList();
+    const roomKeyRaw = room.toLowerCase().replace('ä', 'ae').replace('ö', 'oe').replace('ü', 'ue');
+
+    const fieldMap = {
+      wohnzimmer: 'living_room',
+      schlafzimmer: 'bed_room',
+      badezimmer: 'bathroom',
+      kueche: 'kitchen'
+    };
+
+    const mappedRoom = fieldMap[roomKeyRaw]; 
+
+    selectedRooms = selectedRooms.filter(r => r.roomLabel !== room);
+
+    // Speichern – mit oder ohne API-Schlüssel
+    selectedRooms.push({
+      roomKey: mappedRoom || null,
+      roomLabel: room,
+      size,
+      material
+    });
+
+    // UI zurücksetzen
     roomSelect.value = '';
     roomSize.value = '';
     selectedMaterial = null;
     materialCards.forEach(c => c.classList.remove('selected'));
     roomSize.classList.remove("valid", "invalid", "touched");
+
     validateStep2();
+    updateRoomList();
   }
 });
 
@@ -677,8 +700,8 @@ function updateRoomList() {
   table.appendChild(headerRow);
 
   selectedRooms.forEach(entry => {
-    const row = document.createElement('tr');
-    [entry.room, `${entry.size} m²`, entry.material].forEach(val => {
+  const row = document.createElement('tr');
+    [entry.roomLabel, `${entry.size} m²`, entry.material].forEach(val => {
       const td = document.createElement('td');
       td.textContent = val;
       td.style.padding = '6px';
@@ -686,7 +709,6 @@ function updateRoomList() {
     });
     table.appendChild(row);
   });
-
   roomList.appendChild(table);
 }
 
@@ -749,7 +771,7 @@ function updateRoomList() {
 
       selectedRooms.forEach(entry => {
         const row = document.createElement('tr');
-        [entry.room, `${entry.size} m²`, entry.material].forEach(val => {
+        [entry.roomLabel, `${entry.size} m²`, entry.material].forEach(val => {
           const td = document.createElement('td');
           td.textContent = val;
           td.style.padding = '6px';
@@ -908,16 +930,23 @@ async function initiateAuth(req, res) {
 
   async function submitToHighLevel() {
     const token = 'Bearer pit-df626d04-ebd5-45d8-8548-d589f9d5c903'; // Bearer Token
+    const customFields = [];
+
+  selectedRooms.forEach(({ roomKey, size, material }) => {
+    if (roomKey) {
+      customFields.push({ key: `${roomKey}_size`, field_value: size });
+      customFields.push({ key: `${roomKey}_material`, field_value: material });
+    }
+  });
+
+
     const contactPayload = {
       firstName: firstName.value.trim(),
       lastName: lastName.value.trim(),
       email: email.value.trim(),
       locationId:'YYXLV6WpBo7IkhlFP97b',
       phone: phone.value.trim(),
-     /* customFields: [
-        { key: 'zimmer', field_value: document.getElementById('roomSelect').value },
-        { key: 'material', field_value: selectedMaterial }
-      ],*/
+      customFields,
       source: 'Public Form'
     };
 
