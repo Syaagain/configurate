@@ -13,47 +13,57 @@
   <!-- Persönliche Daten -->
   <div id="personal-form" class="form-fields">
     <div class="form-row">
-      <div class="form-group">
-        <label for="firstName">Vorname *</label>
-        <input type="text" id="firstName" placeholder="Geben Sie Ihren Vornamen ein" required />
-        <span class="validation-message">Bitte geben Sie einen gültigen Vornamen ein.</span>
-      </div>
-      <div class="form-group">
-        <label for="lastName">Nachname *</label>
-        <input type="text" id="lastName" placeholder="Geben Sie Ihren Nachnamen ein" required />
-        <span class="validation-message">Bitte geben Sie einen gültigen Nachnamen ein.</span>
-      </div>
+     <div class="form-group">
+      <label for="firstName">Vorname *</label>
+      <input type="text" id="firstName" placeholder="Geben Sie Ihren Vornamen ein" />
+    </div>
+    <div class="form-group">
+      <label for="lastName">Nachname *</label>
+      <input type="text" id="lastName" placeholder="Geben Sie Ihren Nachnamen ein" />
+    </div>
     </div>
     <div class="form-group full">
       <label for="email">E-Mail-Adresse *</label>
-      <input type="email" id="email" placeholder="Geben Sie Ihre E-Mail-Adresse ein" required />
-      <span class="validation-message">Bitte geben Sie eine gültige E-Mail-Adresse ein.</span>
+      <input type="email" id="email" placeholder="Geben Sie Ihre E-Mail-Adresse ein" />
     </div>
-   <div class="form-group full">
-  <label for="phone">Telefonnummer *</label>
-  <div style="display: flex; gap: 10px;">
-    <select id="countryCode" style="flex: 0.4; padding: 10px 12px; border-radius: 8px;">
-      <option value="+49">DE +49</option>
-      <option value="+43">AT +43</option>         <!-- Österreich -->
-      <option value="+41">CH +41</option>         <!-- Schweiz -->
-      <option value="+31">NL +31</option>         <!-- Niederlande -->
-      <option value="+32">BE +32</option>         <!-- Belgien -->
-      <option value="+33">FR +33</option>         <!-- Frankreich -->
-      <option value="+352">LU +352</option>       <!-- Luxemburg -->
-      <option value="+420">CZ +420</option>       <!-- Tschechien -->
-      <option value="+48">PL +48</option>         <!-- Polen -->
-      <option value="+45">DK +45</option>         <!-- Dänemark -->
-      <option value="+1">US +1</option>
-      <!-- Weitere bei Bedarf -->
-    </select>
-    <input type="tel" id="phone" placeholder="1234567890" style="flex: 1;" />
+    <div class="form-group full">
+      <label for="phone">Telefonnummer *</label>
+      <div class="phone-input-group">
+        <div class="form-field like-input">
+          <div class="custom-select-wrapper">
+            <div class="custom-select" id="customCountryCode">
+              <div class="selected-option">
+                <span class="selected-text">DE +49</span>
+                <span class="dropdown-icon">▾</span>
+              </div>
+              <div class="options-list hidden">
+                <div data-value="+49">DE +49</div>
+                <div data-value="+43">AT +43</div>
+                <div data-value="+41">CH +41</div>
+                <div data-value="+31">NL +31</div>
+                <div data-value="+32">BE +32</div>
+                <div data-value="+33">FR +33</div>
+                <div data-value="+352">LU +352</div>
+                <div data-value="+420">CZ +420</div>
+                <div data-value="+48">PL +48</div>
+                <div data-value="+45">DK +45</div>
+                <div data-value="+1">US +1</div>
+              </div>
+            </div>
+            <input type="hidden" name="countryCode" id="realCountryCode" value="+49" />
+          </div>
+        </div>
+        <div class="form-field">
+          <input type="tel" id="phone" placeholder="1234567890" />
+        </div>
+      </div>
+    </div>
+    <div id="validationErrors" class="form-validation-summary"></div>
   </div>
 </div>
 
-  </div>
-
   <!-- Schritt 2: Zimmerdetails -->
-<div id="room-details" class="room-details" style="display: none;">
+<div id="room-details" class="room-details custom-progress-container" style="display: none;">
   <div class="form-group full">
     <label for="roomSelect">Raum wählen *</label>
     <select id="roomSelect">
@@ -172,15 +182,116 @@
 
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * {
+    font-family: 'Inter', sans-serif;
+  }
+
+  body {
+    background-color: #000 !important;
+    color: #fff;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    -webkit-text-fill-color: #fff !important;
+    caret-color: #fff;
+    transition: background-color 9999s ease-in-out 0s;
+  }
+
   .custom-progress-container {
-    font-family: Arial, sans-serif;
     max-width: 600px;
     padding: 40px 20px;
     margin: 0 auto;
+    background-color: #000;
+    color: #fff;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input:not([type]),
+  select {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    padding: 10px 4px 6px 4px;
+    font-size: 16px;
+    color: #fff;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+  }
+
+  select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  padding: 10px 4px 6px 4px;
+  font-size: 16px;
+  width: 100%;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px 16px;
+}
+
+ select option {
+    background-color: #111;
+    color: #fff;
+  }
+
+  select:focus option:checked {
+    background-color: #444 !important;
+    color: #fff !important;
+  }
+
+  input:focus,
+  select:focus {
+    border-bottom-color: #fff;
+    box-shadow: 0 1px 0 0 #fff;
+  }
+
+  input::placeholder {
+    color: #aaa;
+  }
+
+  input.touched.invalid {
+    border-bottom-color: #e74c3c;
+  }
+
+  input.touched.valid {
+    border-bottom: 2px solid transparent;
+    background-image: linear-gradient(to right, #a47148, #ffd700);
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
+    background-position: 0 100%;
+  }
+
+  .validation-message {
+    display: none;
+    font-size: 12px;
+    color: #e74c3c;
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+
+  .form-group input.touched.invalid ~ .validation-message {
+    display: block;
   }
 
   .step-label {
-    font-size: 14px;
+    font-size: 18px;
+    font-weight: bold;
     margin-bottom: 6px;
     text-align: center;
   }
@@ -188,18 +299,30 @@
   .progress {
     width: 100%;
     height: 8px;
-    background-color: #e0e4e8;
-    border-radius: 4px;
+    background-color: #333; 
+    border-radius: 20px;
     margin-bottom: 30px;
     position: relative;
   }
 
   .progress-bar {
-    width: 25%;
     height: 100%;
+    width: 25%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
     background-color: #000;
-    border-radius: 4px;
-    transition: width 0.3s ease;
+
+    background-image: linear-gradient(
+      120deg,
+      #a47148 20%,
+      #ffd700 50%,
+      #a47148 80%
+    );
+    background-size: 200% 100%;
+    background-position: -100% 0;
+    animation: shimmer-progress-bar 6s ease-in-out infinite;
+    box-shadow: 0 0 10px #ffd70066;
   }
 
   .step-heading {
@@ -209,9 +332,14 @@
     margin-top: 0;
   }
 
+    #step-heading,
+    #info-label {
+      display: none;
+    }
+
   .info-label {
     font-size: 14px;
-    color: #555;
+    color: #999;
     text-align: center;
     margin-bottom: 20px;
   }
@@ -240,36 +368,37 @@
   .form-group label {
     margin-bottom: 6px;
     font-weight: bold;
-  }
-
-  .form-group input,
-  #roomSelect {
-    padding: 10px 12px;
-    border: none;
-    background-color: #f1f3f5;
-    border-radius: 8px;
-    font-size: 14px;
-  }
-
-  .start-button {
-    display: block;
-    margin: 30px auto 0 auto;
-    padding: 12px 24px;
-    font-size: 16px;
-    background-color: #000;
     color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
   }
+
+.start-button {
+  display: block;
+  margin: 30px auto 0 auto;
+  padding: 12px 24px;
+  font-size: 16px;
+  background: transparent;
+  color: #ffd700;
+  border: 2px solid transparent;
+  border-image: linear-gradient(135deg, #a47148 40%, #ffd700 50%, #a47148 60%);
+  border-image-slice: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: shimmer-border 4s ease-in-out infinite;
+}
 
   .start-button:hover:not(:disabled) {
-    background-color: #333;
+    background-color: rgba(255, 215, 0, 0.05);
+    box-shadow: 0 0 8px #ffd700aa;
   }
 
   .start-button:disabled {
-    background-color: #999;
+    opacity: 0.3;
+    border-color: #555;
+    color: #999;
     cursor: not-allowed;
+    background: transparent;
+    border-image: none;
   }
 
   /* Schritt 2 */
@@ -294,7 +423,7 @@
     flex: 1 1 120px;
     min-width: 120px;
     max-width: 150px;
-    background: #fff;
+    background: transparent;
     text-align: center;
     padding: 10px;
     border-radius: 8px;
@@ -302,6 +431,8 @@
     cursor: pointer;
     border: 2px solid transparent;
     transition: 0.2s ease;
+    border-image: linear-gradient(135deg, #a47148 40%, #ffd700 50%, #a47148 60%);
+    border-image-slice: 1;
   }
 
   .material-card:hover {
@@ -325,7 +456,7 @@
     color: #555;
     margin: 0;
   }
-  
+
   .image-upload {
     margin-top: 30px;
   }
@@ -346,7 +477,7 @@
   }
 
   .drop-zone:hover {
-    background-color: #f9f9f9;
+    background-color: #111;
   }
 
   .drop-zone p {
@@ -380,93 +511,279 @@
     object-fit: cover;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
-  
+
+ .phone-input-group {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-bottom: 20px;
+  }
+
+  .phone-input-group .form-field.like-input {
+    flex: 0 0 120px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    border-bottom: 2px solid #ccc;
+    height: 40px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .phone-input-group .form-field {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .phone-input-group .form-field.like-input .custom-select-wrapper {
+    width: 120px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: relative; /
+  }
+
+  .phone-input-group .form-field.like-input:hover,
+  .phone-input-group .form-field.like-input:focus-within {
+    border-bottom-color: #fff;
+  }
+
+  .phone-input-group input[type="tel"].invalid {
+    border-bottom-color: #e74c3c !important;
+  }
+
+  .phone-input-group .custom-select {
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    height: 24px;
+  }
+
+  .phone-input-group input[type="tel"] {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 10px 4px 6px 4px;
+    font-size: 16px;
+    color: #fff;
+  }
+
+  .phone-input-group input[type="tel"]:focus {
+    border-bottom-color: #fff;
+  }
+
+  .selected-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .selected-option .dropdown-icon {
+    margin-left: 32px;
+    font-size: 16px;
+    line-height: 1;
+    color: #fff;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .selected-option.open .dropdown-icon {
+    transform: rotate(180deg);
+  }
+
+
   .review-summary {
-  margin-top: 30px;
-}
+    margin-top: 30px;
+  }
 
-.review-section {
-  margin-bottom: 30px;
-}
+  .review-section {
+    margin-bottom: 30px;
+  }
 
-.review-section h4 {
-  margin-bottom: 10px;
-  font-size: 16px;
-}
+  .review-section h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
 
-.review-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+  .review-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
-.review-section ul li {
-  padding: 4px 0;
-  font-size: 14px;
-}
+  .review-section ul li {
+    padding: 4px 0;
+    font-size: 14px;
+  }
 
-input {
-  border: 2px solid #000; /* Standard: schwarz */
-}
+  .edit-button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    color: #fff;
+  }
 
-input.touched.invalid {
-  border-color: #e74c3c;
-}
+  .edit-button:hover {
+    color: #aaa;
+  }
 
-input.touched.valid {
-  border-color: #2ecc71;
-}
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
 
-.validation-message {
-  display: none;
-  font-size: 12px;
-  color: #e74c3c;
-  margin-top: -10px;
-  margin-bottom: 10px;
-}
+  .tooltip-text {
+    visibility: hidden;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 12px;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: 130%;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+  }
 
-.form-group input.touched.invalid ~ .validation-message {
-  display: block;
-}
+  .tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
 
-.edit-button {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 4px;
-  color: #000;
-}
-.edit-button:hover {
-  color: #555;
-}
+  .custom-select-wrapper {
+    width: 100%;
+    position: relative;
+  }
 
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
+  .custom-select {
+    position: relative;
+    padding: 0;
+    cursor: pointer;
+    font-size: 16px;
+    background: transparent;
+    color: #fff;
+    border: none;
+  }
 
-.tooltip-text {
-  visibility: hidden;
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  position: absolute;
-  z-index: 1;
-  top: -5px;
-  right: 130%;
-  opacity: 0;
-  transition: opacity 0.3s;
-  white-space: nowrap;
-}
+  .custom-select .selected-option {
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    align-items: flex-end;
+    height: 40px;
+    padding-bottom: 6px;
+    box-sizing: border-box;
+    line-height: 1;
+  }
 
-.tooltip-container:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
-}
+  .custom-select .options-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 120px;
+    max-height: 160px;
+    overflow-y: auto;
+    background-color: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    z-index: 999;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #ffd700 transparent;
+    overflow-y: auto;
+  }
+
+ .custom-select .options-list::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-select .options-list::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-select .options-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #a47148, #ffd700);
+    border-radius: 4px;
+  }
+
+  .custom-select .options-list::-webkit-scrollbar-button {
+    height: 8px;
+    background: linear-gradient(to bottom, #a47148, #ffd700);
+    border-radius: 4px;
+  }
+
+  .custom-select .options-list div {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .custom-select .options-list div:hover {
+    background-color: #444;
+  }
+
+  .custom-select .options-list.hidden {
+    display: none;
+  }
+
+  .form-validation-summary {
+    color: #e74c3c;
+    font-size: 14px;
+    margin: 10px 0 20px;
+    padding: 0 6px;
+  }
+
+  .shimmer-gradient {
+    background: linear-gradient(-45deg, #a47148 40%, #ffd700 50%, #a47148 60%);
+    background-size: 300%;
+    background-position-x: 100%;
+    animation: shimmer 1.2s infinite linear;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @keyframes shimmer-border {
+    0% {
+      border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
+    }
+    25% {
+      border-image-source: linear-gradient(120deg, #a47148 20%, #ffcc33 50%, #a47148 80%);
+    }
+    50% {
+      border-image-source: linear-gradient(120deg, #a47148 10%, #fff2b0 50%, #a47148 90%);
+    }
+    75% {
+      border-image-source: linear-gradient(120deg, #a47148 20%, #ffcc33 50%, #a47148 80%);
+    }
+    100% {
+      border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
+    } 
+  }
+
+  @keyframes shimmer-progress-bar {
+    0% {
+      background-position: -100% 0;
+    }
+    50% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
 
 </style>
 
@@ -481,6 +798,13 @@ input.touched.valid {
   const submitButton = document.getElementById('submit-button'); 
   const infoLabel = document.getElementById('info-label');
   const countryCode = document.getElementById('countryCode');
+
+  const customSelect = document.getElementById("customCountryCode");
+  const selectedOption = customSelect.querySelector(".selected-option");
+  const optionsList = customSelect.querySelector(".options-list");
+  const realInput = document.getElementById("realCountryCode");
+  const selectedText = selectedOption.querySelector(".selected-text");
+
 
   const formFields = document.getElementById('personal-form');
   const roomDetails = document.getElementById('room-details');
@@ -531,50 +855,109 @@ input.touched.valid {
 
   const headings = [
     "Willkommen",
-    "Zimmerdetails",
-    "Bilder hochladen",
-    "Anfrage überprüfen"
+    "Zimmerdetails",  
+    "Bilder hochladen",    
+    "Anfrage überprüfen"     
   ];
+
+  const customWrapper = document.querySelector('.form-field.like-input');
+
+  let isDropdownOpen = false;
+
+  customWrapper.addEventListener("click", (e) => {
+    e.stopPropagation();
+    isDropdownOpen = !isDropdownOpen;
+
+    optionsList.classList.toggle("hidden", !isDropdownOpen);
+    selectedOption.classList.toggle("open", isDropdownOpen);
+  });
+
+    optionsList.querySelectorAll("div").forEach(option => {
+    option.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const value = option.dataset.value;
+      selectedText.textContent = option.textContent;
+      realInput.value = value;
+
+      isDropdownOpen = false;
+      optionsList.classList.add("hidden");
+      selectedOption.classList.remove("open");
+    });
+  });
+
+  // Click outside to close
+  document.addEventListener("click", (e) => {
+    if (!customSelect.contains(e.target)) {
+      optionsList.classList.add("hidden");
+      selectedOption.classList.remove("open");
+    }
+  });
 
   // Schritt 1 validieren
 function validateStep1() {
+  const errors = [];
   let isValid = true;
 
-  // Vorname prüfen (mindestens 2 Buchstaben, nur Buchstaben)
   const nameRegex = /^[A-Za-zÄÖÜäöüß\s-]{2,}$/;
-  if (!nameRegex.test(firstName.value.trim())) {
-    markInvalid(firstName);
-    isValid = false;
-  } else {
-    markValid(firstName);
-  }
-
-  // Nachname prüfen
-  if (!nameRegex.test(lastName.value.trim())) {
-    markInvalid(lastName);
-    isValid = false;
-  } else {
-    markValid(lastName);
-  }
-
-  // E-Mail prüfen
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email.value.trim())) {
-    markInvalid(email);
-    isValid = false;
-  } else {
-    markValid(email);
+
+  // Vorname
+  if (firstName.classList.contains("touched")) {
+    if (!nameRegex.test(firstName.value.trim())) {
+      markInvalid(firstName);
+      errors.push("Bitte geben Sie einen gültigen Vornamen ein.");
+      isValid = false;
+    } else {
+      markValid(firstName);
+    }
   }
 
-  // Telefonnummer prüfen (nur Ziffern, mindestens 5 Stellen)
-  if (!/^\d{5,}$/.test(phone.value.trim())) {
-    markInvalid(phone);
-    isValid = false;
-  } else {
-    markValid(phone);
+  // Nachname
+  if (lastName.classList.contains("touched")) {
+    if (!nameRegex.test(lastName.value.trim())) {
+      markInvalid(lastName);
+      errors.push("Bitte geben Sie einen gültigen Nachnamen ein.");
+      isValid = false;
+    } else {
+      markValid(lastName);
+    }
   }
 
-  startButton.disabled = !isValid;
+  // E-Mail
+  if (email.classList.contains("touched")) {
+    if (!emailRegex.test(email.value.trim())) {
+      markInvalid(email);
+      errors.push("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
+      isValid = false;
+    } else {
+      markValid(email);
+    }
+  }
+
+  // Telefonnummer
+  if (phone.classList.contains("touched")) {
+    if (!/^\d{5,}$/.test(phone.value.trim())) {
+      markInvalid(phone);
+      errors.push("Bitte geben Sie eine gültige Telefonnummer ein (mind. 5 Ziffern).");
+      isValid = false;
+    } else {
+      markValid(phone);
+    }
+  }
+
+  // Fehler nur anzeigen, wenn mindestens ein Feld touched wurde
+  const touchedFields = [firstName, lastName, email, phone].some(el => el.classList.contains("touched"));
+  const errorContainer = document.getElementById("validationErrors");
+  errorContainer.innerHTML = touchedFields ? errors.map(err => `<div>• ${err}</div>`).join("") : "";
+
+  // Startbutton aktivieren, wenn alles gültig ist
+  startButton.disabled = !(
+    nameRegex.test(firstName.value.trim()) &&
+    nameRegex.test(lastName.value.trim()) &&
+    emailRegex.test(email.value.trim()) &&
+    /^\d{5,}$/.test(phone.value.trim())
+  );
 }
 
 function markInvalid(input) {
