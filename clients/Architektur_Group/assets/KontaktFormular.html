@@ -1,3 +1,7 @@
+<!-- ===================================== -->
+<!-- Schritt 1: Persönliche Daten -->
+<!-- ===================================== -->
+
 <div class="custom-progress-container">
   <p class="step-label"><span id="step-number">Schritt 1</span> von 4</p>
   <div class="progress">
@@ -62,18 +66,29 @@
   </div>
 </div>
 
-  <!-- Schritt 2: Zimmerdetails -->
-<div id="room-details" class="room-details custom-progress-container" style="display: none;">
-  <div class="form-group full">
-    <label for="roomSelect">Raum wählen *</label>
-    <select id="roomSelect">
-      <option value="">Bitte wählen...</option>
-      <option value="Wohnzimmer">Wohnzimmer</option>
-      <option value="Schlafzimmer">Schlafzimmer</option>
-      <option value="Küche">Küche</option>
-      <option value="Badezimmer">Badezimmer</option>
-      <option value="Sonstiges">Sonstiges</option>
-    </select>
+<!-- ===================================== -->
+<!-- Schritt 2: Zimmerdetails -->
+<!-- ===================================== -->
+  <div id="room-details" class="room-details custom-progress-container" style="display: none;">
+    <div class="form-group full">
+      <label for="roomSelect">Raum wählen *</label>
+      <div class="custom-select-wrapper wide">
+      <div class="custom-select" id="customRoomSelect">
+
+        <div class="selected-option">
+          <span class="selected-text">Bitte wählen...</span>
+          <span class="dropdown-icon">▾</span>
+        </div>
+        <div class="options-list hidden">
+          <div data-value="Wohnzimmer">Wohnzimmer</div>
+          <div data-value="Schlafzimmer">Schlafzimmer</div>
+          <div data-value="Küche">Küche</div>
+          <div data-value="Badezimmer">Badezimmer</div>
+          <div data-value="Sonstiges">Sonstiges</div>
+        </div>
+      </div>
+      <input type="hidden" id="roomSelect" name="roomSelect" value="" />
+    </div>
   </div>
 
   <div class="form-group full">
@@ -111,12 +126,16 @@
       </div>
     </div>
 
+    <div id="step2ValidationErrors" class="form-validation-summary"></div>
+
     <button type="button" id="addRoomButton" class="start-button" style="margin-bottom: 20px;">Hinzufügen</button>
 
       <div id="roomList" class="room-list"></div>
   </div>
   
-  <!-- Schritt 3: Bilder hochladen -->
+<!-- ===================================== -->
+<!-- Schritt 3: Bilder hochladen -->
+<!-- ===================================== -->
   <div id="image-upload" class="image-upload" style="display: none;">
     <div id="drop-zone" class="drop-zone">
       <p><strong>Ziehe deine Bilder hierher</strong><br />oder klicke zum Durchsuchen</p>
@@ -130,16 +149,17 @@
     </div>
   </div>
   
-  <!-- Schritt 4: Zusammenfassung -->
+<!-- ===================================== -->
+<!-- Schritt 4: Zusammenfassung -->
+<!-- ===================================== -->
 <div id="review-summary" class="review-summary" style="display: none;">
   <div class="review-section">
     <h4 style="display: flex; align-items: center; justify-content: space-between;">
         Persönliche Daten
-    <div class="tooltip-container">
-      <button class="edit-button" onclick="goToStep(1)">✏️</button>
-    <span class="tooltip-text">Bearbeiten</span>
-  </div>
-
+      <div class="tooltip-container">
+        <button class="edit-button" onclick="goToStep(1)">✏️</button>
+      <span class="tooltip-text">Bearbeiten</span>
+    </div>
     </h4>
 
     <ul>
@@ -176,200 +196,388 @@
   </div>
 </div>
 
-<!-- Buttons am Ende des Containers -->
 <button id="start-button" class="start-button" disabled>Weiter</button>
 <button id="submit-button" class="start-button" style="display: none;">Absenden</button>
 
-
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+ /* ===================================== */
+/* Global Styles */
+/* ===================================== */
 
-  * {
-    font-family: 'Inter', sans-serif;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-  body {
-    background-color: #000 !important;
-    color: #fff;
-  }
+* {
+  font-family: 'Inter', sans-serif;
+}
 
-  input:-webkit-autofill,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    -webkit-text-fill-color: #fff !important;
-    caret-color: #fff;
-    transition: background-color 9999s ease-in-out 0s;
-  }
+body {
+  background-color: #000;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
 
-  .custom-progress-container {
-    max-width: 600px;
-    padding: 40px 20px;
-    margin: 0 auto;
-    background-color: #000;
-    color: #fff;
-  }
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+}
 
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="number"],
-  input:not([type]),
-  select {
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    border-radius: 0;
-    padding: 10px 4px 6px 4px;
-    font-size: 16px;
-    color: #fff;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    outline: none;
-  }
+input,
+select {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  padding: 10px 4px 6px 4px;
+  font-size: 16px;
+  color: #fff;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  outline: none;
+}
 
-  select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
+input::placeholder {
+  color: #aaa;
+}
+
+input.touched.invalid {
+  border-bottom-color: #e74c3c;
+}
+
+input.touched.valid {
+  border-bottom: 2px solid transparent;
+  background-image: linear-gradient(to right, #a47148, #ffd700);
+  background-repeat: no-repeat;
+  background-size: 100% 2px;
+  background-position: 0 100%;
+}
+
+select {
   appearance: none;
   background-color: transparent;
   color: #fff;
-  border: none;
   border-bottom: 2px solid #ccc;
-  padding: 10px 4px 6px 4px;
-  font-size: 16px;
-  width: 100%;
   background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 16px 16px;
+  width: 100%;
 }
 
- select option {
-    background-color: #111;
-    color: #fff;
-  }
+/* ===================================== */
+/* Schritt 1: Persönliche Daten */
+/* ===================================== */
 
-  select:focus option:checked {
-    background-color: #444 !important;
-    color: #fff !important;
-  }
+.custom-progress-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
 
-  input:focus,
-  select:focus {
-    border-bottom-color: #fff;
-    box-shadow: 0 1px 0 0 #fff;
-  }
+.step-label {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  text-align: center;
+}
 
-  input::placeholder {
-    color: #aaa;
-  }
+.progress {
+  width: 100%;
+  height: 8px;
+  background-color: #333;
+  border-radius: 20px;
+  margin-bottom: 30px;
+  position: relative;
+}
 
-  input.touched.invalid {
-    border-bottom-color: #e74c3c;
-  }
+.progress-bar {
+  height: 100%;
+  width: 25%;
+  border-radius: 20px;
+  background-image: linear-gradient(120deg, #a47148 20%, #ffd700 50%, #a47148 80%);
+  background-size: 200% 100%;
+  background-position: -100% 0;
+  animation: shimmer-progress-bar 6s ease-in-out infinite;
+  box-shadow: 0 0 10px #ffd70066;
+}
 
-  input.touched.valid {
-    border-bottom: 2px solid transparent;
-    background-image: linear-gradient(to right, #a47148, #ffd700);
-    background-repeat: no-repeat;
-    background-size: 100% 2px;
-    background-position: 0 100%;
-  }
+@keyframes shimmer-progress-bar {
+  0% { background-position: -100% 0; }
+  50% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
 
-  .validation-message {
-    display: none;
-    font-size: 12px;
-    color: #e74c3c;
-    margin-top: -10px;
-    margin-bottom: 10px;
-  }
+.step-heading {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
 
-  .form-group input.touched.invalid ~ .validation-message {
-    display: block;
-  }
+.info-label {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .step-label {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 6px;
-    text-align: center;
-  }
+.form-fields {
+  margin-bottom: 30px;
+}
 
-  .progress {
-    width: 100%;
-    height: 8px;
-    background-color: #333; 
-    border-radius: 20px;
-    margin-bottom: 30px;
-    position: relative;
-  }
+.form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
 
-  .progress-bar {
-    height: 100%;
-    width: 25%;
-    position: relative;
-    overflow: hidden;
-    border-radius: 20px;
-    background-color: #000;
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
 
-    background-image: linear-gradient(
-      120deg,
-      #a47148 20%,
-      #ffd700 50%,
-      #a47148 80%
-    );
-    background-size: 200% 100%;
-    background-position: -100% 0;
-    animation: shimmer-progress-bar 6s ease-in-out infinite;
-    box-shadow: 0 0 10px #ffd70066;
-  }
+.form-group.full {
+  width: 100%;
+}
 
-  .step-heading {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 0;
-  }
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
 
-    #step-heading,
-    #info-label {
-      display: none;
-    }
+.phone-input-group {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
 
-  .info-label {
-    font-size: 14px;
-    color: #999;
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.phone-input-group .form-field.like-input {
+  flex: 0 0 120px;
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 2px solid #ccc;
+}
 
-  .form-fields {
-    margin-bottom: 30px;
-  }
+.custom-select-wrapper {
+  width: 100%;
+  position: relative;
+}
 
-  .form-row {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
+.custom-select {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #fff;
+  font-size: 16px;
+}
 
-  .form-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+.custom-select .selected-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
 
-  .form-group.full {
-    width: 100%;
-  }
+.custom-select .dropdown-icon {
+  margin-left: 32px;
+  color: #fff;
+}
 
-  .form-group label {
-    margin-bottom: 6px;
-    font-weight: bold;
-    color: #fff;
-  }
+.custom-select .options-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 160px;
+  overflow-y: auto;
+  background-color: #111;
+  border: 1px solid #333;
+  border-radius: 4px;
+  z-index: 999;
+}
+
+.custom-select .options-list div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.custom-select .options-list div:hover {
+  background-color: #444;
+}
+
+.custom-select .options-list.hidden {
+  display: none;
+}
+
+/* ===================================== */
+/* Schritt 2: Zimmerdetails */
+/* ===================================== */
+
+.room-details {
+  margin-top: 20px;
+}
+
+.materials-heading {
+  margin: 30px 0 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.material-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.material-card {
+  flex: 1 1 120px;
+  max-width: 150px;
+  text-align: center;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  background-image:
+    linear-gradient(#000, #000),
+    linear-gradient(135deg, #a47148 40%, #ffd700 50%, #a47148 60%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  transition: all 0.2s ease;
+}
+
+.material-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.material-card.selected {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #1e1e1e, #000);
+  box-shadow: 0 0 8px #ffd700aa;
+  transform: scale(1.02);
+}
+
+.material-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.material-card p {
+  font-size: 13px;
+  color: #555;
+}
+
+/* ===================================== */
+/* Schritt 3: Bild-Upload */
+/* ===================================== */
+
+.image-upload {
+  margin-top: 30px;
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  padding: 40px;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.drop-zone:hover {
+  background-color: #111;
+}
+
+.uploaded-images h4 {
+  margin-bottom: 10px;
+}
+
+.gallery {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.gallery img {
+  width: 160px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================== */
+/* Schritt 4: Zusammenfassung */
+/* ===================================== */
+
+.review-summary {
+  margin-top: 30px;
+}
+
+.review-section {
+  margin-bottom: 30px;
+}
+
+.review-section h4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.review-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.review-section ul li {
+  padding: 4px 0;
+  font-size: 14px;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #fff;
+  padding: 4px;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  background-color: #000;
+  color: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  position: absolute;
+  top: -5px;
+  right: 130%;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* ===================================== */
+/* Buttons */
+/* ===================================== */
 
 .start-button {
   display: block;
@@ -387,404 +595,30 @@
   animation: shimmer-border 4s ease-in-out infinite;
 }
 
-  .start-button:hover:not(:disabled) {
-    background-color: rgba(255, 215, 0, 0.05);
-    box-shadow: 0 0 8px #ffd700aa;
+.start-button:hover:not(:disabled) {
+  background-color: rgba(255, 215, 0, 0.05);
+  box-shadow: 0 0 8px #ffd700aa;
+}
+
+.start-button:disabled {
+  opacity: 0.3;
+  border-color: #555;
+  color: #999;
+  cursor: not-allowed;
+  border-image: none;
+}
+
+@keyframes shimmer-border {
+  0% {
+    border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
   }
-
-  .start-button:disabled {
-    opacity: 0.3;
-    border-color: #555;
-    color: #999;
-    cursor: not-allowed;
-    background: transparent;
-    border-image: none;
+  50% {
+    border-image-source: linear-gradient(120deg, #a47148 10%, #fff2b0 50%, #a47148 90%);
   }
-
-  /* Schritt 2 */
-  .room-details {
-    margin-top: 20px;
+  100% {
+    border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
   }
-
-  .materials-heading {
-    margin: 30px 0 10px;
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  .material-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
-  }
-
-  .material-card {
-    flex: 1 1 120px;
-    min-width: 120px;
-    max-width: 150px;
-    background: transparent;
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.2s ease;
-    border-image: linear-gradient(135deg, #a47148 40%, #ffd700 50%, #a47148 60%);
-    border-image-slice: 1;
-  }
-
-  .material-card:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .material-card.selected {
-    border: 2px solid #000;
-    background-color: #f0f0f0;
-  }
-
-  .material-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 6px;
-    margin-bottom: 8px;
-  }
-
-  .material-card p {
-    font-size: 13px;
-    color: #555;
-    margin: 0;
-  }
-
-  .image-upload {
-    margin-top: 30px;
-  }
-
-  .upload-heading {
-    text-align: center;
-    font-size: 22px;
-    margin-bottom: 20px;
-  }
-
-  .drop-zone {
-    border: 2px dashed #ccc;
-    padding: 40px;
-    text-align: center;
-    border-radius: 12px;
-    cursor: pointer;
-    margin-bottom: 30px;
-  }
-
-  .drop-zone:hover {
-    background-color: #111;
-  }
-
-  .drop-zone p {
-    margin: 0 0 15px;
-    font-size: 16px;
-  }
-
-  .drop-zone button {
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 6px;
-    background-color: #eee;
-    cursor: pointer;
-  }
-
-  .uploaded-images h4 {
-    margin-bottom: 10px;
-  }
-
-  .gallery {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-
-  .gallery img {
-    width: 160px;
-    height: auto;
-    border-radius: 10px;
-    object-fit: cover;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
- .phone-input-group {
-    display: flex;
-    gap: 12px;
-    align-items: flex-end;
-    margin-bottom: 20px;
-  }
-
-  .phone-input-group .form-field.like-input {
-    flex: 0 0 120px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    border-bottom: 2px solid #ccc;
-    height: 40px;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  .phone-input-group .form-field {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-  }
-
-  .phone-input-group .form-field.like-input .custom-select-wrapper {
-    width: 120px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    position: relative; /
-  }
-
-  .phone-input-group .form-field.like-input:hover,
-  .phone-input-group .form-field.like-input:focus-within {
-    border-bottom-color: #fff;
-  }
-
-  .phone-input-group input[type="tel"].invalid {
-    border-bottom-color: #e74c3c !important;
-  }
-
-  .phone-input-group .custom-select {
-    background: transparent;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    height: 24px;
-  }
-
-  .phone-input-group input[type="tel"] {
-    background: transparent;
-    border: none;
-    border-bottom: 2px solid #ccc;
-    padding: 10px 4px 6px 4px;
-    font-size: 16px;
-    color: #fff;
-  }
-
-  .phone-input-group input[type="tel"]:focus {
-    border-bottom-color: #fff;
-  }
-
-  .selected-option {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .selected-option .dropdown-icon {
-    margin-left: 32px;
-    font-size: 16px;
-    line-height: 1;
-    color: #fff;
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-  }
-
-  .selected-option.open .dropdown-icon {
-    transform: rotate(180deg);
-  }
-
-
-  .review-summary {
-    margin-top: 30px;
-  }
-
-  .review-section {
-    margin-bottom: 30px;
-  }
-
-  .review-section h4 {
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-
-  .review-section ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .review-section ul li {
-    padding: 4px 0;
-    font-size: 14px;
-  }
-
-  .edit-button {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 4px;
-    color: #fff;
-  }
-
-  .edit-button:hover {
-    color: #aaa;
-  }
-
-  .tooltip-container {
-    position: relative;
-    display: inline-block;
-  }
-
-  .tooltip-text {
-    visibility: hidden;
-    background-color: #000;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 12px;
-    position: absolute;
-    z-index: 1;
-    top: -5px;
-    right: 130%;
-    opacity: 0;
-    transition: opacity 0.3s;
-    white-space: nowrap;
-  }
-
-  .tooltip-container:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .custom-select-wrapper {
-    width: 100%;
-    position: relative;
-  }
-
-  .custom-select {
-    position: relative;
-    padding: 0;
-    cursor: pointer;
-    font-size: 16px;
-    background: transparent;
-    color: #fff;
-    border: none;
-  }
-
-  .custom-select .selected-option {
-    color: #fff;
-    font-size: 16px;
-    display: flex;
-    align-items: flex-end;
-    height: 40px;
-    padding-bottom: 6px;
-    box-sizing: border-box;
-    line-height: 1;
-  }
-
-  .custom-select .options-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 120px;
-    max-height: 160px;
-    overflow-y: auto;
-    background-color: #111;
-    border: 1px solid #333;
-    border-radius: 4px;
-    z-index: 999;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-    box-sizing: border-box;
-    scrollbar-width: thin;
-    scrollbar-color: #ffd700 transparent;
-    overflow-y: auto;
-  }
-
- .custom-select .options-list::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .custom-select .options-list::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .custom-select .options-list::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, #a47148, #ffd700);
-    border-radius: 4px;
-  }
-
-  .custom-select .options-list::-webkit-scrollbar-button {
-    height: 8px;
-    background: linear-gradient(to bottom, #a47148, #ffd700);
-    border-radius: 4px;
-  }
-
-  .custom-select .options-list div {
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .custom-select .options-list div:hover {
-    background-color: #444;
-  }
-
-  .custom-select .options-list.hidden {
-    display: none;
-  }
-
-  .form-validation-summary {
-    color: #e74c3c;
-    font-size: 14px;
-    margin: 10px 0 20px;
-    padding: 0 6px;
-  }
-
-  .shimmer-gradient {
-    background: linear-gradient(-45deg, #a47148 40%, #ffd700 50%, #a47148 60%);
-    background-size: 300%;
-    background-position-x: 100%;
-    animation: shimmer 1.2s infinite linear;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  @keyframes shimmer-border {
-    0% {
-      border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
-    }
-    25% {
-      border-image-source: linear-gradient(120deg, #a47148 20%, #ffcc33 50%, #a47148 80%);
-    }
-    50% {
-      border-image-source: linear-gradient(120deg, #a47148 10%, #fff2b0 50%, #a47148 90%);
-    }
-    75% {
-      border-image-source: linear-gradient(120deg, #a47148 20%, #ffcc33 50%, #a47148 80%);
-    }
-    100% {
-      border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
-    } 
-  }
-
-  @keyframes shimmer-progress-bar {
-    0% {
-      background-position: -100% 0;
-    }
-    50% {
-      background-position: 100% 0;
-    }
-    100% {
-      background-position: -100% 0;
-    }
-  }
-
+}
 </style>
 
 <script>
@@ -821,8 +655,17 @@
   const roomSizeValidation = document.getElementById('roomSizeValidation');
   const addRoomButton = document.getElementById('addRoomButton');
   const roomList = document.getElementById('roomList');
+  const customRoomWrapper = document.getElementById("customRoomSelect");
+  const roomSelectedOption = customRoomWrapper.querySelector(".selected-option");
+  const roomOptionsList = customRoomWrapper.querySelector(".options-list");
+  const realRoomInput = document.getElementById("roomSelect");
+  const roomText = roomSelectedOption.querySelector(".selected-text");
   let selectedRooms = [];
   let selectedMaterial = null;
+  let roomDropdownOpen = false;
+  let roomTouched = false;
+  let sizeTouched = false;
+  let materialTouched = false;
 
   const dropZone = document.getElementById('drop-zone');
   const fileInput = document.getElementById('file-input');
@@ -984,35 +827,82 @@ function markValid(input) {
 
  // Schritt 2 validieren
 function validateStep2() {
-  let isRoomSelected = roomSelect.value !== '';
-  let sizeValid = parseInt(roomSize.value) > 0;
-  let hasMaterial = selectedMaterial !== null;
+  const errors = [];
+  const isRoomSelected = roomSelect.value !== '';
+  const sizeValid = parseInt(roomSize.value) > 0;
+  const hasMaterial = selectedMaterial !== null;
 
-  roomSize.classList.add("touched");
-  if (!sizeValid && roomSize.value.trim() !== '') {
-    roomSize.classList.remove("valid");
-    roomSize.classList.add("invalid");
-    roomSizeValidation.style.display = 'block';
-  } else {
-    roomSize.classList.remove("invalid");
-    if (roomSize.value.trim() !== '') {
-      roomSize.classList.add("valid");
-    }
-    roomSizeValidation.style.display = 'none';
-  }
-
+  // Materialauswahl deaktivieren, wenn unvollständig
   const enableMaterials = isRoomSelected && sizeValid;
   materialCards.forEach(card => {
     card.style.pointerEvents = enableMaterials ? "auto" : "none";
     card.style.opacity = enableMaterials ? "1" : "0.5";
   });
 
-  // Hinzufügen-Button aktivieren, wenn alle drei gültig sind
-  addRoomButton.disabled = !(isRoomSelected && sizeValid && hasMaterial);
+  // Nur anzeigen, wenn Feld "touched"
+  if (!isRoomSelected && roomTouched) {
+    errors.push("Bitte wählen Sie einen Raum aus.");
+  }
+  if (!sizeValid && sizeTouched) {
+    errors.push("Bitte geben Sie eine gültige Quadratmeterzahl ein.");
+  }
+  if (!hasMaterial && materialTouched) {
+    errors.push("Bitte wählen Sie ein Material aus.");
+  }
 
-  // Weiter-Button aktivieren, wenn mindestens ein Eintrag gespeichert wurde
+  // Fehlermeldungen anzeigen
+  const errorContainer = document.getElementById("step2ValidationErrors");
+  errorContainer.innerHTML = errors.length > 0
+    ? errors.map(msg => `<div>• ${msg}</div>`).join("")
+    : "";
+
+  // Hinzufügen-Button aktivieren
+  addRoomButton.disabled = !(isRoomSelected && sizeValid && hasMaterial);
   startButton.disabled = !(selectedRooms.length > 0);
 }
+
+  customRoomWrapper.addEventListener("click", (e) => {
+    e.stopPropagation();
+    roomDropdownOpen = !roomDropdownOpen;
+    roomOptionsList.classList.toggle("hidden", !roomDropdownOpen);
+    roomSelectedOption.classList.toggle("open", roomDropdownOpen);
+  });
+
+  roomOptionsList.querySelectorAll("div").forEach(option => {
+    option.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const value = option.dataset.value;
+      roomText.textContent = value;
+      realRoomInput.value = value;
+
+      roomTouched = true;
+
+      roomDropdownOpen = false;
+      roomOptionsList.classList.add("hidden");
+      roomSelectedOption.classList.remove("open");
+      validateStep2();
+    });
+  });
+
+  roomSize.addEventListener("input", () => {
+    sizeTouched = true;
+    validateStep2();
+  });
+
+  materialCards.forEach(card => {
+    card.addEventListener('click', () => {
+      materialTouched = true;
+      validateStep2();
+    });
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!customRoomWrapper.contains(e.target)) {
+      roomOptionsList.classList.add("hidden");
+      roomSelectedOption.classList.remove("open");
+      roomDropdownOpen = false;
+    }
+  });
 
 // Initial deaktivieren
 addRoomButton.disabled = true;
@@ -1055,6 +945,10 @@ addRoomButton.addEventListener("click", () => {
     selectedMaterial = null;
     materialCards.forEach(c => c.classList.remove('selected'));
     roomSize.classList.remove("valid", "invalid", "touched");
+
+    roomTouched = false;
+    sizeTouched = false;
+    materialTouched = false;
 
     validateStep2();
     updateRoomList();
@@ -1168,7 +1062,7 @@ function updateRoomList() {
       summaryRoom.textContent = 'Keine Angaben gemacht';
     }
 
-    summaryMaterial.textContent = ''; // wird jetzt in der Tabelle dargestellt
+    summaryMaterial.textContent = '';
     summaryGallery.innerHTML = "";
 
     // Alle Elemente aus dem Gallery-Container (img oder PDF-Karten)
@@ -1312,7 +1206,7 @@ async function initiateAuth(req, res) {
   });
 
   async function submitToHighLevel() {
-    const token = 'Bearer pit-df626d04-ebd5-45d8-8548-d589f9d5c903'; // Bearer Token
+    const token = 'Bearer pit-df626d04-ebd5-45d8-8548-d589f9d5c903'; 
     const customFields = [];
 
   selectedRooms.forEach(({ roomKey, size, material }) => {
