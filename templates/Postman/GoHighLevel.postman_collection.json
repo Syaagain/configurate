@@ -1,11 +1,60 @@
 {
 	"info": {
-		"_postman_id": "db52909d-6fe3-4235-bab9-20f435d1ccf4",
+		"_postman_id": "c0ed368a-81b4-462f-ab7b-9fa443816fe8",
 		"name": "GoHighLevel",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "34498841"
 	},
 	"item": [
+		{
+			"name": "OAUTH",
+			"item": [
+				{
+					"name": "Get Access Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "685737491800a62217430f79-mc6ue3sc",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "86f0ba89-a445-46f3-bf34-d1a45d4257d6",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "text"
+								},
+								{
+									"key": "code",
+									"value": "c898b8991ad309c6ec9c52c2f543545dc8996313",
+									"type": "text"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://localhost/callback",
+									"type": "text"
+								},
+								{
+									"key": "user_type",
+									"value": "Location",
+									"type": "text"
+								}
+							]
+						},
+						"url": "https://services.leadconnectorhq.com/oauth/token"
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Businesses",
 			"item": [
@@ -1869,6 +1918,143 @@
 							}
 						},
 						"url": "https://services.leadconnectorhq.com/blogs/posts"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Media Library",
+			"item": [
+				{
+					"name": "Get List of Files",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhc3MiOiJMb2NhdGlvbiIsImF1dGhDbGFzc0lkIjoiWVlYTFY2V3BCbzdJa2hsRlA5N2IiLCJzb3VyY2UiOiJJTlRFR1JBVElPTiIsInNvdXJjZUlkIjoiNjg1NzM3NDkxODAwYTYyMjE3NDMwZjc5LW1jNnVlM3NjIiwiY2hhbm5lbCI6Ik9BVVRIIiwicHJpbWFyeUF1dGhDbGFzc0lkIjoiWVlYTFY2V3BCbzdJa2hsRlA5N2IiLCJvYXV0aE1ldGEiOnsic2NvcGVzIjpbIm1lZGlhcy53cml0ZSIsIm1lZGlhcy5yZWFkb25seSJdLCJjbGllbnQiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzkiLCJ2ZXJzaW9uSWQiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzkiLCJjbGllbnRLZXkiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzktbWM2dWUzc2MifSwiaWF0IjoxNzUwNTQ3NTI0LjMyLCJleHAiOjE3NTA2MzM5MjQuMzJ9.yxkubCcVPH9A3_VPJ1fwI0RaJ0Jpq3L2by0r3B1I5vGnlIdJPYKPqfyeKEi0Yt9kgz63pwO_ANTUCm7oQiUr2kWKxso6ZldYVejA4VIHDRcTGi1k3fg5rwxMYrQ7MQLDCYJC4UqMUyCrmQJfL7LbYZjUDMTvF5txRK0SRwK0dwOUlatxN2rVIKe__1jK85j3Z2mICX-yqB0sDdiRDTG61QDWERaBlpJznk4reRVIUUhaD7j8zVHa-1wIomDflX8wdQSSfHcev_rxXl54_MGcFvPdYFv4FDBHHzqbKN9kGIGAbJQA9Pf4E63ohJOjomie_ebg2xOf0BniHqJDqPMkIG6J0rFTdKHrj8V1oEq2OgaIVwxvFBHJX8KSTliVSKVMkIJd-bw9cfY3vJmHAIM2si8ZCdRVM5XyEKNCkNHabR_VmmFGyOiPEWh5AyqHrgdkUCt8lpc5aoabKHM2eglelpFhLCixRAeGAqlHy9Oe-wqB94IpPwE1tU1Dg7o02pPNhg6XU0QuRV8jklpjI5asCsbx3mvhkBXc2-p0snmYEUBfu0q2mVmUDaqf15DxSzmVb6eJQSTfDoTT0lsWc61JhuuowZBSP2Vv-Z_RHUiGqVITUpCZnacNHyvTd3CnutlSDOGhH_42uVh1ZPSCe1Px0HRNH6XnvjqsEyTYnmDdfaw",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://services.leadconnectorhq.com/medias/files?altId=YYXLV6WpBo7IkhlFP97b&altType=location&sortBy=createdAt&sortOrder=asc",
+							"protocol": "https",
+							"host": [
+								"services",
+								"leadconnectorhq",
+								"com"
+							],
+							"path": [
+								"medias",
+								"files"
+							],
+							"query": [
+								{
+									"key": "altId",
+									"value": "YYXLV6WpBo7IkhlFP97b"
+								},
+								{
+									"key": "altType",
+									"value": "location"
+								},
+								{
+									"key": "sortBy",
+									"value": "createdAt"
+								},
+								{
+									"key": "sortOrder",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload File into Media Library",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhc3MiOiJMb2NhdGlvbiIsImF1dGhDbGFzc0lkIjoiWVlYTFY2V3BCbzdJa2hsRlA5N2IiLCJzb3VyY2UiOiJJTlRFR1JBVElPTiIsInNvdXJjZUlkIjoiNjg1NzM3NDkxODAwYTYyMjE3NDMwZjc5LW1jNnVlM3NjIiwiY2hhbm5lbCI6Ik9BVVRIIiwicHJpbWFyeUF1dGhDbGFzc0lkIjoiWVlYTFY2V3BCbzdJa2hsRlA5N2IiLCJvYXV0aE1ldGEiOnsic2NvcGVzIjpbIm1lZGlhcy53cml0ZSIsIm1lZGlhcy5yZWFkb25seSJdLCJjbGllbnQiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzkiLCJ2ZXJzaW9uSWQiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzkiLCJjbGllbnRLZXkiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzktbWM2dWUzc2MifSwiaWF0IjoxNzUwNTQ3NTI0LjMyLCJleHAiOjE3NTA2MzM5MjQuMzJ9.yxkubCcVPH9A3_VPJ1fwI0RaJ0Jpq3L2by0r3B1I5vGnlIdJPYKPqfyeKEi0Yt9kgz63pwO_ANTUCm7oQiUr2kWKxso6ZldYVejA4VIHDRcTGi1k3fg5rwxMYrQ7MQLDCYJC4UqMUyCrmQJfL7LbYZjUDMTvF5txRK0SRwK0dwOUlatxN2rVIKe__1jK85j3Z2mICX-yqB0sDdiRDTG61QDWERaBlpJznk4reRVIUUhaD7j8zVHa-1wIomDflX8wdQSSfHcev_rxXl54_MGcFvPdYFv4FDBHHzqbKN9kGIGAbJQA9Pf4E63ohJOjomie_ebg2xOf0BniHqJDqPMkIG6J0rFTdKHrj8V1oEq2OgaIVwxvFBHJX8KSTliVSKVMkIJd-bw9cfY3vJmHAIM2si8ZCdRVM5XyEKNCkNHabR_VmmFGyOiPEWh5AyqHrgdkUCt8lpc5aoabKHM2eglelpFhLCixRAeGAqlHy9Oe-wqB94IpPwE1tU1Dg7o02pPNhg6XU0QuRV8jklpjI5asCsbx3mvhkBXc2-p0snmYEUBfu0q2mVmUDaqf15DxSzmVb6eJQSTfDoTT0lsWc61JhuuowZBSP2Vv-Z_RHUiGqVITUpCZnacNHyvTd3CnutlSDOGhH_42uVh1ZPSCe1Px0HRNH6XnvjqsEyTYnmDdfaw",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/fgeiger/Downloads/Image (14).jpg"
+								},
+								{
+									"key": "name",
+									"value": "Image (15).jpg",
+									"type": "text"
+								},
+								{
+									"key": "hosted",
+									"value": "false",
+									"type": "text"
+								}
+							]
+						},
+						"url": "https://services.leadconnectorhq.com/medias/upload-file"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete File or Folder",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoQ2xhc3MiOiJMb2NhdGlvbiIsImF1dGhDbGFzc0lkIjoiWVlYTFY2V3BCbzdJa2hsRlA5N2IiLCJzb3VyY2UiOiJJTlRFR1JBVElPTiIsInNvdXJjZUlkIjoiNjg1NzM3NDkxODAwYTYyMjE3NDMwZjc5LW1jNnVlM3NjIiwiY2hhbm5lbCI6Ik9BVVRIIiwicHJpbWFyeUF1dGhDbGFzc0lkIjoiWVlYTFY2V3BCbzdJa2hsRlA5N2IiLCJvYXV0aE1ldGEiOnsic2NvcGVzIjpbIm1lZGlhcy53cml0ZSIsIm1lZGlhcy5yZWFkb25seSJdLCJjbGllbnQiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzkiLCJ2ZXJzaW9uSWQiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzkiLCJjbGllbnRLZXkiOiI2ODU3Mzc0OTE4MDBhNjIyMTc0MzBmNzktbWM2dWUzc2MifSwiaWF0IjoxNzUwNTQ3NTI0LjMyLCJleHAiOjE3NTA2MzM5MjQuMzJ9.yxkubCcVPH9A3_VPJ1fwI0RaJ0Jpq3L2by0r3B1I5vGnlIdJPYKPqfyeKEi0Yt9kgz63pwO_ANTUCm7oQiUr2kWKxso6ZldYVejA4VIHDRcTGi1k3fg5rwxMYrQ7MQLDCYJC4UqMUyCrmQJfL7LbYZjUDMTvF5txRK0SRwK0dwOUlatxN2rVIKe__1jK85j3Z2mICX-yqB0sDdiRDTG61QDWERaBlpJznk4reRVIUUhaD7j8zVHa-1wIomDflX8wdQSSfHcev_rxXl54_MGcFvPdYFv4FDBHHzqbKN9kGIGAbJQA9Pf4E63ohJOjomie_ebg2xOf0BniHqJDqPMkIG6J0rFTdKHrj8V1oEq2OgaIVwxvFBHJX8KSTliVSKVMkIJd-bw9cfY3vJmHAIM2si8ZCdRVM5XyEKNCkNHabR_VmmFGyOiPEWh5AyqHrgdkUCt8lpc5aoabKHM2eglelpFhLCixRAeGAqlHy9Oe-wqB94IpPwE1tU1Dg7o02pPNhg6XU0QuRV8jklpjI5asCsbx3mvhkBXc2-p0snmYEUBfu0q2mVmUDaqf15DxSzmVb6eJQSTfDoTT0lsWc61JhuuowZBSP2Vv-Z_RHUiGqVITUpCZnacNHyvTd3CnutlSDOGhH_42uVh1ZPSCe1Px0HRNH6XnvjqsEyTYnmDdfaw",
+								"type": "text"
+							},
+							{
+								"key": "Version",
+								"value": "{{APIVersion}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://services.leadconnectorhq.com/medias/68573f6b3df5ba2e37dea4c0?altId=YYXLV6WpBo7IkhlFP97b&altType=location",
+							"protocol": "https",
+							"host": [
+								"services",
+								"leadconnectorhq",
+								"com"
+							],
+							"path": [
+								"medias",
+								"68573f6b3df5ba2e37dea4c0"
+							],
+							"query": [
+								{
+									"key": "altId",
+									"value": "YYXLV6WpBo7IkhlFP97b"
+								},
+								{
+									"key": "altType",
+									"value": "location"
+								}
+							]
+						}
 					},
 					"response": []
 				}
