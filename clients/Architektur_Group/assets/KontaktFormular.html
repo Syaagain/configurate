@@ -19,16 +19,16 @@
     <div class="form-row">
      <div class="form-group">
       <label for="firstName">Vorname *</label>
-      <input type="text" id="firstName" placeholder="Vorname..." />
+      <input type="text" id="firstName" placeholder="Vorname..." autocomplete="off"/>
     </div>
     <div class="form-group">
       <label for="lastName">Nachname *</label>
-      <input type="text" id="lastName" placeholder="Nachnamen..." />
+      <input type="text" id="lastName" placeholder="Nachnamen..." autocomplete="off" />
     </div>
     </div>
     <div class="form-group full">
       <label for="email">E-Mail-Adresse *</label>
-      <input type="email" id="email" placeholder="E-Mail-Adresse..." />
+      <input type="email" id="email" placeholder="E-Mail-Adresse..." name="fake_email" autocomplete="off" />
     </div>
     <div class="form-group full">
       <label for="phone">Telefonnummer *</label>
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="form-field full-width">
-          <input type="tel" id="phone" placeholder="1234567890" />
+          <input type="tel" id="phone" placeholder="1234567890" name="fake_phone" autocomplete="off" />
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
 
   <div class="form-group full">
     <label for="roomSize">Quadratmeter *</label>
-    <input type="text" id="roomSize" placeholder="z. B. 25" pattern="\d*" inputmode="numeric" />
+    <input type="text" id="roomSize" placeholder="z. B. 25" pattern="\d*" inputmode="numeric" autocomplete="off"/>
     <span class="validation-message" id="roomSizeValidation">Bitte geben Sie eine gültige Quadratmeterzahl ein.</span>
   </div>
 
@@ -179,7 +179,7 @@
     <h4 style="display: flex; align-items: center; justify-content: space-between;">
         Zimmerdetails
         <div class="tooltip-container">
-          <button class="edit-button" onclick="goToStep(1)">
+          <button class="edit-button" onclick="goToStep(2)">
             <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#ffd700">
           <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.41l-2.34-2.34a1.003 1.003 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
   </svg>
@@ -198,7 +198,7 @@
     <h4 style="display: flex; align-items: center; justify-content: space-between;">
         Hochgeladene Bilder
       <div class="tooltip-container">
-        <button class="edit-button" onclick="goToStep(1)">
+        <button class="edit-button" onclick="goToStep(3)">
           <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#ffd700">
             <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.41l-2.34-2.34a1.003 1.003 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
           </svg>
@@ -237,34 +237,43 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.2) inset !important;
   -webkit-text-fill-color: #fff !important;
   caret-color: #fff !important;
-  transition: background-color 5000s ease-in-out 0s !important;
+  border: none !important;
+  transition: background-color 9999s ease-out, color 9999s ease-out;
+  animation: none !important;
 }
 
 input,
 select {
   border: none;
   border-bottom: 2px solid #ccc;
-  border-radius: 0;
   padding: 10px 4px 6px 4px;
   font-size: 16px;
-  background-color: transparent;
-    color: #fff;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
   outline: none;
-  box-shadow: none !important;
-}
-
-input::placeholder {
-  color: #aaa;
-  opacity: 1;
-}
-
-input.touched.invalid {
-  border-bottom-color: #e74c3c;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 input.touched.valid {
   border-bottom: 2px solid transparent !important;
+  background-image: linear-gradient(to right, #a47148, #ffd700);
+  background-repeat: no-repeat;
+  background-size: 100% 2px;
+  background-position: 0 100%;
+}
+
+input.touched.invalid {
+  border-bottom: 2px solid #e74c3c !important;
+}
+
+input::placeholder {
+  color: #fff;
+  opacity: 1;
+}
+
+input.touched.valid:-webkit-autofill {
+  background-color: transparent !important;
+  border: none !important;
   background-image: linear-gradient(to right, #a47148, #ffd700);
   background-repeat: no-repeat;
   background-size: 100% 2px;
@@ -364,7 +373,7 @@ select {
 
 .info-label {
   font-size: 14px;
-  color: #999;
+  color: #fff; 
   text-align: center;
   margin-bottom: 20px;
 }
@@ -481,10 +490,35 @@ select {
 }
 
 #firstName,
-#lastName{
+#lastName,
+#phone,
+#email,
+#roomSize {
   background-color: rgba(0, 0, 0, 0.2) !important;
   color: #fff !important;
 }
+
+ .form-vwAmpW5o_b #_builder-form input[type=email],
+  .form-vwAmpW5o_b #_builder-form input[type=tel],
+  .form-vwAmpW5o_b #_builder-form .multiselect .multiselect__tags {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #ccc !important;
+    border: none !important;
+  }
+
+  input.invalid {
+    border-bottom: 2px solid #e74c3c !important;
+  }
+
+  input.valid {
+    border-bottom: 2px solid transparent !important;
+    background-image: linear-gradient(to right, #a47148, #ffd700);
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
+    background-position: 0 100%;
+  }
+
 /* ===================================== */
 /* Schritt 2: Zimmerdetails */
 /* ===================================== */
@@ -566,6 +600,35 @@ select {
   color: #fff !important;
 }
 
+label[for="roomSelect"],
+label[for="roomSize"],
+.materials-heading {
+  color: #fff !important;
+}
+
+#roomList table {
+  color: #fff;
+  background-color: transparent;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#roomList th,
+#roomList td {
+  border-bottom: 1px solid #777;
+  padding: 8px;
+}
+
+#roomList th {
+  font-weight: bold;
+  color: #fff;
+}
+
+#roomList tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+
 /* ===================================== */
 /* Schritt 3: Bild-Upload */
 /* ===================================== */
@@ -631,6 +694,18 @@ select {
   object-fit: cover;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+#image-upload h4,
+#image-upload h3,
+#image-upload p,
+#drop-zone p {
+  color: #fff !important;
+}
+
+#drop-zone p strong {
+  color: #fff !important;
+}
+
 
 /* ===================================== */
 /* Schritt 4: Zusammenfassung */
@@ -723,6 +798,31 @@ select {
   margin-bottom: 10px !important;
 }
 
+#review-summary h4,
+#review-summary span,
+#review-summary li,
+#review-summary th,
+#review-summary td {
+  color: #fff !important;
+}
+
+#review-summary table {
+  color: #fff;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: transparent;
+}
+
+#review-summary th,
+#review-summary td {
+  border-bottom: 1px solid #fff;
+  padding: 8px;
+}
+
+#review-summary tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
 /* ===================================== */
 /* Buttons */
 /* ===================================== */
@@ -767,6 +867,14 @@ select {
     border-image-source: linear-gradient(120deg, #a47148 30%, #ffd700 50%, #a47148 70%);
   }
 }
+
+.form-validation-summary {
+  color: #e74c3c; 
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
 </style>
 
 <script>
