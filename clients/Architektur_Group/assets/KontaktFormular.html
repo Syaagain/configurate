@@ -19,16 +19,16 @@
     <div class="form-row">
      <div class="form-group">
       <label for="firstName">Vorname *</label>
-      <input type="text" id="firstName" placeholder="Vorname..." autocomplete="off"/>
+      <input type="text" id="firstName" name="firstName" placeholder="Vorname..." autocomplete="given-name" />
     </div>
     <div class="form-group">
       <label for="lastName">Nachname *</label>
-      <input type="text" id="lastName" placeholder="Nachnamen..." autocomplete="off" />
+      <input type="text" id="lastName" name="lastName" placeholder="Nachname..." autocomplete="family-name" />
     </div>
     </div>
     <div class="form-group full">
       <label for="email">E-Mail-Adresse *</label>
-      <input type="email" id="email" placeholder="E-Mail-Adresse..." name="fake_email" autocomplete="off" />
+      <input type="email" id="email" name="email" placeholder="E-Mail..." autocomplete="email" />
     </div>
     <div class="form-group full">
       <label for="phone">Telefonnummer *</label>
@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="form-field full-width">
-          <input type="tel" id="phone" placeholder="1234567890" name="fake_phone" autocomplete="off" />
+          <input type="tel" id="phone" name="phone" placeholder="Telefon..." autocomplete="tel" />
         </div>
       </div>
     </div>
@@ -177,21 +177,17 @@
 
   <div class="review-section">
     <h4 style="display: flex; align-items: center; justify-content: space-between;">
-        Zimmerdetails
-        <div class="tooltip-container">
-          <button class="edit-button" onclick="goToStep(2)">
-            <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#FAFAF8">
-          <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.41l-2.34-2.34a1.003 1.003 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+      Zimmerdetails
+      <div class="tooltip-container">
+        <button class="edit-button" onclick="goToStep(2)">
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="#FAFAF8">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1.003 1.003 0 0 0 0-1.41l-2.34-2.34a1.003 1.003 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
           </svg>
         </button>
-
         <span class="tooltip-text">Bearbeiten</span>
       </div>
     </h4>
-    <ul>
-      <li><span id="summaryRoom"></span></li>
-      <li><span id="summaryMaterial"></span></li>
-    </ul>
+    <div id="summaryRoom"></div>
   </div>
 
   <div class="review-section">
@@ -282,11 +278,24 @@ select {
 }
 
 input.touched.valid {
+  border: none !important;
   border-bottom: 2px solid transparent !important;
-  background-image: linear-gradient(120deg, #ffffff 20%, #e6e6e6 50%, #ffffff 80%);
-  background-repeat: no-repeat;
-  background-size: 100% 2px;
-  background-position: 0 100%;
+  background-image: linear-gradient(120deg, #ffffff 20%, #e6e6e6 50%, #ffffff 80%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 2px !important;
+  background-position: 0 100% !important;
+  background-color: transparent !important;
+}
+
+input.touched.valid:-webkit-autofill {
+  border: none !important;
+  background-color: transparent !important;
+  background-image: linear-gradient(120deg, #ffffff 20%, #e6e6e6 50%, #ffffff 80%) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 2px !important;
+  background-position: 0 100% !important;
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+  -webkit-text-fill-color: #fff !important;
 }
 
 input.touched.invalid {
@@ -296,15 +305,6 @@ input.touched.invalid {
 input::placeholder {
   color: #fff;
   opacity: 1;
-}
-
-input.touched.valid:-webkit-autofill {
-  background-color: transparent !important;
-  border: none !important;
-  background-image: linear-gradient(120deg, #ffffff 20%, #e6e6e6 50%, #ffffff 80%);
-  background-repeat: no-repeat;
-  background-size: 100% 2px;
-  background-position: 0 100%;
 }
 
 select {
@@ -562,6 +562,17 @@ select {
     background-position: 0 100%;
   }
 
+  input:-webkit-autofill {
+    animation-name: autofill-fix !important;
+    animation-fill-mode: both !important;
+    animation-duration: 10ms !important;
+  }
+
+  @keyframes autofill-fix {
+    from {}
+    to {}
+  }
+
 /* ===================================== */
 /* Schritt 2: Zimmerdetails */
 /* ===================================== */
@@ -671,6 +682,15 @@ label[for="roomSize"],
   background-color: rgba(255, 255, 255, 0.05);
 }
 
+#info-label {
+  margin-bottom: 0px !important;
+}
+
+#room-details.custom-progress-container {
+  padding-top: 0px !important;
+  margin-top: -4px !important;
+}
+
 
 /* ===================================== */
 /* Schritt 3: Bild-Upload */
@@ -749,6 +769,14 @@ label[for="roomSize"],
   color: #fff !important;
 }
 
+#info-label.step-3 {
+  margin-bottom: 0px !important;
+}
+
+#image-upload.custom-progress-container {
+  padding-top: 0px !important;
+  margin-top: -4px !important; 
+}
 
 /* ===================================== */
 /* Schritt 4: Zusammenfassung */
@@ -777,8 +805,24 @@ label[for="roomSize"],
 }
 
 .review-section ul li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 12px;
   padding: 4px 0;
   font-size: 14px;
+}
+
+#summaryRoom ul li {
+  display: revert !important;
+  gap: 0 !important;
+  justify-content: revert !important;
+}
+
+.review-section ul li strong {
+  min-width: 120px;
+  font-weight: 600;
+  display: inline-block;
 }
 
 .edit-button {
@@ -1408,7 +1452,7 @@ function validateStep1() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   // Vorname
-  if (firstName.classList.contains("touched")) {
+  if (firstName.value.trim() !== "") {
     if (!nameRegex.test(firstName.value.trim())) {
       markInvalid(firstName);
       errors.push("Bitte geben Sie einen gültigen Vornamen ein.");
@@ -1419,7 +1463,7 @@ function validateStep1() {
   }
 
   // Nachname
-  if (lastName.classList.contains("touched")) {
+  if (lastName.value.trim() !== "") {
     if (!nameRegex.test(lastName.value.trim())) {
       markInvalid(lastName);
       errors.push("Bitte geben Sie einen gültigen Nachnamen ein.");
@@ -1430,7 +1474,7 @@ function validateStep1() {
   }
 
   // E-Mail
-  if (email.classList.contains("touched")) {
+  if (email.value.trim() !== "") {
     if (!emailRegex.test(email.value.trim())) {
       markInvalid(email);
       errors.push("Bitte geben Sie eine gültige E-Mail-Adresse ein.");
@@ -1441,7 +1485,7 @@ function validateStep1() {
   }
 
   // Telefonnummer
-  if (phone.classList.contains("touched")) {
+  if (phone.value.trim() !== "") {
     if (!/^\d{5,}$/.test(phone.value.trim())) {
       markInvalid(phone);
       phoneGroup.classList.remove("valid");
@@ -1742,14 +1786,52 @@ function updateRoomList() {
       summaryRoom.textContent = 'Keine Angaben gemacht';
     }
 
-    summaryMaterial.textContent = '';
     summaryGallery.innerHTML = "";
 
-  Array.from(gallery.children).forEach(node => {
-    const clone = node.cloneNode(true);
-    summaryGallery.appendChild(clone);
-  });
+    Array.from(gallery.children).forEach(child => {
+      const isPDF = child.querySelector('div')?.innerHTML === '📄';
+      const wrapper = document.createElement('div');
+      wrapper.style.width = '160px';
+      wrapper.style.border = '1px solid #ddd';
+      wrapper.style.borderRadius = '10px';
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+      wrapper.style.background = '#fff';
+      wrapper.style.textAlign = 'center';
+      wrapper.style.display = 'flex';
+      wrapper.style.flexDirection = 'column';
+      wrapper.style.justifyContent = 'center';
+      wrapper.style.padding = '10px';
 
+      if (isPDF) {
+        const icon = document.createElement('div');
+        icon.innerHTML = '📄';
+        icon.style.fontSize = '48px';
+        icon.style.marginBottom = '8px';
+
+        const filename = document.createElement('div');
+        filename.textContent = child.querySelector('div:last-child')?.textContent || 'PDF';
+        filename.style.fontSize = '12px';
+        filename.style.overflow = 'hidden';
+        filename.style.textOverflow = 'ellipsis';
+        filename.style.whiteSpace = 'nowrap';
+
+        wrapper.appendChild(icon);
+        wrapper.appendChild(filename);
+      } else {
+        const img = child.querySelector('img');
+        if (img) {
+          const newImg = document.createElement('img');
+          newImg.src = img.src;
+          newImg.style.width = '100%';
+          newImg.style.borderRadius = '10px';
+          newImg.style.objectFit = 'cover';
+          wrapper.appendChild(newImg);
+        }
+      }
+
+      summaryGallery.appendChild(wrapper);
+    });
   }
     }
   });
@@ -1887,13 +1969,23 @@ submitButton.addEventListener("click", async () => {
       btn.classList.remove("expanding");
     }
 
+    const newIcon = success
+      ? '<span class="material-icons">check</span>'
+      : '<span class="material-icons">close</span>';
+
+    icon.innerHTML = newIcon;
+    icon.style.opacity = "1";
+
     loader.style.display = "none";
 
-  if (success) {
-    setTimeout(showSuccessScreen, 1000);
-  } else {
-    setTimeout(showErrorScreen, 1000);
-  }
+    setTimeout(() => {
+      if (success) {
+        showSuccessScreen();
+      } else {
+        showErrorScreen();
+      }
+    }, 300);
+
   });
 
   let currentAccessToken = ''; 
@@ -2125,17 +2217,49 @@ submitButton.addEventListener("click", async () => {
     document.getElementById("info-label").style.display = "none";
   }
 
-function restartForm() {
-  window.location.reload(); 
+  function restartForm() {
+    window.location.reload(); 
+  }
+
+  function retrySubmission() {
+    document.getElementById("error-screen").style.display = "none";
+    showStep(4);
+  }
+
+  function showStep(step) {
+    goToStep(step);
+  }
+
+  function fixAutofillFields() {
+  requestAnimationFrame(() => {
+    [firstName, lastName, email, phone].forEach(input => {
+      const val = input.value.trim();
+
+      if (val !== "") {
+        input.classList.add("touched");
+
+        if (input === email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+          markValid(input);
+        } else if ((input === firstName || input === lastName) && /^[A-Za-zÄÖÜäöüß\s-]{2,}$/.test(val)) {
+          markValid(input);
+        } else if (input === phone && /^\d{5,}$/.test(val)) {
+          markValid(input);
+          phoneGroup.classList.add("valid");
+          phoneGroup.classList.remove("invalid");
+        } else {
+          markInvalid(input);
+        }
+
+        applyVisualValidationFix(input);
+      }
+    });
+
+    validateStep1(); 
+  });
 }
 
-function retrySubmission() {
-  document.getElementById("error-screen").style.display = "none";
-  showStep(4);
-}
-
-function showStep(step) {
-  goToStep(step);
-}
+window.addEventListener("DOMContentLoaded", () => {
+  setTimeout(() => fixAutofillFields(), 400);  
+});
 
 </script>
