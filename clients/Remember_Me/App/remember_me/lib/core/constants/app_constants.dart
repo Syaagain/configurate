@@ -1,5 +1,5 @@
 class AppConstants {
-  static const String appName = 'Media Manager Pro';
+  static const String appName = 'Remember Me';
   static const String appVersion = '1.0.0';
   static const String appSlogan = 'Verwalte deine Medien smart & sicher';
   
@@ -11,10 +11,10 @@ class AppConstants {
   static const Duration uploadAnimation = Duration(seconds: 25);
   
   // File Size Limits (in bytes)
-  static const int maxVideoSize = 100 * 1024 * 1024; // 100MB
-  static const int maxImageSize = 10 * 1024 * 1024;  // 10MB
-  static const int maxAudioSize = 50 * 1024 * 1024;  // 50MB
-  static const int maxDocumentSize = 25 * 1024 * 1024; // 25MB
+  static const int maxVideoSize = 100 * 1024 * 1024; 
+  static const int maxImageSize = 10 * 1024 * 1024; 
+  static const int maxAudioSize = 50 * 1024 * 1024; 
+  static const int maxDocumentSize = 25 * 1024 * 1024;
   
   // Supported File Extensions
   static const List<String> videoExtensions = ['mp4', 'avi', 'mov', 'wmv'];

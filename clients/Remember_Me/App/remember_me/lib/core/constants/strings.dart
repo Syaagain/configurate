@@ -1,7 +1,7 @@
 class AppStrings {
   // App
-  static const String appTitle = 'Media Manager Pro';
-  static const String appSlogan = 'Verwalte deine Medien smart & sicher';
+  static const String appTitle = 'RememberME!';
+  static const String appSlogan = 'Verwalte deine Medien deiner Liebsten smart & sicher';
   
   // Auth
   static const String login = 'Anmelden';

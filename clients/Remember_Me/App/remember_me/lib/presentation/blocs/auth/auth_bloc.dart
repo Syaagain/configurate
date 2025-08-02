@@ -5,16 +5,19 @@ import '../../../domain/usecases/auth/login_user.dart';
 import '../../../domain/usecases/auth/register_user.dart';
 import '../../../domain/usecases/auth/logout_user.dart';
 import '../../../domain/usecases/usecase.dart';
+import '../../../domain/repositories/auth_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUser loginUser;
   final RegisterUser registerUser;
   final LogoutUser logoutUser;
+  final AuthRepository authRepository;
 
   AuthBloc({
     required this.loginUser,
     required this.registerUser,
     required this.logoutUser,
+    required this.authRepository,
   }) : super(AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthRegisterRequested>(_onRegisterRequested);
@@ -75,8 +78,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthCheckRequested event,
     Emitter<AuthState> emit,
   ) async {
-    // TODO: Implement check current user logic
-    // Here you could check if user is still authenticated
-    emit(AuthUnauthenticated());
+    emit(AuthLoading());
+    
+    final result = await authRepository.getCurrentUser();
+    
+    result.fold(
+      (failure) => emit(AuthUnauthenticated()),
+      (user) {
+        if (user != null) {
+          emit(AuthAuthenticated(user));
+        } else {
+          emit(AuthUnauthenticated());
+        }
+      },
+    );
   }
 }

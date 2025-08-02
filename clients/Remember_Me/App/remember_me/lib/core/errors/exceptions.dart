@@ -22,3 +22,8 @@ class ValidationException implements Exception {
   final String message;
   const ValidationException(this.message);
 }
+
+class NetworkException implements Exception {
+  final String message;
+  NetworkException(this.message);
+}
