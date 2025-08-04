@@ -1,0 +1,71 @@
+# Configuraid Website - Robots.txt
+# https://www.configuraid.de/robots.txt
+
+# Allow all bots to access the site
+User-agent: *
+Allow: /
+
+# Disallow specific directories and files
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_nuxt/
+Disallow: /.nuxt/
+Disallow: /node_modules/
+Disallow: /server/
+Disallow: /private/
+
+# Disallow specific pages
+Disallow: /404
+Disallow: /error
+Disallow: /test/
+Disallow: /dev/
+
+# Allow important crawlable content
+Allow: /blog/
+Allow: /leistungen/
+Allow: /referenzen/
+Allow: /ueber-uns/
+Allow: /kontakt/
+Allow: /loesungen/
+
+# Disallow crawling of certain file types
+Disallow: /*.pdf$
+Disallow: /*.doc$
+Disallow: /*.docx$
+Disallow: /*.xls$
+Disallow: /*.xlsx$
+
+# Block access to sensitive files
+Disallow: /.env
+Disallow: /package.json
+Disallow: /package-lock.json
+Disallow: /nuxt.config.ts
+Disallow: /.git/
+
+# Crawl-delay for respectful crawling
+# Crawl-delay: 1
+
+# Google-specific directives
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Bing-specific directives  
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Prevent indexing of development/staging versions
+User-agent: *
+Disallow: /staging/
+Disallow: /dev/
+Disallow: /preview/
+
+# Sitemap location
+Sitemap: https://www.configuraid.de/sitemap.xml
+
+# Additional sitemaps for specific content types
+Sitemap: https://www.configuraid.de/sitemap-blog.xml
+Sitemap: https://www.configuraid.de/sitemap-services.xml
+
+# Last updated: 2024-12-15
