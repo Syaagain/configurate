@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navier-Stokes Fluid Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            z-index: 100;
+            font-size: 14px;
+        }
+        
+        #controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: white;
+            z-index: 100;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h3>Navier-Stokes Fluid Simulation</h3>
+        <p>Bewege die Maus um das Fluid zu beeinflussen</p>
+    </div>
+    
+    <div id="controls">
+        <p>Viscosity: <span id="viscValue">0.01</span></p>
+        <p>Force: <span id="forceValue">50</span></p>
+        <p>Diffusion: <span id="diffValue">0.1</span></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // === NAVIER-STOKES FLUID SIMULATION ===
+        
+        class NavierStokesFluid {
+            constructor(width, height) {
+                this.width = width;
+                this.height = height;
+                this.size = width * height;
+                
+                // Fluid properties
+                this.viscosity = 0.01;      // Viskosität
+                this.diffusion = 0.1;       // Diffusion
+                this.dt = 0.016;            // Zeitschritt (60fps)
+                
+                // Velocity field (u, v components)
+                this.u = new Float32Array(this.size);      // X-Geschwindigkeit
+                this.v = new Float32Array(this.size);      // Y-Geschwindigkeit
+                this.u_prev = new Float32Array(this.size);
+                this.v_prev = new Float32Array(this.size);
+                
+                // Density field (für Visualisierung)
+                this.density = new Float32Array(this.size);
+                this.density_prev = new Float32Array(this.size);
+                
+                // Pressure field
+                this.pressure = new Float32Array(this.size);
+                this.divergence = new Float32Array(this.size);
+                
+                // Mouse interaction
+                this.mouse = { x: 0, y: 0, prevX: 0, prevY: 0, isDown: false };
+                this.forceStrength = 50;
+            }
+            
+            // Array index from 2D coordinates
+            getIndex(x, y) {
+                return Math.max(0, Math.min(this.size - 1, y * this.width + x));
+            }
+            
+            // Add forces (mouse interaction)
+            addForce(x, y, forceX, forceY, densityAmount = 1.0) {
+                if (x < 0 || x >= this.width || y < 0 || y >= this.height) return;
+                
+                const index = this.getIndex(Math.floor(x), Math.floor(y));
+                this.u[index] += forceX * this.dt;
+                this.v[index] += forceY * this.dt;
+                this.density[index] += densityAmount;
+            }
+            
+            // Boundary conditions
+            setBoundary(boundary, field) {
+                const w = this.width;
+                const h = this.height;
+                
+                for (let i = 1; i < w - 1; i++) {
+                    // Top and bottom boundaries
+                    field[this.getIndex(i, 0)] = boundary === 2 ? -field[this.getIndex(i, 1)] : field[this.getIndex(i, 1)];
+                    field[this.getIndex(i, h - 1)] = boundary === 2 ? -field[this.getIndex(i, h - 2)] : field[this.getIndex(i, h - 2)];
+                }
+                
+                for (let j = 1; j < h - 1; j++) {
+                    // Left and right boundaries
+                    field[this.getIndex(0, j)] = boundary === 1 ? -field[this.getIndex(1, j)] : field[this.getIndex(1, j)];
+                    field[this.getIndex(w - 1, j)] = boundary === 1 ? -field[this.getIndex(w - 2, j)] : field[this.getIndex(w - 2, j)];
+                }
+                
+                // Corners
+                field[this.getIndex(0, 0)] = 0.5 * (field[this.getIndex(1, 0)] + field[this.getIndex(0, 1)]);
+                field[this.getIndex(0, h - 1)] = 0.5 * (field[this.getIndex(1, h - 1)] + field[this.getIndex(0, h - 2)]);
+                field[this.getIndex(w - 1, 0)] = 0.5 * (field[this.getIndex(w - 2, 0)] + field[this.getIndex(w - 1, 1)]);
+                field[this.getIndex(w - 1, h - 1)] = 0.5 * (field[this.getIndex(w - 2, h - 1)] + field[this.getIndex(w - 1, h - 2)]);
+            }
+            
+            // Linear solver (Gauss-Seidel relaxation)
+            linearSolve(boundary, field, field0, a, c) {
+                const cRecip = 1.0 / c;
+                
+                for (let iter = 0; iter < 10; iter++) {
+                    for (let j = 1; j < this.height - 1; j++) {
+                        for (let i = 1; i < this.width - 1; i++) {
+                            const index = this.getIndex(i, j);
+                            field[index] = (field0[index] + a * (
+                                field[this.getIndex(i + 1, j)] + field[this.getIndex(i - 1, j)] +
+                                field[this.getIndex(i, j + 1)] + field[this.getIndex(i, j - 1)]
+                            )) * cRecip;
+                        }
+                    }
+                    this.setBoundary(boundary, field);
+                }
+            }
+            
+            // Diffusion step
+            diffuse(boundary, field, field0, diff) {
+                const a = this.dt * diff * (this.width - 2) * (this.height - 2);
+                this.linearSolve(boundary, field, field0, a, 1 + 4 * a);
+            }
+            
+            // Project step (make velocity field incompressible)
+            project() {
+                const h = 1.0 / this.width;
+                
+                // Calculate divergence
+                for (let j = 1; j < this.height - 1; j++) {
+                    for (let i = 1; i < this.width - 1; i++) {
+                        const index = this.getIndex(i, j);
+                        this.divergence[index] = -0.5 * h * (
+                            this.u[this.getIndex(i + 1, j)] - this.u[this.getIndex(i - 1, j)] +
+                            this.v[this.getIndex(i, j + 1)] - this.v[this.getIndex(i, j - 1)]
+                        );
+                        this.pressure[index] = 0;
+                    }
+                }
+                
+                this.setBoundary(0, this.divergence);
+                this.setBoundary(0, this.pressure);
+                this.linearSolve(0, this.pressure, this.divergence, 1, 4);
+                
+                // Subtract pressure gradient
+                for (let j = 1; j < this.height - 1; j++) {
+                    for (let i = 1; i < this.width - 1; i++) {
+                        const index = this.getIndex(i, j);
+                        this.u[index] -= 0.5 * (this.pressure[this.getIndex(i + 1, j)] - this.pressure[this.getIndex(i - 1, j)]) / h;
+                        this.v[index] -= 0.5 * (this.pressure[this.getIndex(i, j + 1)] - this.pressure[this.getIndex(i, j - 1)]) / h;
+                    }
+                }
+                
+                this.setBoundary(1, this.u);
+                this.setBoundary(2, this.v);
+            }
+            
+            // Advection step
+            advect(boundary, field, field0, velocU, velocV) {
+                const dtx = this.dt * (this.width - 2);
+                const dty = this.dt * (this.height - 2);
+                
+                for (let j = 1; j < this.height - 1; j++) {
+                    for (let i = 1; i < this.width - 1; i++) {
+                        const index = this.getIndex(i, j);
+                        
+                        let x = i - dtx * velocU[index];
+                        let y = j - dty * velocV[index];
+                        
+                        // Clamp to boundaries
+                        x = Math.max(0.5, Math.min(this.width - 1.5, x));
+                        y = Math.max(0.5, Math.min(this.height - 1.5, y));
+                        
+                        const i0 = Math.floor(x);
+                        const i1 = i0 + 1;
+                        const j0 = Math.floor(y);
+                        const j1 = j0 + 1;
+                        
+                        const s1 = x - i0;
+                        const s0 = 1 - s1;
+                        const t1 = y - j0;
+                        const t0 = 1 - t1;
+                        
+                        field[index] = s0 * (t0 * field0[this.getIndex(i0, j0)] + t1 * field0[this.getIndex(i0, j1)]) +
+                                      s1 * (t0 * field0[this.getIndex(i1, j0)] + t1 * field0[this.getIndex(i1, j1)]);
+                    }
+                }
+                
+                this.setBoundary(boundary, field);
+            }
+            
+            // Main simulation step
+            step() {
+                // Velocity step
+                this.diffuse(1, this.u_prev, this.u, this.viscosity);
+                this.diffuse(2, this.v_prev, this.v, this.viscosity);
+                
+                this.project();
+                
+                this.advect(1, this.u, this.u_prev, this.u_prev, this.v_prev);
+                this.advect(2, this.v, this.v_prev, this.u_prev, this.v_prev);
+                
+                this.project();
+                
+                // Density step
+                this.diffuse(0, this.density_prev, this.density, this.diffusion);
+                this.advect(0, this.density, this.density_prev, this.u, this.v);
+                
+                // Fade density over time
+                for (let i = 0; i < this.size; i++) {
+                    this.density[i] *= 0.995;
+                }
+            }
+            
+            // Handle mouse interaction
+            handleMouse(mouseX, mouseY, isPressed) {
+                const prevX = this.mouse.prevX;
+                const prevY = this.mouse.prevY;
+                
+                this.mouse.prevX = mouseX;
+                this.mouse.prevY = mouseY;
+                
+                if (isPressed) {
+                    const forceX = (mouseX - prevX) * this.forceStrength;
+                    const forceY = (mouseY - prevY) * this.forceStrength;
+                    
+                    // Add force in radius around mouse
+                    const radius = 5;
+                    for (let dx = -radius; dx <= radius; dx++) {
+                        for (let dy = -radius; dy <= radius; dy++) {
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            if (dist <= radius) {
+                                const strength = (1 - dist / radius);
+                                this.addForce(
+                                    mouseX + dx, 
+                                    mouseY + dy, 
+                                    forceX * strength, 
+                                    forceY * strength, 
+                                    strength
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // === THREE.JS VISUALIZATION ===
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        
+        // Fluid simulation
+        const GRID_WIDTH = 128;
+        const GRID_HEIGHT = 96;
+        const fluid = new NavierStokesFluid(GRID_WIDTH, GRID_HEIGHT);
+        
+        // Create texture for fluid visualization
+        const fluidTexture = new THREE.DataTexture(
+            new Uint8Array(GRID_WIDTH * GRID_HEIGHT * 4),
+            GRID_WIDTH,
+            GRID_HEIGHT,
+            THREE.RGBAFormat
+        );
+        fluidTexture.needsUpdate = true;
+        
+        // Shader material for fluid rendering
+        const fluidMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                fluidTexture: { value: fluidTexture },
+                time: { value: 0 }
+            },
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform sampler2D fluidTexture;
+                uniform float time;
+                varying vec2 vUv;
+                
+                vec3 hsv2rgb(vec3 c) {
+                    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+                    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+                    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+                }
+                
+                void main() {
+                    vec4 fluidData = texture2D(fluidTexture, vUv);
+                    float density = fluidData.r;
+                    float velocityMag = length(fluidData.gb);
+                    
+                    // Color based on density and velocity
+                    float hue = velocityMag * 0.3 + time * 0.1;
+                    float saturation = min(1.0, density * 2.0);
+                    float brightness = min(1.0, density + velocityMag * 0.5);
+                    
+                    vec3 color = hsv2rgb(vec3(hue, saturation, brightness));
+                    
+                    // Add some glow effect
+                    float glow = smoothstep(0.0, 0.1, density) * 0.8;
+                    color += vec3(glow * 0.2, glow * 0.4, glow * 0.8);
+                    
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `
+        });
+        
+        // Fluid plane
+        const fluidGeometry = new THREE.PlaneGeometry(2, 2);
+        const fluidMesh = new THREE.Mesh(fluidGeometry, fluidMaterial);
+        scene.add(fluidMesh);
+        
+        // Mouse handling
+        const mouse = { x: 0, y: 0, isPressed: false };
+        
+        function onMouseMove(event) {
+            mouse.x = (event.clientX / window.innerWidth) * GRID_WIDTH;
+            mouse.y = (1 - event.clientY / window.innerHeight) * GRID_HEIGHT;
+        }
+        
+        function onMouseDown(event) {
+            mouse.isPressed = true;
+        }
+        
+        function onMouseUp(event) {
+            mouse.isPressed = false;
+        }
+        
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mouseup', onMouseUp);
+        
+        // Touch handling for mobile
+        window.addEventListener('touchmove', (event) => {
+            event.preventDefault();
+            const touch = event.touches[0];
+            mouse.x = (touch.clientX / window.innerWidth) * GRID_WIDTH;
+            mouse.y = (1 - touch.clientY / window.innerHeight) * GRID_HEIGHT;
+            mouse.isPressed = true;
+        });
+        
+        window.addEventListener('touchstart', () => mouse.isPressed = true);
+        window.addEventListener('touchend', () => mouse.isPressed = false);
+        
+        // Window resize
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Update texture with fluid data
+        function updateFluidTexture() {
+            const data = fluidTexture.image.data;
+            
+            for (let i = 0; i < fluid.size; i++) {
+                const density = Math.min(255, fluid.density[i] * 255);
+                const velocityX = Math.min(127, Math.abs(fluid.u[i]) * 1000) + 128;
+                const velocityY = Math.min(127, Math.abs(fluid.v[i]) * 1000) + 128;
+                
+                data[i * 4] = density;     // R: density
+                data[i * 4 + 1] = velocityX; // G: velocity X
+                data[i * 4 + 2] = velocityY; // B: velocity Y
+                data[i * 4 + 3] = 255;       // A: alpha
+            }
+            
+            fluidTexture.needsUpdate = true;
+        }
+        
+        // Animation loop
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            time += 0.016;
+            
+            // Update fluid simulation
+            fluid.handleMouse(mouse.x, mouse.y, mouse.isPressed);
+            fluid.step();
+            
+            // Update visualization
+            updateFluidTexture();
+            fluidMaterial.uniforms.time.value = time;
+            
+            // Update UI
+            document.getElementById('viscValue').textContent = fluid.viscosity.toFixed(3);
+            document.getElementById('forceValue').textContent = fluid.forceStrength.toFixed(0);
+            document.getElementById('diffValue').textContent = fluid.diffusion.toFixed(2);
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Add some initial turbulence
+        for (let i = 0; i < 10; i++) {
+            const x = Math.random() * GRID_WIDTH;
+            const y = Math.random() * GRID_HEIGHT;
+            const fx = (Math.random() - 0.5) * 100;
+            const fy = (Math.random() - 0.5) * 100;
+            fluid.addForce(x, y, fx, fy, 2.0);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
