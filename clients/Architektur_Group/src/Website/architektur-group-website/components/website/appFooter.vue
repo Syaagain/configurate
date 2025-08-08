@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import SocialIcons from '~/components/socialIcons.vue'
+import SocialIcons from '~/components/website/socialIcons.vue'
 
 const email = ref('')
 

@@ -1,16 +1,33 @@
 <template>
   <div class="app-wrapper">
-    <AppHeader />
+    <!-- Desktop Header -->
+    <AppHeader v-if="!isMobile" />
+    <!-- Mobile Header -->
+    <MobileHeader v-else />
+    
     <main>
       <slot />
     </main>
-    <AppFooter />
+    
+    <!-- Desktop Footer -->
+    <AppFooter v-if="!isMobile" />
+    <!-- Mobile Bottom Sheet für Navigation -->
+    <MobileBottomSheet v-else />
   </div>
 </template>
 
 <script setup>
-import AppHeader from '~/components/appHeader.vue'
-import AppFooter from '~/components/appFooter.vue'
+// Desktop Components
+import AppHeader from '~/components/website/appHeader.vue'
+import AppFooter from '~/components/website/appFooter.vue'
+
+// Mobile Components
+import MobileHeader from '~/components/mobile/mobileHeader.vue'
+import MobileBottomSheet from '~/components/mobile/mobileBottomSheet.vue'
+
+// Device Detection
+import { useDevice } from '~/composables/useDevice'
+const { isMobile } = useDevice()
 </script>
 
 <style scoped>
