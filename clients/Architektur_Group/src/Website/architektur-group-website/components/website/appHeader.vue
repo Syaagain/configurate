@@ -45,8 +45,8 @@
             <ul class="flex flex-col items-center justify-center">
               <li><NuxtLink to="/ueber-uns" @click="closeMenu" class="submenu-item">Über uns</NuxtLink></li>
               <li><NuxtLink to="/sortiment" @click="closeMenu" class="submenu-item">Sortiment</NuxtLink></li>
-              <li><NuxtLink to="/showrooms" @click="closeMenu" class="submenu-item">Showrooms</NuxtLink></li>
               <li><NuxtLink to="/projekte" @click="closeMenu" class="submenu-item">Projekte</NuxtLink></li>
+              <li><NuxtLink to="/magazin" @click="closeMenu" class="submenu-item">Magazin</NuxtLink></li>
               <li><NuxtLink to="/service" @click="closeMenu" class="submenu-item">Service</NuxtLink></li>
             </ul>
           </nav>
@@ -89,15 +89,15 @@
           <!-- Social Links -->
           <div class="text-center">
             <h3 class="text-lg font-light uppercase tracking-wider text-gray-300 mb-4">Social</h3>
-            <div class="flex justify-center">
+            <div class="flex justify-center gap-4">
               <a href="#" class="text-2xl hover:text-yellow-400 transition">
                 <span class="material-icons">facebook</span>
               </a>
-              <a href="#" class="text-2xl hover:text-yellow-400 transition">
-                <span class="material-icons">instagram</span>
+              <a href="#" class="text-2xl hover:text-yellow-400 transition ml-4">
+                <span class="material-icons">photo_camera</span>
               </a>
-              <a href="#" class="text-2xl hover:text-yellow-400 transition">
-                <span class="material-icons">linkedin</span>
+              <a href="#" class="text-2xl hover:text-yellow-400 transition ml-4">
+                <span class="material-icons">work</span>
               </a>
             </div>
           </div>
@@ -144,32 +144,24 @@ const toggleLang = () => {
 const handleScroll = () => {
   const currentScrollY = window.scrollY
   
-  // Immer sichtbar wenn:
-  // 1. Ganz oben (< 100px)
-  // 2. Menü ist offen
-  // 3. Hochscrollen
   if (currentScrollY < 100 || menuOpen.value || currentScrollY < lastScrollY.value) {
     headerVisible.value = true
   } else if (currentScrollY > lastScrollY.value && currentScrollY > 100) {
-    // Ausblenden beim Runterscrollen (aber nicht wenn Menü offen)
     headerVisible.value = false
   }
   
   lastScrollY.value = currentScrollY
 }
 
-// Scroll-Listener hinzufügen
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
-// Clean up on unmount
 onUnmounted(() => {
   document.body.classList.remove('overlay-open')
   window.removeEventListener('scroll', handleScroll)
 })
 
-// Sicherstellen dass Header sichtbar ist wenn Menü öffnet
 watch(menuOpen, (newValue) => {
   if (newValue) {
     headerVisible.value = true
@@ -187,7 +179,7 @@ watch(menuOpen, (newValue) => {
 .logo-shield {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-white) 100%);
+  background: linear-gradient(135deg, #a47148 0%, #FAFAF8 100%);
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   display: flex;
   align-items: center;
@@ -208,10 +200,9 @@ watch(menuOpen, (newValue) => {
   z-index: 1;
   font-weight: 700;
   font-size: 18px;
-  color: var(--primary-white);
+  color: #FAFAF8;
 }
 
-/* ============== MENU OVERLAY ============== */
 #menu-overlay {
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
@@ -242,15 +233,13 @@ watch(menuOpen, (newValue) => {
 
 .submenu-item:hover {
   transform: translateY(0);
-  color: var(--primary-gold);
+  color: #a47148;
 }
 
-/* Grey-out every other item only while one is hovered */
 #menu-overlay:has(.submenu-item:hover) .submenu-item:not(:hover) {
   color: #B0B0B0;
 }
 
-/* ============== MENU TRIGGER ICON (MENÜ → ✕) ============== */
 .menu-item-title {
   position: relative;
   display: inline-flex;
@@ -277,7 +266,6 @@ watch(menuOpen, (newValue) => {
   transition: all 0.3s ease;
 }
 
-/* ============== MENU TRANSITIONS ============== */
 .menu-enter-active,
 .menu-leave-active {
   transition: opacity 0.3s ease;
@@ -288,7 +276,6 @@ watch(menuOpen, (newValue) => {
   opacity: 0;
 }
 
-/* ============== MOBILE OPTIMIZATIONS ============== */
 @media (max-width: 768px) {
   #menu-overlay ul {
     text-align: center;
@@ -309,7 +296,6 @@ watch(menuOpen, (newValue) => {
 </style>
 
 <style>
-/* Prevent body scrolling when overlay open */
 body.overlay-open {
   overflow: hidden;
 }
