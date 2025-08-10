@@ -96,7 +96,7 @@
             :data-index="index"
           >
             <div class="step-marker">
-              <span class="step-number">{{ String(index + 1).padStart(2, '0') }}</span>
+              <span class="step-number">{{ toRoman(index + 1) }}</span>
               <div class="marker-pulse"></div>
             </div>
             
@@ -114,73 +114,95 @@
       </div>
     </section>
 
-    <!-- Advantages Section -->
+    <!-- Luxury Advantages Section -->
     <section class="advantages-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-badge">VORTEILE</span>
+          <span class="section-badge">EXKLUSIVITÄT</span>
           <h2 class="section-title">WARUM ARCHITEKTUR GROUP?</h2>
-          <p class="section-subtitle">Weitere Vorteile im Überblick</p>
+          <p class="section-subtitle">Erstklassige Vorteile für anspruchsvolle Kunden</p>
         </div>
 
-        <div class="advantages-grid">
+        <!-- Premium Advantages Grid -->
+        <div class="premium-advantages">
           <div 
             v-for="(advantage, index) in advantages" 
             :key="advantage.id"
-            class="advantage-card"
-            :style="{ animationDelay: `${index * 0.05}s` }"
-            @click="advantage.expanded = !advantage.expanded"
+            class="premium-advantage-card"
+            :style="{ animationDelay: `${index * 0.1}s` }"
+            :class="{ 
+              'expanded': expandedAdvantages.includes(advantage.id),
+              'highlight': index < 4 
+            }"
+            @mouseenter="handleCardHover(advantage.id)"
+            @mouseleave="handleCardLeave(advantage.id)"
           >
-            <div class="advantage-header">
-              <div class="advantage-icon">
-                <span class="material-icons">{{ advantage.icon }}</span>
+            <!-- Card Background Effects -->
+            <div class="card-glow"></div>
+            <div class="card-shine"></div>
+            
+            <!-- Card Header -->
+            <div class="premium-card-header" @click="toggleAdvantage(advantage.id)">
+              <div class="advantage-icon-wrapper">
+                <div class="icon-ring"></div>
+                <span class="material-icons advantage-icon">{{ advantage.icon }}</span>
               </div>
-              <h3 class="advantage-title">{{ advantage.title }}</h3>
-              <span class="expand-icon material-icons">
-                {{ advantage.expanded ? 'expand_less' : 'expand_more' }}
-              </span>
+              <div class="advantage-info">
+                <h3 class="advantage-title">{{ advantage.title }}</h3>
+                <div class="advantage-indicator">
+                  <span class="material-icons expand-arrow">
+                    {{ expandedAdvantages.includes(advantage.id) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                  </span>
+                </div>
+              </div>
             </div>
             
-            <transition name="expand">
-              <div v-if="advantage.expanded" class="advantage-content">
-                <p>{{ advantage.description }}</p>
+            <!-- Expandable Content -->
+            <transition name="advantage-expand" @enter="onAdvantageEnter" @leave="onAdvantageLeave">
+              <div v-if="expandedAdvantages.includes(advantage.id)" class="premium-advantage-content">
+                <div class="content-divider"></div>
+                <p class="advantage-description">{{ advantage.description }}</p>
+                <div class="advantage-badge">
+                  <span class="material-icons badge-icon">verified</span>
+                  <span>PREMIUM VORTEIL</span>
+                </div>
               </div>
             </transition>
           </div>
         </div>
 
-        <!-- Special Features -->
-        <div class="special-features">
-          <h3 class="features-title">BESONDERE LEISTUNGEN</h3>
-          <div class="features-carousel">
-            <div class="carousel-track" :style="{ transform: `translateX(-${currentFeature * 100}%)` }">
-              <div 
-                v-for="feature in specialFeatures" 
-                :key="feature.id"
-                class="feature-slide"
-              >
-                <div class="feature-icon">
+        <!-- Luxury Special Features Showcase -->
+        <div class="luxury-features-showcase">
+          <div class="showcase-header">
+            <h3 class="showcase-title">EXKLUSIVE SERVICELEISTUNGEN</h3>
+            <p class="showcase-subtitle">Außergewöhnlicher Service für außergewöhnliche Kunden</p>
+          </div>
+          
+          <div class="features-luxury-grid">
+            <div 
+              v-for="(feature, index) in specialFeatures" 
+              :key="feature.id"
+              class="luxury-feature-card"
+              :style="{ animationDelay: `${index * 0.2}s` }"
+              @mouseenter="playFeatureAnimation(feature.id)"
+            >
+              <div class="luxury-feature-background">
+                <div class="feature-gradient"></div>
+                <div class="feature-pattern"></div>
+              </div>
+              
+              <div class="luxury-feature-content">
+                <div class="luxury-feature-icon">
+                  <div class="icon-backdrop"></div>
                   <span class="material-icons">{{ feature.icon }}</span>
                 </div>
-                <h4>{{ feature.title }}</h4>
-                <p>{{ feature.description }}</p>
+                <h4 class="luxury-feature-title">{{ feature.title }}</h4>
+                <p class="luxury-feature-description">{{ feature.description }}</p>
+                
+                <div class="feature-highlight">
+                  <div class="highlight-bar"></div>
+                </div>
               </div>
-            </div>
-            <div class="carousel-controls">
-              <button @click="prevFeature" class="carousel-btn">
-                <span class="material-icons">chevron_left</span>
-              </button>
-              <div class="carousel-dots">
-                <button 
-                  v-for="(feature, index) in specialFeatures" 
-                  :key="index"
-                  @click="currentFeature = index"
-                  :class="['dot', { active: currentFeature === index }]"
-                ></button>
-              </div>
-              <button @click="nextFeature" class="carousel-btn">
-                <span class="material-icons">chevron_right</span>
-              </button>
             </div>
           </div>
         </div>
@@ -237,48 +259,6 @@
               </transition>
             </div>
           </transition-group>
-        </div>
-      </div>
-    </section>
-
-    <!-- Partner Provision Section -->
-    <section class="provision-section">
-      <div class="provision-background">
-        <div class="animated-bg"></div>
-      </div>
-      <div class="container">
-        <div class="provision-content">
-          <div class="provision-icon">
-            <span class="material-icons">handshake</span>
-          </div>
-          <h2 class="provision-title">TIPPGEBERPROVISION</h2>
-          <p class="provision-subtitle">Profitieren Sie von erfolgreichen Kundenvermittlungen</p>
-          
-          <div class="provision-range">
-            <div class="range-item">
-              <span class="range-value">10%</span>
-              <span class="range-label">MINIMUM</span>
-            </div>
-            <div class="range-divider">
-              <div class="divider-line"></div>
-              <span class="material-icons">trending_up</span>
-              <div class="divider-line"></div>
-            </div>
-            <div class="range-item">
-              <span class="range-value">70%</span>
-              <span class="range-label">MAXIMUM</span>
-            </div>
-          </div>
-          
-          <p class="provision-description">
-            Für die erfolgreiche Vermittlung von Kunden bieten wir nach Absprache eine 
-            attraktive Tippgeberprovision je nach Auftragsvolumen
-          </p>
-          
-          <NuxtLink to="/kontakt" class="provision-btn">
-            PARTNER WERDEN
-            <span class="material-icons">arrow_forward</span>
-          </NuxtLink>
         </div>
       </div>
     </section>
@@ -465,8 +445,9 @@ const timelineProgress = ref(0)
 const visibleSteps = ref([])
 const activeFaqCategory = ref('allgemein')
 const expandedFaqs = ref([])
-const currentFeature = ref(0)
+const expandedAdvantages = ref([]) // Separates Array für Bug-Fix
 const selectedService = ref(null)
+const hoveredCards = ref(new Set())
 
 // Form
 const form = reactive({
@@ -596,72 +577,64 @@ const processSteps = [
   }
 ]
 
-// Advantages (aus dem Text)
-const advantages = reactive([
+// Advantages - fixed reactive structure
+const advantages = [
   {
     id: 1,
     icon: 'inventory',
     title: 'Mehr als 650 Natursteinsorten',
-    description: 'Europas größte Auswahl an Natursteinen in jeder Form. Spezialisierung auf Natursteine mit Top-Qualität, nur 1. Wahl und 1. Sortierung, alle Steine zertifiziert mit Blocknummer.',
-    expanded: false
+    description: 'Europas größte Auswahl an Natursteinen in jeder Form. Spezialisierung auf Natursteine mit Top-Qualität, nur 1. Wahl und 1. Sortierung, alle Steine zertifiziert mit Blocknummer.'
   },
   {
     id: 2,
     icon: 'warehouse',
     title: 'Alle Artikel sind Lagerware',
-    description: 'Auf über 80.000 m² Lagerfläche haben wir Europas größte Auswahl an Natursteinen in jeder Form vorrätig. Produkte aus unserem Sortiment sind für Sie sofort lieferbar.',
-    expanded: false
+    description: 'Auf über 80.000 m² Lagerfläche haben wir Europas größte Auswahl an Natursteinen in jeder Form vorrätig. Produkte aus unserem Sortiment sind für Sie sofort lieferbar.'
   },
   {
     id: 3,
     icon: 'architecture',
     title: 'Fachmännische Design Beratung',
-    description: 'Ausgezeichnete Beratung durch Fachverkäufer in Gestaltung, Trends, Fliesen-Technologie, Verlegung, Pflege und Reinigung. Unser Verkaufsteam verfügt über eine renommierte Innenarchitektin.',
-    expanded: false
+    description: 'Ausgezeichnete Beratung durch Fachverkäufer in Gestaltung, Trends, Fliesen-Technologie, Verlegung, Pflege und Reinigung. Unser Verkaufsteam verfügt über eine renommierte Innenarchitektin.'
   },
   {
     id: 4,
     icon: 'handyman',
     title: 'Europaweite Verlegung und Montage',
-    description: 'Unsere fachmännische Verlegung und Montage zeichnen uns aus! Europaweite Lieferung, Montage und Verlegung von unserem Werk.',
-    expanded: false
+    description: 'Unsere fachmännische Verlegung und Montage zeichnen uns aus! Europaweite Lieferung, Montage und Verlegung von unserem Werk.'
   },
   {
     id: 5,
     icon: 'savings',
     title: 'Firmenverbund-Vorteile',
-    description: 'Wir arbeiten in einem Firmenverbund. Durch den gemeinsamen Einkauf haben wir günstige Einkaufskonditionen. Den dadurch erzielten Preisvorteil geben wir an unsere Kunden weiter.',
-    expanded: false
+    description: 'Wir arbeiten in einem Firmenverbund. Durch den gemeinsamen Einkauf haben wir günstige Einkaufskonditionen. Den dadurch erzielten Preisvorteil geben wir an unsere Kunden weiter.'
   },
   {
     id: 6,
     icon: 'wb_sunny',
     title: 'Spezielle Lichtverhältnisse',
-    description: 'Aufgrund der speziellen Lichtverhältnisse in unserer Ausstellung, haben Sie die Möglichkeit, die Fliesen mittels unterschiedlicher Lichteffekte (Sonnenlicht, Tageslicht, Dämmerung, Wohnräumlichkeit) anzusehen.',
-    expanded: false
+    description: 'Aufgrund der speziellen Lichtverhältnisse in unserer Ausstellung, haben Sie die Möglichkeit, die Fliesen mittels unterschiedlicher Lichteffekte (Sonnenlicht, Tageslicht, Dämmerung, Wohnräumlichkeit) anzusehen.'
   },
   {
     id: 7,
     icon: 'collections',
     title: 'Digitale Bildergalerie',
-    description: 'Inspirationen durch unsere digitale Bildergalerie in unserer Ausstellung für eine optimale Visualisierung Ihrer Projekte.',
-    expanded: false
+    description: 'Inspirationen durch unsere digitale Bildergalerie in unserer Ausstellung für eine optimale Visualisierung Ihrer Projekte.'
   },
   {
     id: 8,
     icon: 'home_work',
     title: 'Badplanung nach Vereinbarung',
-    description: 'Individuelle Badplanung mit 3D-Visualisierung nach Terminvereinbarung durch unsere Experten.',
-    expanded: false
+    description: 'Individuelle Badplanung mit 3D-Visualisierung nach Terminvereinbarung durch unsere Experten.'
   }
-])
+]
 
 // Special Features (aus dem Text)
 const specialFeatures = [
   {
     id: 1,
     icon: 'accessible',
-    title: 'Behindertengerecht',
+    title: 'Barrierefrei',
     description: 'Unsere Ausstellung ist selbstverständlich behindertengerecht ausgestattet'
   },
   {
@@ -692,7 +665,7 @@ const faqCategories = [
   { id: 'bestellung', name: 'Bestellung & Lieferung', icon: 'shopping_cart', count: 6 }
 ]
 
-// Complete FAQ Data (aus dem bereitgestellten Text)
+// Complete FAQ Data
 const faqs = [
   // Allgemein
   {
@@ -880,6 +853,11 @@ const filteredFaqs = computed(() => {
 })
 
 // Methods
+const toRoman = (num) => {
+  const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+  return romanNumerals[num - 1] || num.toString()
+}
+
 const scrollToSection = (id) => {
   const element = document.getElementById(id)
   if (element) {
@@ -906,14 +884,40 @@ const toggleFaq = (id) => {
   }
 }
 
-const prevFeature = () => {
-  currentFeature.value = currentFeature.value === 0 
-    ? specialFeatures.length - 1 
-    : currentFeature.value - 1
+// Fixed advantage methods
+const toggleAdvantage = (id) => {
+  const index = expandedAdvantages.value.indexOf(id)
+  if (index > -1) {
+    expandedAdvantages.value.splice(index, 1)
+  } else {
+    expandedAdvantages.value.push(id)
+  }
 }
 
-const nextFeature = () => {
-  currentFeature.value = (currentFeature.value + 1) % specialFeatures.length
+const handleCardHover = (id) => {
+  hoveredCards.value.add(id)
+}
+
+const handleCardLeave = (id) => {
+  hoveredCards.value.delete(id)
+}
+
+const playFeatureAnimation = (id) => {
+  // Animation placeholder
+}
+
+const onAdvantageEnter = (el) => {
+  el.style.height = '0'
+  el.style.opacity = '0'
+  setTimeout(() => {
+    el.style.height = 'auto'
+    el.style.opacity = '1'
+  }, 10)
+}
+
+const onAdvantageLeave = (el) => {
+  el.style.height = '0'
+  el.style.opacity = '0'
 }
 
 const submitForm = () => {
@@ -1001,11 +1005,6 @@ onMounted(() => {
     step.dataset.index = index
     stepsObserver.observe(step)
   })
-  
-  // Auto-rotate features
-  setInterval(() => {
-    nextFeature()
-  }, 5000)
 })
 
 onUnmounted(() => {
@@ -1491,7 +1490,11 @@ onUnmounted(() => {
 
 .marker-pulse {
   position: absolute;
-  inset: -10px;
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  transform: translate(-50%, -50%);
   border: 2px solid #a47148;
   border-radius: 50%;
   animation: pulse 2s infinite;
@@ -1499,11 +1502,11 @@ onUnmounted(() => {
 
 @keyframes pulse {
   0% {
-    transform: scale(1);
+    transform: translate(-50%, -50%) scale(1);
     opacity: 1;
   }
   100% {
-    transform: scale(1.5);
+    transform: translate(-50%, -50%) scale(2);
     opacity: 0;
   }
 }
@@ -1544,193 +1547,425 @@ onUnmounted(() => {
   background: linear-gradient(45deg, rgba(0,0,0,0.4), rgba(164, 113, 72, 0.2));
 }
 
-/* Advantages Section */
+/* Luxury Advantages Section */
 .advantages-section {
-  padding: 6rem 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-}
-
-.advantages-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-bottom: 4rem;
-}
-
-.advantage-card {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 15px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  animation: advantageIn 0.6s ease-out backwards;
-}
-
-@keyframes advantageIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.advantage-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  transform: translateY(-5px);
-}
-
-.advantage-header {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 1rem;
-}
-
-.advantage-icon {
-  width: 50px;
-  height: 50px;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a47148;
-  font-size: 1.5rem;
-}
-
-.advantage-title {
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #FAFAF8;
-}
-
-.expand-icon {
-  color: #a47148;
-  transition: transform 0.3s ease;
-}
-
-.advantage-card:hover .expand-icon {
-  transform: rotate(180deg);
-}
-
-.advantage-content {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.advantage-content p {
-  color: #ccc;
-  line-height: 1.6;
-}
-
-/* Special Features */
-.special-features {
-  margin-top: 4rem;
-  padding: 3rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.features-title {
-  font-size: 2rem;
-  font-weight: 300;
-  margin-bottom: 2rem;
-  text-align: center;
-  color: #FAFAF8;
-}
-
-.features-carousel {
+  padding: 8rem 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(164, 113, 72, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(164, 113, 72, 0.05) 0%, transparent 50%),
+    linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0a0a0a 100%);
   position: relative;
   overflow: hidden;
 }
 
-.carousel-track {
-  display: flex;
-  transition: transform 0.5s ease;
+.advantages-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
 }
 
-.feature-slide {
-  min-width: 100%;
-  text-align: center;
+/* Premium Advantages Grid */
+.premium-advantages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 6rem;
+}
+
+.premium-advantage-card {
+  position: relative;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.08) 0%, 
+    rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
   padding: 2rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: premiumCardIn 0.8s ease-out backwards;
 }
 
-.feature-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
+@keyframes premiumCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(60px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.premium-advantage-card.highlight {
+  border-image: linear-gradient(135deg, #a47148, transparent) 1;
+}
+
+.premium-advantage-card:hover {
+  transform: translateY(-15px) scale(1.03);
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.12) 0%, 
+    rgba(164, 113, 72, 0.05) 100%);
+  box-shadow: 
+    0 40px 80px rgba(164, 113, 72, 0.3),
+    inset 0 0 0 1px rgba(164, 113, 72, 0.2);
+}
+
+.premium-advantage-card.expanded {
+  border-color: rgba(164, 113, 72, 0.4);
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 100%);
+}
+
+/* Card Effects */
+.card-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(164, 113, 72, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+
+.premium-advantage-card:hover .card-glow {
+  opacity: 1;
+}
+
+.card-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.premium-advantage-card:hover .card-shine {
+  left: 100%;
+}
+
+/* Card Header */
+.premium-card-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.advantage-icon-wrapper {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50%;
+  animation: iconRingRotate 8s linear infinite;
+}
+
+@keyframes iconRingRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.advantage-icon {
+  font-size: 2rem;
+  color: #a47148;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.1));
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
-  color: #000;
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 1;
 }
 
-.feature-slide h4 {
+.premium-advantage-card:hover .advantage-icon {
+  color: #FAFAF8;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  transform: scale(1.1) rotateY(180deg);
+}
+
+.advantage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.advantage-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #FAFAF8;
+  line-height: 1.3;
+  transition: color 0.3s ease;
+}
+
+.premium-advantage-card:hover .advantage-title {
+  color: #a47148;
+}
+
+.advantage-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(164, 113, 72, 0.1);
+  border-radius: 50%;
+  transition: all 0.4s ease;
+}
+
+.expand-arrow {
+  color: #a47148;
   font-size: 1.5rem;
-  font-weight: 400;
+  transition: all 0.4s ease;
+}
+
+.premium-advantage-card.expanded .expand-arrow {
+  transform: rotate(180deg);
+  color: #FAFAF8;
+}
+
+.premium-advantage-card:hover .advantage-indicator {
+  background: rgba(164, 113, 72, 0.2);
+  transform: scale(1.1);
+}
+
+/* Expandable Content */
+.premium-advantage-content {
+  margin-top: 2rem;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.content-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+  margin-bottom: 1.5rem;
+}
+
+.advantage-description {
+  color: #ccc;
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.advantage-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #a47148;
+}
+
+.badge-icon {
+  font-size: 1rem;
+}
+
+/* Transitions */
+.advantage-expand-enter-active,
+.advantage-expand-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.advantage-expand-enter-from,
+.advantage-expand-leave-to {
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(-20px);
+}
+
+.advantage-expand-enter-to,
+.advantage-expand-leave-from {
+  opacity: 1;
+  max-height: 300px;
+  transform: translateY(0);
+}
+
+/* Luxury Features Showcase */
+.luxury-features-showcase {
+  padding: 4rem 0;
+  position: relative;
+}
+
+.showcase-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.showcase-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.showcase-subtitle {
+  font-size: 1.1rem;
+  color: #999;
+  font-style: italic;
+}
+
+.features-luxury-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 3rem;
+}
+
+.luxury-feature-card {
+  position: relative;
+  height: 300px;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  animation: luxuryFeatureIn 0.8s ease-out backwards;
+  transition: all 0.6s ease;
+}
+
+@keyframes luxuryFeatureIn {
+  from {
+    opacity: 0;
+    transform: translateY(80px) rotateX(-15deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
+}
+
+.luxury-feature-card:hover {
+  transform: translateY(-20px) scale(1.05);
+}
+
+.luxury-feature-background {
+  position: absolute;
+  inset: 0;
+}
+
+.feature-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.8) 0%, 
+    rgba(0, 0, 0, 0.9) 100%);
+}
+
+.feature-pattern {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+}
+
+.luxury-feature-content {
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.luxury-feature-icon {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-backdrop {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(164, 113, 72, 0.3));
+  border-radius: 50%;
+  filter: blur(20px);
+}
+
+.luxury-feature-icon .material-icons {
+  font-size: 3rem;
+  color: #FAFAF8;
+  position: relative;
+  z-index: 1;
+}
+
+.luxury-feature-title {
+  font-size: 1.5rem;
+  font-weight: 500;
   margin-bottom: 1rem;
   color: #FAFAF8;
 }
 
-.feature-slide p {
+.luxury-feature-description {
   color: #ccc;
   line-height: 1.6;
+  margin-bottom: 2rem;
 }
 
-.carousel-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-}
-
-.carousel-btn {
-  width: 40px;
-  height: 40px;
+.feature-highlight {
+  width: 100%;
+  height: 2px;
   background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: #FAFAF8;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.carousel-btn:hover {
-  background: #a47148;
-  color: #000;
+.highlight-bar {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #FAFAF8, transparent);
+  animation: highlightSlide 3s ease-in-out infinite;
 }
 
-.carousel-dots {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.dot.active {
-  background: #a47148;
-  transform: scale(1.3);
+@keyframes highlightSlide {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
 }
 
 /* FAQ Section */
@@ -1856,145 +2091,6 @@ onUnmounted(() => {
 
 .answer-content strong {
   color: #FAFAF8;
-}
-
-/* Provision Section */
-.provision-section {
-  position: relative;
-  padding: 6rem 0;
-  overflow: hidden;
-}
-
-.provision-background {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-}
-
-.animated-bg {
-  position: absolute;
-  inset: 0;
-  opacity: 0.1;
-  background: repeating-linear-gradient(
-    45deg,
-    #a47148,
-    #a47148 1px,
-    transparent 1px,
-    transparent 15px
-  );
-  animation: bgSlide 10s linear infinite;
-}
-
-@keyframes bgSlide {
-  from { transform: translateX(0); }
-  to { transform: translateX(15px); }
-}
-
-.provision-content {
-  position: relative;
-  z-index: 1;
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.provision-icon {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 2rem;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: #000;
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.provision-title {
-  font-size: 3rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.provision-subtitle {
-  font-size: 1.25rem;
-  color: #ccc;
-  margin-bottom: 3rem;
-}
-
-.provision-range {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 3rem;
-  margin-bottom: 3rem;
-}
-
-.range-item {
-  text-align: center;
-}
-
-.range-value {
-  display: block;
-  font-size: 3rem;
-  font-weight: 600;
-  color: #a47148;
-  margin-bottom: 0.5rem;
-}
-
-.range-label {
-  font-size: 0.875rem;
-  color: #999;
-  letter-spacing: 0.1em;
-}
-
-.range-divider {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.divider-line {
-  width: 50px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #a47148, transparent);
-}
-
-.provision-description {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #ccc;
-  margin-bottom: 3rem;
-}
-
-.provision-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2.5rem;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  color: #000;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-decoration: none;
-  border-radius: 50px;
-  transition: all 0.4s ease;
-}
-
-.provision-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 40px rgba(164, 113, 72, 0.4);
 }
 
 /* Showroom CTA */
@@ -2429,17 +2525,6 @@ onUnmounted(() => {
 }
 
 /* Transitions */
-.expand-enter-active,
-.expand-leave-active {
-  transition: all 0.3s ease;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  opacity: 0;
-  max-height: 0;
-}
-
 .answer-enter-active,
 .answer-leave-active {
   transition: all 0.3s ease;
@@ -2486,8 +2571,12 @@ onUnmounted(() => {
     grid-template-columns: 1fr;
   }
   
-  .advantages-grid {
+  .premium-advantages {
     grid-template-columns: 1fr;
+  }
+  
+  .features-luxury-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -2524,13 +2613,12 @@ onUnmounted(() => {
     grid-template-columns: 1fr;
   }
   
-  .faq-categories {
-    flex-direction: column;
+  .features-luxury-grid {
+    grid-template-columns: 1fr;
   }
   
-  .provision-range {
+  .faq-categories {
     flex-direction: column;
-    gap: 2rem;
   }
 }
 
@@ -2540,6 +2628,10 @@ onUnmounted(() => {
   }
   
   .section-title {
+    font-size: 2rem;
+  }
+  
+  .showcase-title {
     font-size: 2rem;
   }
   

@@ -384,10 +384,10 @@
               <h2>IHR TRAUMPROJEKT WARTET</h2>
               <p>Lassen Sie uns gemeinsam Ihre Vision verwirklichen</p>
               <div class="cta-buttons">
-                <NuxtLink to="/kontakt" class="cta-btn primary">
+                <a href="/kontakt" class="cta-btn primary">
                   <span class="material-icons">phone</span>
                   BERATUNG VEREINBAREN
-                </NuxtLink>
+                </a>
                 <button @click="downloadBrochure" class="cta-btn secondary">
                   <span class="material-icons">download</span>
                   PROJEKT-BROSCHÜRE
@@ -425,9 +425,8 @@
     <!-- CTA Section -->
     <section class="cta-section">
       <div class="cta-background">
-        <video autoplay muted loop class="cta-video">
-          <source src="/videos/luxury-bathroom.mp4" type="video/mp4">
-        </video>
+        <!-- Ersetzt Video mit statischem Hintergrundbild -->
+        <div class="cta-bg-image"></div>
         <div class="cta-overlay"></div>
       </div>
       <div class="container">
@@ -437,9 +436,9 @@
             Von der ersten Idee bis zur finalen Umsetzung – wir begleiten Sie auf dem Weg zu Ihrem Traumbad
           </p>
           <div class="cta-actions">
-            <NuxtLink to="/kontakt" class="cta-button primary">
+            <a href="/kontakt" class="cta-button primary">
               KOSTENLOSES ERSTGESPRÄCH
-            </NuxtLink>
+            </a>
             <button @click="openVirtualShowroom" class="cta-button secondary">
               <span class="material-icons">view_in_ar</span>
               VIRTUELLER SHOWROOM
@@ -2402,10 +2401,13 @@ watch(activeFilter, () => {
   inset: 0;
 }
 
-.cta-video {
+.cta-bg-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  background-image: url('https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .cta-overlay {
