@@ -26,6 +26,22 @@
       </section>
       
       <ParallaxSlider />
+      
+      <!-- Neue Kontakt CTA Sektion -->
+      <section class="contact-cta-section py-20 bg-gradient-to-r from-black via-gray-800 to-black">
+        <div class="container mx-auto px-6 text-center">
+          <h2 class="text-4xl font-light mb-6">BEREIT FÜR IHR TRAUMPROJEKT?</h2>
+          <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+            Lassen Sie uns gemeinsam Ihre Vision verwirklichen. Kontaktieren Sie uns für eine persönliche Beratung.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <NuxtLink to="/kontakt" class="inline-block px-10 py-4 bg-white text-black font-medium hover:bg-gray-100 transition duration-300 transform hover:scale-105">
+              JETZT KONTAKT AUFNEHMEN
+            </NuxtLink>
+          </div>
+        </div>
+      </section>
+      
       <ShowroomContact />
     </template>
     
@@ -59,6 +75,24 @@
           <NuxtLink to="/sortiment" class="inline-block px-6 py-2 border border-white text-white text-sm">
             MEHR ERFAHREN
           </NuxtLink>
+        </div>
+      </section>
+      
+      <!-- Mobile Kontakt CTA Sektion -->
+      <section class="mobile-contact-cta py-12 bg-gradient-to-r from-black via-gray-800 to-black">
+        <div class="container mx-auto px-4 text-center">
+          <h2 class="text-2xl font-light mb-4">BEREIT FÜR IHR TRAUMPROJEKT?</h2>
+          <p class="text-sm text-gray-300 mb-6">
+            Kontaktieren Sie uns für eine persönliche Beratung.
+          </p>
+          <div class="space-y-3">
+            <NuxtLink to="/kontakt" class="block w-full py-3 bg-white text-black font-medium text-center">
+              JETZT KONTAKT AUFNEHMEN
+            </NuxtLink>
+            <NuxtLink to="/showroom" class="block w-full py-3 border border-white text-white text-center">
+              SHOWROOM BESUCHEN
+            </NuxtLink>
+          </div>
         </div>
       </section>
       
@@ -98,3 +132,32 @@ const { isMobile } = useDevice()
 // Optional: Control video display
 const showVideo = ref(false)
 </script>
+
+<style scoped>
+.contact-cta-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+  pointer-events: none;
+}
+
+.mobile-contact-cta {
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .mobile-contact-cta .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+</style>

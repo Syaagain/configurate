@@ -115,50 +115,90 @@ const swiperContainer = ref(null)
 let swiperInstance = null
 
 const slidePrev = () => {
-  if (swiperInstance) swiperInstance.slidePrev()
+  if (swiperInstance) {
+    // Direkt zum vorherigen Slide ohne Swipe-Einschränkungen
+    swiperInstance.slidePrev(800) // 800ms Geschwindigkeit für smooth transition
+  }
 }
 
 const slideNext = () => {
-  if (swiperInstance) swiperInstance.slideNext()
+  if (swiperInstance) {
+    // Direkt zum nächsten Slide ohne Swipe-Einschränkungen
+    swiperInstance.slideNext(800) // 800ms Geschwindigkeit für smooth transition
+  }
 }
 
 onMounted(async () => {
   // Dynamically import Swiper
   const { default: Swiper } = await import('swiper')
-  const { Navigation, EffectCreative } = await import('swiper/modules')
+  const { Navigation } = await import('swiper/modules')
   
   // Import Swiper styles
   await import('swiper/css')
   await import('swiper/css/navigation')
-  await import('swiper/css/effect-creative')
   
   // Initialize Swiper
   swiperInstance = new Swiper(swiperContainer.value, {
-    modules: [Navigation, EffectCreative],
-    slidesPerView: 'auto',
-    centeredSlides: false,
+    modules: [Navigation],
+    slidesPerView: 1,
+    centeredSlides: true,
     loop: false,
-    speed: 1500,
+    speed: 800,
     spaceBetween: 0,
-    navigation: {
-      prevEl: '.prev-btn',
-      nextEl: '.next-btn',
-    },
-    effect: 'slide',
-    watchSlidesProgress: true,
+    
+    // Optimierte Touch/Swipe Einstellungen für responsiveres Verhalten
+    threshold: 20,          // Minimaler Swipe-Abstand (Standard: 50px)
+    shortSwipes: true,      // Kurze Swipes erlauben
+    longSwipes: true,       // Lange Swipes erlauben
+    longSwipesRatio: 0.2,   // Verhältnis für lange Swipes (Standard: 0.5)
+    longSwipesMs: 200,      // Zeit für lange Swipes (Standard: 300ms)
+    followFinger: true,     // Slider folgt dem Finger
+    
+    // Touch-spezifische Einstellungen
+    touchRatio: 1,          // Touch-Verhältnis
+    touchAngle: 45,         // Touch-Winkel
+    simulateTouch: true,    // Simuliert Touch für Desktop
+    allowTouchMove: true,   // Touch-Bewegung erlauben
+    touchMoveStopPropagation: false,
+    
+    // Resistance für besseres Gefühl an den Rändern
+    resistance: true,
+    resistanceRatio: 0.85,
+    
+    // NAVIGATION ENTFERNT - wir verwenden nur Custom-Handler
+    // navigation: {
+    //   prevEl: '.prev-btn',
+    //   nextEl: '.next-btn',
+    //   disabledClass: 'swiper-button-disabled',
+    // },
+    
+    // Zusätzliche Einstellungen für optimale Navigation
+    preventClicks: false,
+    preventClicksPropagation: false,
+    slideToClickedSlide: false,
+    
     grabCursor: true,
+    watchSlidesProgress: true,
+    
+    // Responsive Breakpoints mit angepassten Touch-Einstellungen
     breakpoints: {
       320: {
-        slidesPerView: 'auto',
+        slidesPerView: 1,
         spaceBetween: 0,
+        threshold: 15,        // Noch empfindlicher auf kleinen Bildschirmen
+        longSwipesRatio: 0.15,
       },
       768: {
-        slidesPerView: 'auto',
+        slidesPerView: 1,
         spaceBetween: 0,
+        threshold: 20,
+        longSwipesRatio: 0.2,
       },
       1024: {
-        slidesPerView: 'auto',
+        slidesPerView: 1,
         spaceBetween: 0,
+        threshold: 25,
+        longSwipesRatio: 0.25,
       }
     }
   })
@@ -211,11 +251,8 @@ onUnmounted(() => {
   width: 100vw;
   height: 80vh;
   min-height: 600px;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding-left: 5vw;
+  overflow: hidden;
+  padding: 0 10vw;
 }
 
 .swiper-wrapper {
@@ -224,11 +261,10 @@ onUnmounted(() => {
 }
 
 .swiper-slide {
-  width: 80vw;
-  margin-right: 3vw;
+  width: 100%;
+  max-width: 1200px;
   height: 70vh;
   min-height: 500px;
-  max-width: 1200px;
   display: flex;
   box-sizing: border-box;
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -412,10 +448,8 @@ onUnmounted(() => {
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .swiper-slide {
-    width: 85vw;
-    height: 65vh;
-    min-height: 450px;
+  .swiper {
+    padding: 0 7.5vw;
   }
   
   .slide-content h2 {
@@ -443,12 +477,10 @@ onUnmounted(() => {
   .swiper {
     height: auto;
     min-height: unset;
-    padding-left: 2vw;
+    padding: 0 5vw;
   }
   
   .swiper-slide {
-    width: 90vw;
-    margin-right: 3vw;
     height: 60vh;
     min-height: 400px;
     flex-direction: column;
@@ -504,6 +536,10 @@ onUnmounted(() => {
 }
 
 @media (max-width: 480px) {
+  .swiper {
+    padding: 0 2.5vw;
+  }
+  
   .swiper-slide {
     height: 70vh;
     min-height: 350px;

@@ -29,9 +29,9 @@
             UNSERE SERVICES
             <span class="material-icons">arrow_downward</span>
           </button>
-          <NuxtLink to="/kontakt" class="cta-btn secondary">
+          <a href="/kontakt" class="cta-btn secondary">
             BERATUNG VEREINBAREN
-          </NuxtLink>
+          </a>
         </div>
       </div>
     </section>
@@ -123,7 +123,6 @@
           <p class="section-subtitle">Erstklassige Vorteile für anspruchsvolle Kunden</p>
         </div>
 
-        <!-- Premium Advantages Grid -->
         <div class="premium-advantages">
           <div 
             v-for="(advantage, index) in advantages" 
@@ -131,17 +130,14 @@
             class="premium-advantage-card"
             :style="{ animationDelay: `${index * 0.1}s` }"
             :class="{ 
-              'expanded': expandedAdvantages.includes(advantage.id),
-              'highlight': index < 4 
+              'expanded': expandedAdvantages.includes(advantage.id)
             }"
             @mouseenter="handleCardHover(advantage.id)"
             @mouseleave="handleCardLeave(advantage.id)"
           >
-            <!-- Card Background Effects -->
             <div class="card-glow"></div>
             <div class="card-shine"></div>
             
-            <!-- Card Header -->
             <div class="premium-card-header" @click="toggleAdvantage(advantage.id)">
               <div class="advantage-icon-wrapper">
                 <div class="icon-ring"></div>
@@ -157,51 +153,117 @@
               </div>
             </div>
             
-            <!-- Expandable Content -->
-            <transition name="advantage-expand" @enter="onAdvantageEnter" @leave="onAdvantageLeave">
+            <transition name="advantage-expand">
               <div v-if="expandedAdvantages.includes(advantage.id)" class="premium-advantage-content">
                 <div class="content-divider"></div>
                 <p class="advantage-description">{{ advantage.description }}</p>
-                <div class="advantage-badge">
-                  <span class="material-icons badge-icon">verified</span>
-                  <span>PREMIUM VORTEIL</span>
-                </div>
               </div>
             </transition>
           </div>
         </div>
 
-        <!-- Luxury Special Features Showcase -->
         <div class="luxury-features-showcase">
           <div class="showcase-header">
-            <h3 class="showcase-title">EXKLUSIVE SERVICELEISTUNGEN</h3>
+            <div class="header-particle-system">
+              <div v-for="n in 20" :key="n" class="floating-particle" 
+                   :style="{ 
+                     animationDelay: `${n * 0.3}s`,
+                     left: `${Math.random() * 100}%`,
+                     animationDuration: `${3 + Math.random() * 4}s`
+                   }"></div>
+            </div>
+            <h3 class="showcase-title">
+              <span class="title-word" v-for="(word, index) in showcaseTitleWords" :key="word" 
+                    :style="{ animationDelay: `${index * 0.2}s` }">{{ word }}</span>
+            </h3>
             <p class="showcase-subtitle">Außergewöhnlicher Service für außergewöhnliche Kunden</p>
+            <div class="showcase-divider">
+              <div class="divider-line"></div>
+              <div class="divider-glow"></div>
+            </div>
           </div>
           
-          <div class="features-luxury-grid">
+          <div class="features-luxury-grid" ref="featuresGrid">
             <div 
               v-for="(feature, index) in specialFeatures" 
               :key="feature.id"
               class="luxury-feature-card"
-              :style="{ animationDelay: `${index * 0.2}s` }"
-              @mouseenter="playFeatureAnimation(feature.id)"
+              :class="{ 'hovered': hoveredFeature === feature.id, 'visible': visibleFeatures.includes(index) }"
+              :style="{ 
+                animationDelay: `${index * 0.3}s`,
+                '--card-index': index
+              }"
+              @mouseenter="handleFeatureHover(feature.id, index)"
+              @mouseleave="handleFeatureLeave(feature.id)"
+              @click="triggerFeatureExplosion(feature.id)"
             >
               <div class="luxury-feature-background">
-                <div class="feature-gradient"></div>
+                <div class="feature-gradient" :style="{ background: feature.gradient }"></div>
                 <div class="feature-pattern"></div>
+                <div class="morphing-blob blob-1"></div>
+                <div class="morphing-blob blob-2"></div>
+                <div class="energy-waves">
+                  <div v-for="n in 3" :key="n" class="wave" :style="{ animationDelay: `${n * 0.5}s` }"></div>
+                </div>
+              </div>
+
+              <div class="card-particles">
+                <div v-for="n in 15" :key="n" class="particle" 
+                     :style="{ 
+                       animationDelay: `${n * 0.1}s`,
+                       '--start-pos': `${Math.random() * 360}deg`,
+                       '--end-pos': `${Math.random() * 360}deg`
+                     }"></div>
               </div>
               
               <div class="luxury-feature-content">
-                <div class="luxury-feature-icon">
-                  <div class="icon-backdrop"></div>
-                  <span class="material-icons">{{ feature.icon }}</span>
+                <div class="luxury-feature-icon-3d">
+                  <div class="icon-hologram">
+                    <div class="hologram-layer layer-1"></div>
+                    <div class="hologram-layer layer-2"></div>
+                    <div class="hologram-layer layer-3"></div>
+                  </div>
+                  <div class="icon-glow-ring"></div>
+                  <div class="icon-container">
+                    <span class="material-icons feature-icon">{{ feature.icon }}</span>
+                    <div class="icon-reflection"></div>
+                  </div>
+                  <div class="magnetic-field">
+                    <div v-for="n in 5" :key="n" class="field-line" 
+                         :style="{ transform: `rotate(${n * 72}deg)` }"></div>
+                  </div>
                 </div>
-                <h4 class="luxury-feature-title">{{ feature.title }}</h4>
-                <p class="luxury-feature-description">{{ feature.description }}</p>
-                
-                <div class="feature-highlight">
-                  <div class="highlight-bar"></div>
+
+                <h4 class="luxury-feature-title">
+                  <span v-for="(char, charIndex) in feature.title.split('')" :key="charIndex" 
+                        class="title-char" 
+                        :style="{ animationDelay: `${charIndex * 0.05}s` }">
+                    {{ char === ' ' ? '&nbsp;' : char }}
+                  </span>
+                </h4>
+
+                <p class="luxury-feature-description">
+                  {{ feature.description }}
+                </p>
+
+                <div class="quantum-highlight">
+                  <div class="quantum-particles">
+                    <div v-for="n in 8" :key="n" class="quantum-particle" 
+                         :style="{ animationDelay: `${n * 0.2}s` }"></div>
+                  </div>
+                  <div class="energy-beam"></div>
                 </div>
+              </div>
+
+              <div class="interaction-ripples">
+                <div class="ripple" v-for="n in rippleCount" :key="n"></div>
+              </div>
+
+              <div class="corner-accents">
+                <div class="corner top-left"></div>
+                <div class="corner top-right"></div>
+                <div class="corner bottom-left"></div>
+                <div class="corner bottom-right"></div>
               </div>
             </div>
           </div>
@@ -209,56 +271,254 @@
       </div>
     </section>
 
-    <!-- FAQ Section -->
     <section class="faq-section">
       <div class="container">
+        <!-- Enhanced Section Header -->
         <div class="section-header">
-          <span class="section-badge">HÄUFIGE FRAGEN</span>
-          <h2 class="section-title">FRAGEN & ANTWORTEN</h2>
-          <p class="section-subtitle">Alles was Sie über unsere Services wissen müssen</p>
+          <div class="header-decoration">
+            <div class="decoration-line left"></div>
+            <span class="section-badge premium">
+              <span class="material-icons">help_center</span>
+              HÄUFIGE FRAGEN
+            </span>
+            <div class="decoration-line right"></div>
+          </div>
+          <h2 class="section-title">
+            <span class="title-gradient">FRAGEN & ANTWORTEN</span>
+          </h2>
+          <p class="section-subtitle">Alles was Sie über unsere Premium Services wissen müssen</p>
         </div>
 
-        <div class="faq-categories">
-          <button 
-            v-for="category in faqCategories" 
-            :key="category.id"
-            @click="activeFaqCategory = category.id"
-            :class="['category-btn', { active: activeFaqCategory === category.id }]"
-          >
-            <span class="material-icons">{{ category.icon }}</span>
-            {{ category.name }}
-            <span class="count">{{ category.count }}</span>
-          </button>
-        </div>
-
-        <div class="faq-list">
-          <transition-group name="faq-transition">
-            <div 
-              v-for="(faq, index) in filteredFaqs" 
-              :key="faq.id"
-              class="faq-item"
-              :style="{ animationDelay: `${index * 0.05}s` }"
-            >
-              <button 
-                @click="toggleFaq(faq.id)"
-                class="faq-question"
-                :class="{ active: expandedFaqs.includes(faq.id) }"
-              >
-                <span class="question-text">{{ faq.question }}</span>
-                <span class="faq-toggle">
-                  <span class="material-icons">
-                    {{ expandedFaqs.includes(faq.id) ? 'remove' : 'add' }}
-                  </span>
-                </span>
-              </button>
-              
-              <transition name="answer">
-                <div v-if="expandedFaqs.includes(faq.id)" class="faq-answer">
-                  <div class="answer-content" v-html="faq.answer"></div>
-                </div>
-              </transition>
+        <!-- Search Bar -->
+        <div class="faq-search-container">
+          <div class="search-wrapper">
+            <div class="search-icon">
+              <span class="material-icons">search</span>
             </div>
-          </transition-group>
+            <input 
+              v-model="searchQuery"
+              type="text" 
+              placeholder="Durchsuchen Sie unsere FAQs..."
+              class="search-input"
+              @input="handleSearch"
+            />
+            <div v-if="searchQuery" class="search-clear" @click="clearSearch">
+              <span class="material-icons">close</span>
+            </div>
+          </div>
+          <div v-if="searchQuery" class="search-results-info">
+            {{ filteredFaqs.length }} Ergebnis{{ filteredFaqs.length !== 1 ? 'se' : '' }} für "{{ searchQuery }}"
+          </div>
+        </div>
+
+        <!-- Luxury Category Filters -->
+        <div class="faq-filter-container">
+          <div class="filter-background-glow"></div>
+
+          <div class="category-filters">
+            <button 
+              v-for="category in faqCategories" 
+              :key="category.id"
+              @click="setActiveFaqCategory(category.id)"
+              :class="['luxury-category-btn', { 
+                active: activeFaqCategory === category.id,
+                'has-new': category.hasNew
+              }]"
+            >
+              <div class="btn-background">
+                <div class="bg-gradient"></div>
+                <div class="bg-shine"></div>
+              </div>
+              
+              <div class="btn-content">
+                <div class="category-icon-wrapper">
+                  <div class="icon-orbit"></div>
+                  <span class="material-icons category-icon">{{ category.icon }}</span>
+                </div>
+                
+                <div class="category-info">
+                  <span class="category-name">{{ category.name }}</span>
+                </div>
+              </div>
+              
+              <div class="btn-particles">
+                <div v-for="n in 6" :key="n" class="filter-particle"
+                     :style="{ animationDelay: `${n * 0.2}s` }"></div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Enhanced FAQ List -->
+        <div class="faq-container">
+          <div class="faq-count-indicator">
+            <span class="count-number">{{ filteredFaqs.length }}</span>
+            <span class="count-label">{{ searchQuery ? 'Suchergebnisse' : 'Fragen in dieser Kategorie' }}</span>
+          </div>
+          
+          <div class="luxury-faq-list">
+            <transition-group name="faq-slide" tag="div">
+              <div 
+                v-for="(faq, index) in filteredFaqs" 
+                :key="`${activeFaqCategory}-${faq.id}`"
+                class="luxury-faq-item"
+                :style="{ '--item-index': index }"
+                :class="{ expanded: expandedFaqs.includes(faq.id) }"
+              >
+                <!-- FAQ Question Button -->
+                <button 
+                  @click="toggleFaq(faq.id)"
+                  class="luxury-faq-question"
+                  :class="{ active: expandedFaqs.includes(faq.id) }"
+                >
+                  <div class="question-background">
+                    <div class="bg-pattern"></div>
+                    <div class="bg-glow"></div>
+                  </div>
+                  
+                  <div class="question-content">
+                    <div class="question-number">
+                      {{ String(index + 1).padStart(2, '0') }}
+                    </div>
+                    
+                    <div class="question-text-wrapper">
+                      <h3 class="question-text" v-html="highlightSearchTerm(faq.question)"></h3>
+                      <div v-if="faq.tags" class="question-tags">
+                        <span v-for="tag in faq.tags" :key="tag" class="tag">{{ tag }}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="question-toggle-wrapper">
+                      <div class="toggle-bg"></div>
+                      <span class="material-icons toggle-icon">
+                        {{ expandedFaqs.includes(faq.id) ? 'expand_less' : 'expand_more' }}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div class="question-hover-effects">
+                    <div class="hover-glow"></div>
+                    <div class="hover-border"></div>
+                  </div>
+                </button>
+                
+                <!-- FAQ Answer -->
+                <transition name="answer-expand">
+                  <div v-if="expandedFaqs.includes(faq.id)" class="luxury-faq-answer">
+                    <div class="answer-background">
+                      <div class="answer-pattern"></div>
+                    </div>
+                    
+                    <div class="answer-content">
+                      <div class="answer-decorator">
+                        <div class="decorator-line"></div>
+                        <span class="material-icons">lightbulb</span>
+                        <div class="decorator-line"></div>
+                      </div>
+                      
+                      <div class="answer-text" v-html="highlightSearchTerm(faq.answer)"></div>
+                      
+                      <div v-if="faq.relatedLinks" class="related-links">
+                        <h5>Verwandte Informationen:</h5>
+                        <div class="links-grid">
+                          <a v-for="link in faq.relatedLinks" :key="link.title" 
+                             :href="link.url" class="related-link">
+                            <span class="material-icons">{{ link.icon }}</span>
+                            {{ link.title }}
+                          </a>
+                        </div>
+                      </div>
+                      
+                      <div class="answer-meta">
+                        <div class="helpful-question">
+                          <span>War diese Antwort hilfreich?</span>
+                          <div class="helpful-buttons">
+                            <button @click="markHelpful(faq.id, true)" class="helpful-btn positive">
+                              <span class="material-icons">thumb_up</span>
+                              Ja
+                            </button>
+                            <button @click="markHelpful(faq.id, false)" class="helpful-btn negative">
+                              <span class="material-icons">thumb_down</span>
+                              Nein
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </transition>
+              </div>
+            </transition-group>
+          </div>
+          
+          <!-- No Results State -->
+          <div v-if="filteredFaqs.length === 0" class="no-results">
+            <div class="no-results-icon">
+              <span class="material-icons">{{ searchQuery ? 'search_off' : 'help_outline' }}</span>
+            </div>
+            <h3>{{ searchQuery ? 'Keine Suchergebnisse' : 'Keine Fragen gefunden' }}</h3>
+            <p>
+              {{ searchQuery 
+                ? `Keine Fragen gefunden für "${searchQuery}". Versuchen Sie andere Suchbegriffe.`
+                : 'Für diese Kategorie sind derzeit keine Fragen verfügbar.'
+              }}
+            </p>
+            <div class="no-results-actions">
+              <button v-if="searchQuery" @click="clearSearch" class="action-btn">
+                <span class="material-icons">clear</span>
+                Suche zurücksetzen
+              </button>
+              <button v-else @click="setActiveFaqCategory('allgemein')" class="action-btn">
+                <span class="material-icons">arrow_back</span>
+                Zurück zu Allgemein
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhanced Quick Actions -->
+        <div class="faq-quick-actions">
+          <div class="quick-action-card">
+            <div class="action-icon">
+              <span class="material-icons">contact_support</span>
+            </div>
+            <div class="action-content">
+              <h4>Haben Sie weitere Fragen?</h4>
+              <p>Unser Expertenteam steht Ihnen gerne zur Verfügung</p>
+            </div>
+            <a href="/kontakt" class="action-btn">
+              KONTAKT AUFNEHMEN
+              <span class="material-icons">arrow_forward</span>
+            </a>
+          </div>
+          
+          <div class="quick-action-card">
+            <div class="action-icon">
+              <span class="material-icons">calendar_today</span>
+            </div>
+            <div class="action-content">
+              <h4>Persönliche Beratung</h4>
+              <p>Vereinbaren Sie einen Termin in unserem Showroom</p>
+            </div>
+            <a href="/kontakt" class="action-btn">
+              TERMIN BUCHEN
+              <span class="material-icons">event</span>
+            </a>
+          </div>
+          
+          <div class="quick-action-card">
+            <div class="action-icon">
+              <span class="material-icons">download</span>
+            </div>
+            <div class="action-content">
+              <h4>Katalog Download</h4>
+              <p>Laden Sie unseren vollständigen Produktkatalog herunter</p>
+            </div>
+            <a href="#" class="action-btn">
+              KATALOG LADEN
+              <span class="material-icons">file_download</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -280,10 +540,10 @@
                 <span><span class="material-icons">square_foot</span> 80.000 m² Lagerfläche</span>
                 <span><span class="material-icons">inventory</span> 650+ Natursteinsorten</span>
               </div>
-              <NuxtLink to="/kontakt" class="card-btn">
+              <a href="/kontakt" class="card-btn">
                 TERMIN VEREINBAREN
                 <span class="material-icons">calendar_today</span>
-              </NuxtLink>
+              </a>
             </div>
           </div>
           
@@ -300,99 +560,11 @@
                 <span><span class="material-icons">visibility</span> Digitale Bildergalerie</span>
                 <span><span class="material-icons">local_shipping</span> Europaweite Lieferung</span>
               </div>
-              <NuxtLink to="/kontakt" class="card-btn">
+              <a href="/kontakt" class="card-btn">
                 TERMIN VEREINBAREN
                 <span class="material-icons">calendar_today</span>
-              </NuxtLink>
+              </a>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section">
-      <div class="container">
-        <div class="contact-content">
-          <div class="contact-info">
-            <h2 class="contact-title">IMMER FÜR SIE ERREICHBAR</h2>
-            <p class="contact-subtitle">Unser Expertenteam steht Ihnen zur Verfügung</p>
-            
-            <div class="contact-details">
-              <div class="detail-item">
-                <span class="material-icons">schedule</span>
-                <div>
-                  <h4>Öffnungszeiten</h4>
-                  <p>Dienstag - Freitag: 09:00 - 17:00 Uhr</p>
-                  <p>Samstag: 09:00 - 16:00 Uhr</p>
-                </div>
-              </div>
-              
-              <div class="detail-item">
-                <span class="material-icons">phone</span>
-                <div>
-                  <h4>Telefon & Fax</h4>
-                  <a href="tel:+498171386870">+49 8171 / 3868770</a>
-                  <p>Fax: +49 8171 / 3868771</p>
-                </div>
-              </div>
-              
-              <div class="detail-item">
-                <span class="material-icons">email</span>
-                <div>
-                  <h4>E-Mail</h4>
-                  <a href="mailto:kontakt@group-ag.de">kontakt@group-ag.de</a>
-                </div>
-              </div>
-            </div>
-            
-            <div class="service-badges">
-              <div class="badge-item">
-                <span class="material-icons">accessible</span>
-                <span>Barrierefrei</span>
-              </div>
-              <div class="badge-item">
-                <span class="material-icons">child_care</span>
-                <span>Spielecke</span>
-              </div>
-              <div class="badge-item">
-                <span class="material-icons">local_cafe</span>
-                <span>Bewirtung</span>
-              </div>
-              <div class="badge-item">
-                <span class="material-icons">local_taxi</span>
-                <span>Abholservice Flughafen/HBF</span>
-              </div>
-            </div>
-          </div>
-          
-          <div class="contact-form">
-            <h3>SCHNELLANFRAGE</h3>
-            <form @submit.prevent="submitForm">
-              <div class="form-group">
-                <input type="text" v-model="form.name" placeholder="Ihr Name" required>
-              </div>
-              <div class="form-group">
-                <input type="email" v-model="form.email" placeholder="Ihre E-Mail" required>
-              </div>
-              <div class="form-group">
-                <select v-model="form.service" required>
-                  <option value="">Service wählen</option>
-                  <option value="beratung">Beratung</option>
-                  <option value="aufmass">Aufmaß</option>
-                  <option value="verlegung">Verlegung</option>
-                  <option value="sanitaer">Sanitärarbeiten</option>
-                  <option value="komplett">Komplettservice</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <textarea v-model="form.message" placeholder="Ihre Nachricht" rows="4"></textarea>
-              </div>
-              <button type="submit" class="submit-btn">
-                ANFRAGE SENDEN
-                <span class="material-icons">send</span>
-              </button>
-            </form>
           </div>
         </div>
       </div>
@@ -424,12 +596,10 @@
             </div>
             
             <div class="modal-cta">
-              <NuxtLink to="/kontakt" class="modal-btn primary">
+              <a href="/kontakt" class="modal-btn primary full-width">
+                <span class="material-icons">phone</span>
                 BERATUNG ANFRAGEN
-              </NuxtLink>
-              <button @click="closeModal" class="modal-btn secondary">
-                SCHLIESSEN
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -439,33 +609,33 @@
 </template>
 
 <script setup>
+
+import { ref, computed, onMounted, nextTick } from 'vue'
 // State Management
+const searchQuery = ref('')
 const scrollY = ref(0)
 const timelineProgress = ref(0)
 const visibleSteps = ref([])
 const activeFaqCategory = ref('allgemein')
 const expandedFaqs = ref([])
-const expandedAdvantages = ref([]) // Separates Array für Bug-Fix
+const expandedAdvantages = ref([])
 const selectedService = ref(null)
 const hoveredCards = ref(new Set())
 
-// Form
-const form = reactive({
-  name: '',
-  email: '',
-  service: '',
-  message: ''
-})
+// Features Showcase States
+const hoveredFeature = ref(null)
+const visibleFeatures = ref([])
+const rippleCount = ref(0)
+const featuresGrid = ref(null)
 
 // Hero Stats
 const heroStats = [
-  { id: 1, value: 650, label: 'Natursteinsorten' },
+  { id: 1, value: 650, label: 'Steinsorten' },
   { id: 2, value: 80000, label: 'm² Lagerfläche' },
-  { id: 3, value: 100, label: '% auf Lager' },
-  { id: 4, value: 1, label: '. Wahl & Sortierung' }
+  { id: 3, value: 100, label: '% auf Lager' }
 ]
 
-// Core Services (aus dem Text)
+// Core Services
 const coreServices = [
   {
     id: 1,
@@ -509,26 +679,6 @@ const coreServices = [
   },
   {
     id: 3,
-    icon: 'straighten',
-    title: 'Bemaßung',
-    description: 'Präzises Aufmaß europaweit bei Ihnen vor Ort',
-    features: [
-      'Europaweit verfügbar',
-      'Millimetergenaue Erfassung',
-      'Schablonenerstellung'
-    ],
-    fullDescription: 'Wir übernehmen das Aufmaß bei Ihnen europaweit. Betonbelagtreppen und freitragende Bolzentreppen werden individuell ausgemessen und wie ein Maßanzug montiert.',
-    detailedFeatures: [
-      'Deutschlandweite Vermessung',
-      'Schablonenerstellung vor Ort',
-      'Treppen-Aufmaß',
-      'SkyStairs (freitragende Treppen)',
-      'Komplettpaket aus einer Hand',
-      'Harmonisches Raumgefühl'
-    ]
-  },
-  {
-    id: 4,
     icon: 'local_shipping',
     title: 'Lieferung',
     description: 'Europaweite Lieferung bis zu Ihrer Haustür',
@@ -577,7 +727,7 @@ const processSteps = [
   }
 ]
 
-// Advantages - fixed reactive structure
+// Advantages
 const advantages = [
   {
     id: 1,
@@ -614,243 +764,327 @@ const advantages = [
     icon: 'wb_sunny',
     title: 'Spezielle Lichtverhältnisse',
     description: 'Aufgrund der speziellen Lichtverhältnisse in unserer Ausstellung, haben Sie die Möglichkeit, die Fliesen mittels unterschiedlicher Lichteffekte (Sonnenlicht, Tageslicht, Dämmerung, Wohnräumlichkeit) anzusehen.'
-  },
-  {
-    id: 7,
-    icon: 'collections',
-    title: 'Digitale Bildergalerie',
-    description: 'Inspirationen durch unsere digitale Bildergalerie in unserer Ausstellung für eine optimale Visualisierung Ihrer Projekte.'
-  },
-  {
-    id: 8,
-    icon: 'home_work',
-    title: 'Badplanung nach Vereinbarung',
-    description: 'Individuelle Badplanung mit 3D-Visualisierung nach Terminvereinbarung durch unsere Experten.'
   }
 ]
 
-// Special Features (aus dem Text)
+// Enhanced Special Features
 const specialFeatures = [
   {
     id: 1,
     icon: 'accessible',
     title: 'Barrierefrei',
-    description: 'Unsere Ausstellung ist selbstverständlich behindertengerecht ausgestattet'
+    description: 'Unsere Ausstellung ist selbstverständlich behindertengerecht ausgestattet',
+    gradient: 'linear-gradient(135deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.8) 50%, rgba(210, 180, 140, 0.7) 100%)'
   },
   {
     id: 2,
     icon: 'child_care',
     title: 'Spielecke',
-    description: 'Für Ihr Wohlbefinden bieten wir Ihren Kindern eine Spielecke'
+    description: 'Für Ihr Wohlbefinden bieten wir Ihren Kindern eine Spielecke',
+    gradient: 'linear-gradient(135deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.8) 50%, rgba(210, 180, 140, 0.7) 100%)'
   },
   {
     id: 3,
-    icon: 'local_cafe',
-    title: 'Bewirtung',
-    description: 'Selbstverständlich versorgen wir Sie mit Cafe, Espresso oder Kaltgetränken'
-  },
-  {
-    id: 4,
     icon: 'local_taxi',
     title: 'Abholservice',
-    description: 'Auf Wunsch Abholung vom Flughafen Düsseldorf/München oder Hauptbahnhöfen'
+    description: 'Auf Wunsch Abholung vom Flughafen Düsseldorf/München oder Hauptbahnhöfen',
+    gradient: 'linear-gradient(135deg, rgba(139, 69, 19, 0.9) 0%, rgba(160, 82, 45, 0.8) 50%, rgba(210, 180, 140, 0.7) 100%)'
   }
 ]
 
-// FAQ Categories
+// Showcase Title Words
+const showcaseTitleWords = ['PREMIUM', 'FEATURES']
+
+// Enhanced FAQ Categories with detailed descriptions
 const faqCategories = [
-  { id: 'allgemein', name: 'Allgemein', icon: 'help', count: 10 },
-  { id: 'material', name: 'Material & Oberflächen', icon: 'layers', count: 8 },
-  { id: 'verlegung', name: 'Verlegung', icon: 'construction', count: 5 },
-  { id: 'bestellung', name: 'Bestellung & Lieferung', icon: 'shopping_cart', count: 6 }
+  { 
+    id: 'allgemein', 
+    name: 'Allgemein', 
+    icon: 'help', 
+    description: 'Grundlegende Informationen über die Architektur Group und unsere Services',
+    hasNew: false
+  },
+  { 
+    id: 'material', 
+    name: 'Material & Oberflächen', 
+    icon: 'layers', 
+    description: 'Alles über Natursteine, Feinsteinzeug und Oberflächenbehandlungen',
+    hasNew: true
+  },
+  { 
+    id: 'verlegung', 
+    name: 'Verlegung & Montage', 
+    icon: 'construction', 
+    description: 'Fragen zur professionellen Verlegung und Installationsverfahren',
+    hasNew: false
+  },
+  { 
+    id: 'bestellung', 
+    name: 'Bestellung & Lieferung', 
+    icon: 'shopping_cart', 
+    description: 'Informationen zu Bestellprozess, Preisen und europaweiter Lieferung',
+    hasNew: false
+  }
 ]
 
-// Complete FAQ Data
+// Complete Enhanced FAQ Data
 const faqs = [
-  // Allgemein
+  // Allgemein (10 Fragen)
   {
     id: 1,
     category: 'allgemein',
     question: 'Was bedeutet Architektur Group?',
-    answer: 'Die Architektur Group besteht aus einem Team an Partnern/Kooperationen & Beratern im Bereich Planung & Innenarchitektur, die während eines Projektes (Neubau, Kernsanierung, Badrenovierung, SkyStairs, Outdoorbereich) die gesamten Arbeitsschritte koordinieren.'
+    answer: 'Die <strong>Architektur Group</strong> besteht aus einem Team an Partnern, Kooperationen & Beratern im Bereich Planung & Innenarchitektur, die während eines Projektes (Neubau, Kernsanierung, Badrenovierung, SkyStairs, Outdoorbereich) die gesamten Arbeitsschritte koordinieren.',
+    tags: ['Unternehmen', 'Services'],
+    relatedLinks: [
+      { title: 'Über uns', url: '/ueber-uns', icon: 'info' },
+      { title: 'Unsere Partner', url: '/partner', icon: 'group' }
+    ]
   },
   {
     id: 2,
     category: 'allgemein',
     question: 'Wie läuft ein Beratungstermin ab?',
-    answer: 'Unsere Kunden kommen deutschland- und europaweit für eine persönliche Beratung in unsere Showrooms. Wir empfehlen einen Termin mit unseren geschulten Innendesignern zu vereinbaren. Die Beratung ist selbstverständlich kostenlos. Bringen Sie genaue Angaben (Quadratmeter, Treppenstufen, laufende Meter) oder Baupläne mit.'
+    answer: 'Unsere Kunden kommen deutschland- und europaweit für eine persönliche Beratung in unsere Showrooms. Wir empfehlen einen Termin mit unseren <strong>geschulten Innendesignern</strong> zu vereinbaren. Die Beratung ist selbstverständlich <strong>kostenlos</strong>. Bringen Sie genaue Angaben (Quadratmeter, Treppenstufen, laufende Meter) oder Baupläne mit.',
+    tags: ['Beratung', 'Termin'],
+    relatedLinks: [
+      { title: 'Termin buchen', url: '/kontakt', icon: 'calendar_today' }
+    ]
   },
   {
     id: 3,
     category: 'allgemein',
     question: 'Kann ich mir die Produkte vor dem Kauf ansehen?',
-    answer: 'Gerne können Sie sich die Natursteine oder Feinsteinzeugfliesen in unseren Ausstellungen in natura ansehen. Unser gesamtes Sortiment ist sofort verfügbar. Kunden aus ganz Europa besuchen uns.'
+    answer: 'Gerne können Sie sich die Natursteine oder Feinsteinzeugfliesen in unseren Ausstellungen <strong>in natura</strong> ansehen. Unser gesamtes Sortiment ist sofort verfügbar. Kunden aus ganz Europa besuchen uns.',
+    tags: ['Showroom', 'Besichtigung']
   },
   {
     id: 4,
     category: 'allgemein',
     question: 'Wie erfahre ich Preise?',
-    answer: 'Preise erfahren Sie:<br>1. Persönlich in unserer Ausstellung<br>2. Per E-Mail an kontakt@group-ag.de<br>3. Über unser Kontaktformular<br>4. Im Produktbereich über unser Anfrageformular<br>Ihr individuelles Angebot erhalten Sie innerhalb kürzester Zeit.'
+    answer: 'Preise erfahren Sie:<br>1. Persönlich in unserer Ausstellung<br>2. Per E-Mail an kontakt@group-ag.de<br>3. Über unser Kontaktformular<br>4. Im Produktbereich über unser Anfrageformular<br><br>Ihr individuelles Angebot erhalten Sie <strong>innerhalb kürzester Zeit</strong>.',
+    tags: ['Preise', 'Angebot']
   },
   {
     id: 5,
     category: 'allgemein',
     question: 'Wann und wie erreiche ich die Architektur Group?',
-    answer: '<strong>Öffnungszeiten:</strong><br>Dienstag – Freitag: 09:00 – 17:00 Uhr<br>Samstag: 09:00 – 16:00 Uhr<br><br><strong>Kontakt:</strong><br>Telefon: +49 8171 / 3868770<br>Fax: +49 8171 / 3868771<br>E-Mail: kontakt@group-ag.de'
+    answer: '<strong>Öffnungszeiten:</strong><br>Dienstag – Freitag: 09:00 – 17:00 Uhr<br>Samstag: 09:00 – 16:00 Uhr<br><br><strong>Kontakt:</strong><br>Telefon: +49 8171 / 3868770<br>Fax: +49 8171 / 3868771<br>E-Mail: kontakt@group-ag.de',
+    tags: ['Kontakt', 'Öffnungszeiten']
   },
   {
     id: 6,
     category: 'allgemein',
     question: 'Sind alle Steine Lagerware?',
-    answer: 'Ja! Die Architektur Group ist als Fachgroßhändler spezialisiert auf Endkunden. Auf über 80.000 m² Lagerfläche haben wir Europas größte Auswahl an Natursteinen in jeder Form vorrätig.'
+    answer: 'Ja! Die Architektur Group ist als <strong>Fachgroßhändler</strong> spezialisiert auf Endkunden. Auf über <strong>80.000 m² Lagerfläche</strong> haben wir Europas größte Auswahl an Natursteinen in jeder Form vorrätig.',
+    tags: ['Lager', 'Verfügbarkeit']
   },
   {
     id: 7,
     category: 'allgemein',
     question: 'Bietet die Architektur Group den Umbau von Badezimmern an?',
-    answer: 'Ja, wir bieten neben der Verlegung auch den Einbau von Sanitäranlagen und Elektronik aus einer Hand an. Unsere speziell geschulten Design-Verleger kommen deutschland- und europaweit zu Ihnen.'
+    answer: 'Ja, wir bieten neben der Verlegung auch den <strong>Einbau von Sanitäranlagen und Elektronik aus einer Hand</strong> an. Unsere speziell geschulten Design-Verleger kommen deutschland- und europaweit zu Ihnen.',
+    tags: ['Badezimmer', 'Umbau', 'Sanitär']
   },
   {
     id: 8,
     category: 'allgemein',
     question: 'Verfügt die Architektur Group über einen Verlegservice?',
-    answer: 'Ja, die Architektur Group verfügt über qualifiziertes Fachpersonal zur Verlegung von Böden, Wandverkleidungen und Treppenbelegen. Es werden die besten Verlegungsstoffe verwendet für beste ästhetische und funktionale Resultate.'
+    answer: 'Ja, die Architektur Group verfügt über <strong>qualifiziertes Fachpersonal</strong> zur Verlegung von Böden, Wandverkleidungen und Treppenbelegen. Es werden die besten Verlegungsstoffe verwendet für beste ästhetische und funktionale Resultate.',
+    tags: ['Verlegung', 'Service']
   },
   {
     id: 9,
     category: 'allgemein',
     question: 'Kann ich Musterfliesen bestellen?',
-    answer: 'Nein, da Musterfliesen den Gesamteindruck verfälschen. Wir legen großen Wert auf fachmännisch fundierte Beratung im Hinblick auf Design & kompatible Verlegematerialien direkt vor Ort in unserem Showroom.'
+    answer: 'Nein, da Musterfliesen den <strong>Gesamteindruck verfälschen</strong>. Wir legen großen Wert auf fachmännisch fundierte Beratung im Hinblick auf Design & kompatible Verlegematerialien direkt vor Ort in unserem Showroom.',
+    tags: ['Muster', 'Beratung']
   },
   {
     id: 10,
     category: 'allgemein',
     question: 'Architektur Group & Kooperation',
-    answer: 'Die Architektur Group verfügt weltweit über Kooperationspartner und Lieferanten. Für erfolgreiche Kundenvermittlung bieten wir eine Tippgeberprovision von 10% bis 70% je nach Auftragsvolumen.'
+    answer: 'Die Architektur Group verfügt weltweit über <strong>Kooperationspartner und Lieferanten</strong>. Für erfolgreiche Kundenvermittlung bieten wir eine <strong>Tippgeberprovision von 10% bis 70%</strong> je nach Auftragsvolumen.',
+    tags: ['Kooperation', 'Partner']
   },
-  // Material & Oberflächen
+
+  // Material & Oberflächen (8 Fragen)
   {
     id: 11,
     category: 'material',
-    question: 'Welche Oberflächen für Granitfliesen sind möglich?',
-    answer: '<strong>Verfügbare Oberflächen:</strong><br>• <strong>Poliert:</strong> Glänzende Oberfläche, gute Reinigungsfähigkeit<br>• <strong>Geschliffen:</strong> Matt bis halbglänzend<br>• <strong>Satiniert:</strong> Geschliffen und gebürstet<br>• <strong>Geflammt:</strong> Raue Oberfläche für Rutschsicherheit<br>• <strong>Geflammt & Gebürstet:</strong> Samtweiche Oberfläche, echte Veredelung'
+    question: 'Welche Natursteinarten bieten Sie an?',
+    answer: 'Wir führen über <strong>650 verschiedene Natursteinsorten</strong> in unserem Sortiment, darunter Marmor, Granit, Travertin, Kalkstein, Schiefer und Quarzit. Alle Steine sind <strong>1. Wahl und 1. Sortierung</strong>, zertifiziert mit Blocknummer.',
+    tags: ['Naturstein', 'Sortiment', 'Qualität'],
+    relatedLinks: [
+      { title: 'Naturstein-Katalog', url: '/natursteine', icon: 'book' }
+    ]
   },
   {
     id: 12,
     category: 'material',
-    question: 'Welche Oberflächen bei Marmorfliesen sind möglich?',
-    answer: '<strong>Marmoroberflächen:</strong><br>• <strong>Antik gebürstet:</strong> Seidiger Glanz, sehr widerstandsfähig<br>• <strong>Geschliffen:</strong> Matt bis halbglänzend, kann neu geschliffen werden<br>• <strong>Poliert:</strong> Attraktivste Seite, gute Reinigungsfähigkeit'
+    question: 'Was ist High-Tech Feinsteinzeug?',
+    answer: '<strong>High-Tech Feinsteinzeug</strong> ist ein hochwertiges keramisches Material mit außergewöhnlichen technischen Eigenschaften. Es bietet höchste Abriebfestigkeit, geringe Wasseraufnahme und ist praktisch unverwüstlich. Ideal für stark beanspruchte Bereiche.',
+    tags: ['Feinsteinzeug', 'Technologie']
   },
   {
     id: 13,
     category: 'material',
-    question: 'Was bedeutet Kalibrierung?',
-    answer: 'Kalibrierung bezieht sich auf Formate und Stärken von Natursteinprodukten. Die Produkte müssen DIN-Normen erfüllen. Durch Kalibrierung wird z.B. die Stärke von 0,9-1,1 cm auf einheitlich 1 cm gebracht.'
+    question: 'Welche Oberflächenbehandlungen gibt es?',
+    answer: 'Wir bieten verschiedene Oberflächenbehandlungen: <strong>poliert, geschliffen, sandgestrahlt, gebürstet, antik und getrommelt</strong>. Jede Oberfläche verleiht dem Stein einen einzigartigen Charakter und eignet sich für unterschiedliche Anwendungen.',
+    tags: ['Oberfläche', 'Bearbeitung']
   },
   {
     id: 14,
     category: 'material',
-    question: 'Was bedeutet rektifiziert?',
-    answer: 'Bei rektifiziertem Feinsteinzeug wird das Material nach dem Brennen in einheitliche Größe gebracht mit exakt 90 Grad Kantenneigung. Jede Fliese ist gleich groß, Verlegung mit 1,5-2mm Fugenbreite. Weniger Angriffsfläche für Bakterien und Schmutz.'
+    question: 'Sind die Natursteine frostbeständig?',
+    answer: 'Die meisten unserer Natursteine sind <strong>frostbeständig</strong> und für den Außenbereich geeignet. Wir beraten Sie gerne über die spezifischen Eigenschaften jedes Steins und empfehlen die optimale Auswahl für Ihr Projekt.',
+    tags: ['Frostbeständigkeit', 'Außenbereich']
   },
   {
     id: 15,
     category: 'material',
-    question: 'Nutzt sich High-Tech Feinsteinzeug ab?',
-    answer: 'High-Tech Feinsteinzeug ist sehr robust und pflegeleicht mit der Härte von Granit. Mit der Zeit entstehen normale Gebrauchsspuren wie leichte Kratzer, je nach Belastungsgruppe und Reibungskoeffizient.'
+    question: 'Wie pflege ich Natursteine richtig?',
+    answer: 'Die Pflege hängt von der Steinart ab. Grundsätzlich empfehlen wir <strong>pH-neutrale Reinigungsmittel</strong> und regelmäßige Imprägnierung. Unser Team berät Sie ausführlich über die optimale Pflege für Ihren spezifischen Stein.',
+    tags: ['Pflege', 'Reinigung', 'Wartung']
   },
   {
     id: 16,
     category: 'material',
-    question: 'Ist High-Tech Feinsteinzeug säurefest?',
-    answer: 'Unser High-Tech Feinsteinzeug ist grundsätzlich säurefest und schimmelbeständig. Von stark säurehaltigen Reinigungsmitteln außerhalb unseres Sortiments raten wir ab.'
+    question: 'Können Natursteine individuell zugeschnitten werden?',
+    answer: 'Ja, wir bieten <strong>individuelle Zuschnitte</strong> nach Ihren Wünschen. Unsere moderne Bearbeitungsanlage ermöglicht präzise Schnitte, Bohrungen und Kantenbearbeitungen für maßgeschneiderte Lösungen.',
+    tags: ['Zuschnitt', 'Individuell']
   },
   {
     id: 17,
     category: 'material',
-    question: 'Was wiegen die verschiedenen Fliesen?',
-    answer: '• 1 m² Naturstein Fliesenformat: ca. 29-30 kg<br>• 1 m² Feinsteinzeug Fliesenformat: ca. 22-24 kg'
+    question: 'Was sind die Vorteile von Quarzkomposit?',
+    answer: '<strong>Quarzkomposit</strong> verbindet die Schönheit von Naturstein mit technischen Vorteilen: keine Poren, fleckenresistent, pflegeleicht und in gleichmäßiger Qualität verfügbar. Ideal für Küchenarbeitsplatten.',
+    tags: ['Quarzkomposit', 'Vorteile']
   },
   {
     id: 18,
     category: 'material',
-    question: 'Gibt es einheitliche Bodenbeläge für Innen und Außen?',
-    answer: 'Ja, wir haben ein spezielles System zur Verlegung von großformatigen Belägen entwickelt. So ist es möglich, den Bodenbelag aus dem Innenbereich mit rutschfester Oberfläche auf Terrasse oder Balkon weiterzuverlegen.'
+    question: 'Welche Stärken sind verfügbar?',
+    answer: 'Unsere Natursteine sind in verschiedenen Stärken erhältlich: <strong>10mm, 12mm, 15mm, 20mm, 30mm und 40mm</strong>. Die Wahl der Stärke hängt von der geplanten Anwendung und der gewünschten Optik ab.',
+    tags: ['Stärke', 'Dimensionen']
   },
-  // Verlegung
+
+  // Verlegung & Montage (6 Fragen)
   {
     id: 19,
     category: 'verlegung',
-    question: 'Design-Verlegung und Verfugung',
-    answer: 'Die Verlegung ist entscheidend für perfekte und langlebige Ergebnisse. Für unsere patentierte High-Tech Fuge bieten wir spezielle Schulungen an, damit die patentierten Eigenschaften erreicht und erhalten bleiben.'
+    question: 'Was ist fugenlose Design-Verlegung?',
+    answer: 'Bei der <strong>fugenlosen Design-Verlegung</strong> werden die Natursteine ohne sichtbare Fugen verlegt. Dies schaffen wir durch präzise Kantenbearbeitung und unsere <strong>patentierte High-Tech Fuge</strong>, die optisch unsichtbar ist.',
+    tags: ['Fugenlos', 'Design', 'Patent']
   },
   {
     id: 20,
     category: 'verlegung',
-    question: 'Veredelte Kantenübergänge',
-    answer: 'Bei Kantenübergängen werden veredelte Übergänge mit Mamorkitt-Veredlung ausgeführt. Die Bearbeitung erfolgt von beiden Seiten für nahtlose Übergänge. Es wird eine innovative, bruchsichere Kanten-Verhärtungstechnik angewandt.'
+    question: 'Wie lange dauert eine Verlegung?',
+    answer: 'Die Dauer hängt von der Projektgröße ab. Ein <strong>Badezimmer (15m²)</strong> benötigt ca. 2-3 Tage, eine <strong>Küche (25m²)</strong> ca. 3-4 Tage. Große Flächen werden entsprechend kalkuliert. Wir erstellen einen detaillierten Zeitplan.',
+    tags: ['Dauer', 'Zeitplanung']
   },
   {
     id: 21,
     category: 'verlegung',
-    question: 'Fachgerechte Verarbeitung der High-Tech Fuge',
-    answer: 'Der Fugenbereich muss frei von Verschmutzungen sein. Mit dem mitgelieferten Glättmittel muss die Fuge innerhalb von 5 Minuten abgezogen werden. Für die lebenslange Garantie ist die Verlegung durch unsere geschulten Design-Verleger Voraussetzung.'
+    question: 'Verlegen Sie auch im Außenbereich?',
+    answer: 'Ja, wir verlegen auch <strong>Terrassen, Balkone und Fassaden</strong>. Dabei verwenden wir spezielle frostbeständige Materialien und Verlegeverfahren, die den Witterungseinflüssen standhalten.',
+    tags: ['Außenbereich', 'Terrasse', 'Fassade']
   },
   {
     id: 22,
     category: 'verlegung',
-    question: 'Sind besondere Klebstoffe notwendig?',
-    answer: 'Unser AG-N Hochflexibel Spezial Kleber ist speziell für die Entkopplung entwickelt. Er enthält Kunststoffzusätze für hochflexible Verklebung von High-Tech Feinsteinzeug und Natursteinen in Großformaten. Der Kleber ist wasser- und frostfest.'
+    question: 'Was ist die High-Tech Fuge?',
+    answer: 'Unsere <strong>patentierte High-Tech Fuge</strong> ist eine innovative 2-Komponenten-Masse, die nach der Aushärtung die gleiche Härte wie Naturstein erreicht. Sie ist wasserdicht, fleckenresistent und praktisch unsichtbar.',
+    tags: ['High-Tech', 'Patent', 'Innovation']
   },
   {
     id: 23,
     category: 'verlegung',
-    question: 'Reinigung der High-Tech Fuge',
-    answer: 'Patent innerhalb unserer Unternehmensgruppe. Verunreinigungen können mit unserem Premium Fleckenentferner entfernt werden. Nach der Verlegung wird Ihnen die Reinigung ausführlich vor Ort erklärt.'
+    question: 'Können Sie auch auf Fußbodenheizung verlegen?',
+    answer: 'Ja, <strong>Natursteine sind ideal für Fußbodenheizungen</strong> geeignet. Sie leiten die Wärme optimal und speichern sie lange. Wir verwenden spezielle Kleber und Verlegeverfahren für beheizte Untergründe.',
+    tags: ['Fußbodenheizung', 'Wärmeleitung']
   },
-  // Bestellung & Lieferung
   {
     id: 24,
-    category: 'bestellung',
-    question: 'Wie läuft eine Bestellung ab?',
-    answer: 'Der Ablauf ist einfach:<br>1. Bestellung aufgeben<br>2. Bestätigung erhalten<br>3. Lieferung erfolgt'
+    category: 'verlegung',
+    question: 'Bieten Sie eine Garantie auf die Verlegung?',
+    answer: 'Wir geben <strong>5 Jahre Garantie</strong> auf unsere Verlegungsarbeiten und <strong>lebenslange Garantie</strong> auf die High-Tech Fuge. Bei Problemen stehen wir zu unserem Wort und sorgen für eine professionelle Lösung.',
+    tags: ['Garantie', 'Gewährleistung']
   },
+
+  // Bestellung & Lieferung (7 Fragen)
   {
     id: 25,
     category: 'bestellung',
-    question: 'Warum sollte ich mehr Material bestellen?',
-    answer: 'Beim Verlegen kann es zu Verschnitt und Bruch kommen. Die Profi-Daumenregel: immer ca. 10% mehr Material mitbestellen. Eine Reserve ist auch sinnvoll für spätere Reparaturen oder Sanierungsarbeiten.'
+    question: 'Wie läuft der Bestellprozess ab?',
+    answer: 'Nach der <strong>kostenlosen Beratung</strong> erstellen wir ein detailliertes Angebot. Nach Ihrer Zusage erfolgt die Auftragsbestätigung, dann wird das Material kommissioniert und termingerecht geliefert.',
+    tags: ['Bestellprozess', 'Angebot']
   },
   {
     id: 26,
     category: 'bestellung',
-    question: 'In welche Länder liefert die Architektur Group?',
-    answer: 'Die Architektur Group liefert europaweit. Ihren Wünschen sind keine Grenzen gesetzt!'
+    question: 'Was kostet die Lieferung?',
+    answer: 'Deutschlandweite Lieferung kostet bei ca. <strong>50m² nur etwa 90,00€</strong>. Für andere Mengen und europäische Länder erstellen wir gerne ein individuelles Angebot. Die Lieferung erfolgt durch unsere eigene Spedition.',
+    tags: ['Lieferkosten', 'Versand']
   },
   {
     id: 27,
     category: 'bestellung',
-    question: 'Werde ich vor der Anlieferung kontaktiert?',
-    answer: 'Ja, vor der Anlieferung erfolgt eine Kontaktierung durch unsere Haus-Spedition.'
+    question: 'Liefern Sie auch nach Österreich und in die Schweiz?',
+    answer: 'Ja, wir liefern <strong>europaweit</strong>! Neben Deutschland beliefern wir auch Österreich, Schweiz, Frankreich, Italien und andere EU-Länder. Die Lieferzeiten betragen je nach Land 3-10 Werktage.',
+    tags: ['Europa', 'International']
   },
   {
     id: 28,
     category: 'bestellung',
-    question: 'Wie bekomme ich meine Wunschsteine?',
-    answer: 'Wir liefern deutschland- und europaweit bis zu Ihnen nach Hause. Unser kostengünstiger Transport liegt bei ca. 50m² deutschlandweit bei nur ca. 90,00€.'
+    question: 'Kann ich Material zurückgeben?',
+    answer: 'Nicht verwendetes Material in <strong>Originalverpackung</strong> kann binnen 14 Tagen zurückgegeben werden. Maßangefertigte Zuschnitte sind vom Umtausch ausgeschlossen. Die Rückgabe erfolgt auf Kosten des Kunden.',
+    tags: ['Rückgabe', 'Umtausch']
   },
   {
     id: 29,
     category: 'bestellung',
-    question: 'Wie bekomme ich meine Betontreppe/Bolzentreppe?',
-    answer: 'Sie kommen mit Ihrem Bauplan zu uns und erhalten eine fachmännische Beratung. Nach Auftragsbestätigung kommen wir deutschlandweit für Aufmaß und Schablonenerstellung zu Ihnen. Die Treppen werden wie ein Maßanzug montiert.'
+    question: 'Welche Zahlungsmöglichkeiten gibt es?',
+    answer: 'Wir akzeptieren <strong>Banküberweisung, Kreditkarte, PayPal und Ratenzahlung</strong>. Bei größeren Projekten bieten wir auch individuelle Zahlungspläne an. Anzahlung meist 30-50% bei Bestellung.',
+    tags: ['Zahlung', 'Finanzierung']
+  },
+  {
+    id: 30,
+    category: 'bestellung',
+    question: 'Wie wird das Material angeliefert?',
+    answer: 'Die Anlieferung erfolgt durch unsere <strong>eigene Spedition mit speziellen Fahrzeugen</strong>. Wir kontaktieren Sie vor der Anlieferung zur Terminabstimmung. Das Material wird bis zur Bordsteinkante oder nach Absprache auch ins Haus geliefert.',
+    tags: ['Anlieferung', 'Spedition']
+  },
+  {
+    id: 31,
+    category: 'bestellung',
+    question: 'Was ist bei der Anlieferung zu beachten?',
+    answer: 'Bitte stellen Sie sicher, dass die <strong>Zufahrt für LKW möglich</strong> ist und ausreichend Lagerplatz vorhanden ist. Schwere Platten benötigen ggf. einen Kran. Wir besichtigen die Örtlichkeiten gerne vorab.',
+    tags: ['Zufahrt', 'Lagerung']
   }
 ]
 
-// Computed
+// Computed Properties
 const filteredFaqs = computed(() => {
-  return faqs.filter(faq => faq.category === activeFaqCategory.value)
+  let filtered = faqs.filter(faq => {
+    const matchesCategory = activeFaqCategory.value === 'alle' || faq.category === activeFaqCategory.value
+    const matchesSearch = !searchQuery.value || 
+      faq.question.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      faq.answer.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (faq.tags && faq.tags.some(tag => tag.toLowerCase().includes(searchQuery.value.toLowerCase())))
+    
+    return matchesCategory && matchesSearch
+  })
+  
+  return filtered
 })
+
+const activeCategoryData = computed(() => {
+  return faqCategories.find(cat => cat.id === activeFaqCategory.value) || faqCategories[0]
+})
+
+const totalFaqs = computed(() => faqs.length)
 
 // Methods
 const toRoman = (num) => {
@@ -884,7 +1118,6 @@ const toggleFaq = (id) => {
   }
 }
 
-// Fixed advantage methods
 const toggleAdvantage = (id) => {
   const index = expandedAdvantages.value.indexOf(id)
   if (index > -1) {
@@ -902,27 +1135,30 @@ const handleCardLeave = (id) => {
   hoveredCards.value.delete(id)
 }
 
-const playFeatureAnimation = (id) => {
-  // Animation placeholder
+const handleFeatureHover = (id, index) => {
+  hoveredFeature.value = id
 }
 
-const onAdvantageEnter = (el) => {
-  el.style.height = '0'
-  el.style.opacity = '0'
+const handleFeatureLeave = (id) => {
+  hoveredFeature.value = null
+}
+
+const triggerFeatureExplosion = (id) => {
+  rippleCount.value += 1
   setTimeout(() => {
-    el.style.height = 'auto'
-    el.style.opacity = '1'
-  }, 10)
+    rippleCount.value -= 1
+  }, 1000)
 }
 
-const onAdvantageLeave = (el) => {
-  el.style.height = '0'
-  el.style.opacity = '0'
+const setActiveFaqCategory = (categoryId) => {
+  activeFaqCategory.value = categoryId
+  // Close all expanded FAQs when switching categories
+  expandedFaqs.value = []
 }
 
-const submitForm = () => {
-  console.log('Form submitted:', form)
-  // Handle form submission
+const markHelpful = (faqId, isHelpful) => {
+  console.log('FAQ', faqId, 'marked as', isHelpful ? 'helpful' : 'not helpful')
+  // Here you could implement tracking logic
 }
 
 const playHoverSound = () => {
@@ -933,7 +1169,6 @@ const playHoverSound = () => {
 const handleScroll = () => {
   scrollY.value = window.scrollY
   
-  // Timeline progress
   const timeline = document.querySelector('.process-timeline')
   if (timeline) {
     const rect = timeline.getBoundingClientRect()
@@ -943,6 +1178,32 @@ const handleScroll = () => {
     ))
     timelineProgress.value = progress
   }
+}
+
+const getCategoryCount = (categoryId) => {
+  return faqs.filter(faq => faq.category === categoryId).length
+}
+
+const handleSearch = () => {
+  // Debounce search if needed
+  // expandedFaqs.value = [] // Optionally close all expanded FAQs on search
+}
+
+// Lifecycle
+onMounted(() => {
+  // Any initialization logic
+})
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  expandedFaqs.value = []
+}
+
+const highlightSearchTerm = (text) => {
+  if (!searchQuery.value || !text) return text
+  
+  const regex = new RegExp(`(${searchQuery.value})`, 'gi')
+  return text.replace(regex, '<mark class="search-highlight">$1</mark>')
 }
 
 // Number animation
@@ -983,9 +1244,7 @@ onMounted(() => {
   }, { threshold: 0.5 })
   
   const heroSection = document.querySelector('.hero-stats')
-  if (heroSection) {
-    observer.observe(heroSection)
-  }
+  if (heroSection) observer.observe(heroSection)
   
   // Timeline steps observer
   const stepsObserver = new IntersectionObserver((entries) => {
@@ -1005,6 +1264,27 @@ onMounted(() => {
     step.dataset.index = index
     stepsObserver.observe(step)
   })
+
+  // Features visibility observer
+  const featuresObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const index = parseInt(entry.target.dataset.index)
+        if (!visibleFeatures.value.includes(index)) {
+          setTimeout(() => {
+            visibleFeatures.value.push(index)
+          }, index * 100)
+        }
+      }
+    })
+  }, { threshold: 0.2 })
+  
+  nextTick(() => {
+    document.querySelectorAll('.luxury-feature-card').forEach((card, index) => {
+      card.dataset.index = index
+      featuresObserver.observe(card)
+    })
+  })
 })
 
 onUnmounted(() => {
@@ -1014,6 +1294,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* Basis Styles */
 .service-page {
   min-height: 100vh;
   background: #000;
@@ -1021,6 +1302,7 @@ onUnmounted(() => {
   overflow-x: hidden;
 }
 
+/* Hero Section Styles */
 .hero-section {
   position: relative;
   min-height: calc(100vh - var(--header-height)); 
@@ -1255,18 +1537,347 @@ onUnmounted(() => {
   font-weight: 600;
 }
 
-.section-title {
-  font-size: 3rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 .section-subtitle {
   font-size: 1.15rem;
   color: #999;
+}
+
+/* Search Bar */
+.faq-search-container {
+  max-width: 600px;
+  margin: 0 auto 4rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(164, 113, 72, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(20px);
+}
+
+.search-wrapper:focus-within {
+  border-color: #a47148;
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.3);
+  transform: translateY(-2px);
+}
+
+.search-icon {
+  color: #a47148;
+  margin-right: 1rem;
+  font-size: 1.25rem;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #FAFAF8;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-clear {
+  cursor: pointer;
+  color: #999;
+  margin-left: 1rem;
+  padding: 0.25rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.search-clear:hover {
+  color: #a47148;
+  background: rgba(164, 113, 72, 0.1);
+}
+
+.search-results-info {
+  text-align: center;
+  margin-top: 1rem;
+  color: #a47148;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.search-highlight {
+  background: rgba(164, 113, 72, 0.3);
+  color: #FAFAF8;
+  padding: 0.1rem 0.25rem;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* Category Statistics */
+.category-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.stats-card {
+  text-align: center;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(164, 113, 72, 0.3);
+  box-shadow: 0 10px 20px rgba(164, 113, 72, 0.1);
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #a47148;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: #999;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Luxury Category Filters */
+.faq-filter-container {
+  position: relative;
+  margin-bottom: 4rem;
+}
+
+.filter-background-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse, rgba(164, 113, 72, 0.1), transparent);
+  filter: blur(30px);
+  opacity: 0.7;
+}
+
+.category-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.luxury-category-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 20px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: filterBtnIn 0.8s ease-out backwards;
+}
+
+@keyframes filterBtnIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.btn-background {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  transition: all 0.6s ease;
+}
+
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: all 0.6s ease;
+}
+
+.luxury-category-btn.active .bg-gradient {
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.3) 0%, 
+    rgba(164, 113, 72, 0.1) 100%);
+  border-color: #a47148;
+  box-shadow: 
+    0 10px 30px rgba(164, 113, 72, 0.3),
+    inset 0 0 50px rgba(164, 113, 72, 0.1);
+}
+
+.bg-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease;
+  border-radius: 20px;
+}
+
+.luxury-category-btn:hover .bg-shine {
+  left: 100%;
+}
+
+.btn-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: left;
+}
+
+.category-icon-wrapper {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-orbit {
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50%;
+  animation: iconOrbit 10s linear infinite;
+}
+
+@keyframes iconOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.category-icon {
+  font-size: 1.8rem;
+  color: #a47148;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.1));
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.luxury-category-btn.active .category-icon {
+  color: #FAFAF8;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(164, 113, 72, 0.6);
+}
+
+.category-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #FAFAF8;
+  transition: all 0.3s ease;
+}
+
+.luxury-category-btn.active .category-name {
+  color: #a47148;
+}
+
+.category-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.question-count {
+  font-size: 0.85rem;
+  color: #999;
+  transition: color 0.3s ease;
+}
+
+.luxury-category-btn.active .question-count {
+  color: #a47148;
+}
+
+
+@keyframes newBadgePulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.btn-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.filter-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #a47148;
+  border-radius: 50%;
+  opacity: 0;
+  animation: filterParticleFloat 3s ease-out infinite;
+}
+
+.filter-particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+.filter-particle:nth-child(2) { top: 40%; left: 80%; animation-delay: 0.5s; }
+.filter-particle:nth-child(3) { top: 70%; left: 30%; animation-delay: 1s; }
+.filter-particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 1.5s; }
+.filter-particle:nth-child(5) { top: 30%; left: 50%; animation-delay: 2s; }
+.filter-particle:nth-child(6) { top: 60%; left: 10%; animation-delay: 2.5s; }
+
+@keyframes filterParticleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+}
+
+.luxury-category-btn.active .filter-particle {
+  animation-duration: 2s;
+  background: #FAFAF8;
+}
+
+.luxury-category-btn:hover {
+  transform: translateY(-5px) scale(1.02);
 }
 
 /* Services Section */
@@ -1547,7 +2158,7 @@ onUnmounted(() => {
   background: linear-gradient(45deg, rgba(0,0,0,0.4), rgba(164, 113, 72, 0.2));
 }
 
-/* Luxury Advantages Section */
+/* Advantages Section */
 .advantages-section {
   padding: 8rem 0;
   background: 
@@ -1568,7 +2179,6 @@ onUnmounted(() => {
   background: linear-gradient(90deg, transparent, #a47148, transparent);
 }
 
-/* Premium Advantages Grid */
 .premium-advantages {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -1601,10 +2211,6 @@ onUnmounted(() => {
   }
 }
 
-.premium-advantage-card.highlight {
-  border-image: linear-gradient(135deg, #a47148, transparent) 1;
-}
-
 .premium-advantage-card:hover {
   transform: translateY(-15px) scale(1.03);
   background: linear-gradient(135deg, 
@@ -1622,7 +2228,6 @@ onUnmounted(() => {
     rgba(255, 255, 255, 0.05) 100%);
 }
 
-/* Card Effects */
 .card-glow {
   position: absolute;
   top: -50%;
@@ -1659,7 +2264,6 @@ onUnmounted(() => {
   left: 100%;
 }
 
-/* Card Header */
 .premium-card-header {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -1756,11 +2360,9 @@ onUnmounted(() => {
   transform: scale(1.1);
 }
 
-/* Expandable Content */
 .premium-advantage-content {
   margin-top: 2rem;
   overflow: hidden;
-  transition: all 0.4s ease;
 }
 
 .content-divider {
@@ -1777,25 +2379,6 @@ onUnmounted(() => {
   margin-bottom: 1.5rem;
 }
 
-.advantage-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(164, 113, 72, 0.3);
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #a47148;
-}
-
-.badge-icon {
-  font-size: 1rem;
-}
-
-/* Transitions */
 .advantage-expand-enter-active,
 .advantage-expand-leave-active {
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1817,212 +2400,1001 @@ onUnmounted(() => {
 
 /* Luxury Features Showcase */
 .luxury-features-showcase {
-  padding: 4rem 0;
+  padding: 8rem 0;
   position: relative;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(164, 113, 72, 0.15) 0%, transparent 60%),
+    radial-gradient(circle at 75% 75%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+  overflow: hidden;
+}
+
+.luxury-features-showcase::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a47148' fill-opacity='0.03'%3E%3Cpolygon points='30,0 60,30 30,60 0,30'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  animation: patternShift 20s linear infinite;
+}
+
+@keyframes patternShift {
+  0% { transform: translateX(0) translateY(0); }
+  100% { transform: translateX(-60px) translateY(-60px); }
 }
 
 .showcase-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 6rem;
+  position: relative;
+  z-index: 2;
+}
+
+.header-particle-system {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.floating-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #a47148, transparent);
+  border-radius: 50%;
+  animation: floatParticle 4s ease-in-out infinite;
+}
+
+@keyframes floatParticle {
+  0%, 100% {
+    transform: translateY(100px) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(80px) translateX(10px) scale(1);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(-50px) translateX(-10px) scale(0.5);
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .showcase-title {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: 300;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.title-word {
+  display: inline-block;
+  margin-right: 1rem;
+  opacity: 0;
+  transform: translateY(50px) rotateX(-90deg);
+  animation: titleWordReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 50%, #FAFAF8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: titleWordReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
+             shimmerEffect 3s ease-in-out infinite 1.5s;
 }
 
-.showcase-subtitle {
-  font-size: 1.1rem;
-  color: #999;
-  font-style: italic;
-}
-
-.features-luxury-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 3rem;
-}
-
-.luxury-feature-card {
-  position: relative;
-  height: 300px;
-  border-radius: 24px;
-  overflow: hidden;
-  cursor: pointer;
-  animation: luxuryFeatureIn 0.8s ease-out backwards;
-  transition: all 0.6s ease;
-}
-
-@keyframes luxuryFeatureIn {
-  from {
-    opacity: 0;
-    transform: translateY(80px) rotateX(-15deg);
-  }
+@keyframes titleWordReveal {
   to {
     opacity: 1;
     transform: translateY(0) rotateX(0);
   }
 }
 
+@keyframes shimmerEffect {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+.showcase-subtitle {
+  font-size: 1.3rem;
+  color: #999;
+  font-style: italic;
+  margin-bottom: 2rem;
+  animation: fadeInUp 1s ease-out 0.8s backwards;
+}
+
+.showcase-divider {
+  position: relative;
+  width: 200px;
+  margin: 0 auto;
+  height: 2px;
+}
+
+.divider-line {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+  animation: dividerExpand 1.5s ease-out 1s forwards;
+  transform: scaleX(0);
+}
+
+.divider-glow {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: radial-gradient(ellipse, rgba(164, 113, 72, 0.5), transparent);
+  filter: blur(8px);
+  animation: glowPulse 2s ease-in-out infinite 2s;
+}
+
+@keyframes dividerExpand {
+  to { transform: scaleX(1); }
+}
+
+.features-luxury-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 4rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+.luxury-feature-card {
+  position: relative;
+  min-height: 600px;
+  border-radius: 32px;
+  overflow: hidden;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 0;
+  transform: translateY(100px) rotateX(-15deg) scale(0.8);
+  animation: luxuryCardReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.luxury-feature-card.visible {
+  opacity: 1;
+  transform: translateY(0) rotateX(0) scale(1);
+}
+
+@keyframes luxuryCardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0) scale(1);
+  }
+}
+
 .luxury-feature-card:hover {
-  transform: translateY(-20px) scale(1.05);
+  transform: translateY(-30px) rotateX(5deg) scale(1.05);
+  box-shadow: 
+    0 50px 100px rgba(164, 113, 72, 0.4),
+    0 0 0 1px rgba(164, 113, 72, 0.3),
+    inset 0 0 50px rgba(164, 113, 72, 0.1);
+}
+
+.luxury-feature-card.hovered {
+  z-index: 10;
 }
 
 .luxury-feature-background {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
 .feature-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, 
-    rgba(164, 113, 72, 0.8) 0%, 
-    rgba(0, 0, 0, 0.9) 100%);
+  transition: all 0.8s ease;
 }
 
 .feature-pattern {
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 40px 40px;
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px, 25px 25px;
+  animation: patternDrift 15s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes patternDrift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-50px, -25px); }
+}
+
+.morphing-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: blobMorph 8s ease-in-out infinite;
   opacity: 0.3;
+}
+
+.blob-1 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(164, 113, 72, 0.8), transparent);
+  top: 20%;
+  left: 10%;
+}
+
+.blob-2 {
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.6), transparent);
+  bottom: 20%;
+  right: 15%;
+  animation-delay: -4s;
+}
+
+@keyframes blobMorph {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    border-radius: 50%;
+  }
+  25% {
+    transform: scale(1.2) rotate(90deg);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  }
+  50% {
+    transform: scale(0.8) rotate(180deg);
+    border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+  }
+  75% {
+    transform: scale(1.1) rotate(270deg);
+    border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+  }
+}
+
+.energy-waves {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: waveExpand 3s ease-out infinite;
+}
+
+@keyframes waveExpand {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+  }
+  100% {
+    width: 600px;
+    height: 600px;
+    opacity: 0;
+  }
+}
+
+.card-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: linear-gradient(45deg, #a47148, #FAFAF8);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  animation: particleOrbit 4s linear infinite;
+}
+
+@keyframes particleOrbit {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--start-pos)) translateX(100px) scale(0);
+    opacity: 0;
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--start-pos)) translateX(100px) scale(1);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(var(--end-pos)) translateX(200px) scale(0);
+    opacity: 0;
+  }
+}
+
+.luxury-feature-icon-3d {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-hologram {
+  position: absolute;
+  inset: 0;
+}
+
+.hologram-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  animation: hologramSpin 6s linear infinite;
+}
+
+.layer-1 { animation-delay: 0s; }
+.layer-2 { 
+  animation-delay: -2s; 
+  transform: rotateY(60deg);
+}
+.layer-3 { 
+  animation-delay: -4s; 
+  transform: rotateY(120deg);
+}
+
+@keyframes hologramSpin {
+  from { transform: rotateZ(0deg) rotateX(60deg); }
+  to { transform: rotateZ(360deg) rotateX(60deg); }
+}
+
+.icon-glow-ring {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: conic-gradient(transparent, rgba(164, 113, 72, 0.3), transparent);
+  animation: ringRotate 3s linear infinite;
+  filter: blur(10px);
+}
+
+@keyframes ringRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.icon-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.1));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  transition: all 0.6s ease;
+  z-index: 2;
+}
+
+.luxury-feature-card:hover .icon-container {
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  transform: scale(1.2) rotateY(180deg);
+  box-shadow: 0 0 50px rgba(164, 113, 72, 0.8);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  color: #a47148;
+  transition: all 0.6s ease;
+  z-index: 1;
+}
+
+.luxury-feature-card:hover .feature-icon {
+  color: #000;
+  transform: scale(1.1);
+}
+
+.icon-reflection {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+  border-radius: 50%;
+  animation: reflectionSweep 4s ease-in-out infinite;
+}
+
+@keyframes reflectionSweep {
+  0%, 100% { transform: rotate(0deg); opacity: 0; }
+  50% { opacity: 1; transform: rotate(180deg); }
+}
+
+.magnetic-field {
+  position: absolute;
+  inset: -40px;
+}
+
+.field-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(164, 113, 72, 0.4), transparent);
+  transform-origin: center bottom;
+  animation: fieldPulse 2s ease-in-out infinite;
+}
+
+@keyframes fieldPulse {
+  0%, 100% { opacity: 0.3; transform: translate(-50%, -100%) scaleY(1); }
+  50% { opacity: 1; transform: translate(-50%, -100%) scaleY(1.5); }
 }
 
 .luxury-feature-content {
   position: relative;
-  z-index: 1;
-  padding: 2rem;
+  z-index: 3;
+  padding: 3rem 2rem;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
   text-align: center;
-}
-
-.luxury-feature-icon {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-backdrop {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(164, 113, 72, 0.3));
-  border-radius: 50%;
-  filter: blur(20px);
-}
-
-.luxury-feature-icon .material-icons {
-  font-size: 3rem;
-  color: #FAFAF8;
-  position: relative;
-  z-index: 1;
+  backdrop-filter: blur(10px);
 }
 
 .luxury-feature-title {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 500;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   color: #FAFAF8;
+  overflow: hidden;
+}
+
+.title-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) rotateX(-90deg);
+  animation: charReveal 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes charReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0);
+  }
 }
 
 .luxury-feature-description {
   color: #ccc;
-  line-height: 1.6;
+  line-height: 1.8;
+  font-size: 1.1rem;
   margin-bottom: 2rem;
+  flex-grow: 1;
 }
 
-.feature-highlight {
-  width: 100%;
+.quantum-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 2px;
-  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.quantum-particles {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.quantum-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #a47148;
+  border-radius: 50%;
+  animation: quantumMove 4s linear infinite;
+}
+
+@keyframes quantumMove {
+  0% {
+    left: -10px;
+    opacity: 0;
+    transform: scale(0);
+  }
+  10%, 90% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    left: 110%;
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+.energy-beam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+  animation: beamSweep 3s ease-in-out infinite;
+}
+
+@keyframes beamSweep {
+  0%, 100% { width: 0; left: 0; }
+  50% { width: 100%; left: 0; }
+}
+
+.interaction-ripples {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(164, 113, 72, 0.3), transparent);
+  animation: rippleExpand 1s ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleExpand {
+  from {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  to {
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+  }
+}
+
+.corner-accents {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 32px;
+}
+
+.corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #a47148;
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+.corner.top-left {
+  top: 15px;
+  left: 15px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.corner.top-right {
+  top: 15px;
+  right: 15px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.corner.bottom-left {
+  bottom: 15px;
+  left: 15px;
+  border-right: none;
+  border-top: none;
+}
+
+.corner.bottom-right {
+  bottom: 15px;
+  right: 15px;
+  border-left: none;
+  border-top: none;
+}
+
+.luxury-feature-card:hover .corner {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+/* Enhanced Luxury FAQ Section */
+.faq-section {
+  padding: 8rem 0;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(164, 113, 72, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, rgba(164, 113, 72, 0.05) 0%, transparent 50%),
+    linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
   position: relative;
   overflow: hidden;
 }
 
-.highlight-bar {
+.faq-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+}
+
+/* Enhanced Section Header */
+.header-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.decoration-line {
+  width: 100px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148);
+}
+
+.decoration-line.left {
+  background: linear-gradient(90deg, transparent, #a47148);
+}
+
+.decoration-line.right {
+  background: linear-gradient(90deg, #a47148, transparent);
+}
+
+.section-badge.premium {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  animation: badgeGlow 3s ease-in-out infinite;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: #a47148;
+}
+
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(164, 113, 72, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(164, 113, 72, 0.3); }
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.title-gradient {
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 50%, #FAFAF8 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleShimmer 4s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+/* Luxury Category Filters */
+.faq-filter-container {
+  position: relative;
+  margin-bottom: 4rem;
+}
+
+.filter-background-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse, rgba(164, 113, 72, 0.1), transparent);
+  filter: blur(30px);
+  opacity: 0.7;
+}
+
+.category-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.luxury-category-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 20px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: filterBtnIn 0.8s ease-out backwards;
+}
+
+@keyframes filterBtnIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.btn-background {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  transition: all 0.6s ease;
+}
+
+.bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: all 0.6s ease;
+}
+
+.luxury-category-btn.active .bg-gradient {
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.3) 0%, 
+    rgba(164, 113, 72, 0.1) 100%);
+  border-color: #a47148;
+  box-shadow: 
+    0 10px 30px rgba(164, 113, 72, 0.3),
+    inset 0 0 50px rgba(164, 113, 72, 0.1);
+}
+
+.bg-shine {
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, #FAFAF8, transparent);
-  animation: highlightSlide 3s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s ease;
+  border-radius: 20px;
 }
 
-@keyframes highlightSlide {
-  0%, 100% { left: -100%; }
-  50% { left: 100%; }
+.luxury-category-btn:hover .bg-shine {
+  left: 100%;
 }
 
-/* FAQ Section */
-.faq-section {
-  padding: 6rem 0;
+.btn-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  text-align: left;
 }
 
-.faq-categories {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 3rem;
-}
-
-.category-btn {
+.category-icon-wrapper {
+  position: relative;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: center;
+}
+
+.icon-orbit {
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50%;
+  animation: iconOrbit 10s linear infinite;
+}
+
+@keyframes iconOrbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.category-icon {
+  font-size: 1.8rem;
+  color: #a47148;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.1));
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.6s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.luxury-category-btn.active .category-icon {
   color: #FAFAF8;
-  border-radius: 50px;
-  cursor: pointer;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(164, 113, 72, 0.6);
+}
+
+.category-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #FAFAF8;
   transition: all 0.3s ease;
 }
 
-.category-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.category-btn.active {
-  background: rgba(164, 113, 72, 0.2);
-  border-color: #a47148;
+.luxury-category-btn.active .category-name {
   color: #a47148;
 }
 
-.category-btn .count {
-  padding: 0.25rem 0.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  font-size: 0.75rem;
-  font-weight: 600;
+.category-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-.faq-list {
-  max-width: 900px;
+.question-count {
+  font-size: 0.85rem;
+  color: #999;
+  transition: color 0.3s ease;
+}
+
+.luxury-category-btn.active .question-count {
+  color: #a47148;
+}
+
+.btn-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.filter-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #a47148;
+  border-radius: 50%;
+  opacity: 0;
+  animation: filterParticleFloat 3s ease-out infinite;
+}
+
+.filter-particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+.filter-particle:nth-child(2) { top: 40%; left: 80%; animation-delay: 0.5s; }
+.filter-particle:nth-child(3) { top: 70%; left: 30%; animation-delay: 1s; }
+.filter-particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 1.5s; }
+.filter-particle:nth-child(5) { top: 30%; left: 50%; animation-delay: 2s; }
+.filter-particle:nth-child(6) { top: 60%; left: 10%; animation-delay: 2.5s; }
+
+@keyframes filterParticleFloat {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1);
+  }
+}
+
+.luxury-category-btn.active .filter-particle {
+  animation-duration: 2s;
+  background: #FAFAF8;
+}
+
+.luxury-category-btn:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* Category Summary */
+.category-summary {
+  display: flex;
+  justify-content: center;
+}
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 3rem;
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(164, 113, 72, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  max-width: 600px;
+  transition: all 0.6s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(164, 113, 72, 0.2);
+}
+
+.summary-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.summary-content h4 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #FAFAF8;
+  margin-bottom: 0.5rem;
+}
+
+.summary-content p {
+  color: #ccc;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+/* Enhanced FAQ List */
+.faq-container {
+  max-width: 1000px;
   margin: 0 auto;
 }
 
-.faq-item {
-  margin-bottom: 1rem;
-  animation: faqIn 0.5s ease-out backwards;
+.faq-count-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 50px;
+  backdrop-filter: blur(10px);
+  animation: countIndicatorIn 0.8s ease-out;
 }
 
-@keyframes faqIn {
+@keyframes countIndicatorIn {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -2033,64 +3405,743 @@ onUnmounted(() => {
   }
 }
 
-.faq-question {
-  width: 100%;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 15px;
-  color: #FAFAF8;
-  text-align: left;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.count-number {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #a47148;
+}
+
+.count-label {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.luxury-faq-list {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.luxury-faq-item {
+  position: relative;
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: faqItemSlideIn 0.8s ease-out backwards;
+  animation-delay: calc(var(--item-index) * 0.1s);
+}
+
+@keyframes faqItemSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.luxury-faq-item:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(164, 113, 72, 0.3);
+  box-shadow: 0 20px 40px rgba(164, 113, 72, 0.15);
+}
+
+.luxury-faq-item.expanded {
+  border-color: rgba(164, 113, 72, 0.4);
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.08) 0%, 
+    rgba(255, 255, 255, 0.03) 100%);
+}
+
+/* FAQ Question Button */
+.luxury-faq-question {
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.question-background {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-pattern {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(164, 113, 72, 0.1) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(164, 113, 72, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px, 15px 15px;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.luxury-faq-question:hover .bg-pattern {
+  opacity: 1;
+  animation: patternShift 10s linear infinite;
+}
+
+.bg-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(164, 113, 72, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.luxury-faq-question.active .bg-glow {
+  opacity: 1;
+}
+
+.question-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  font-size: 1.1rem;
+  gap: 2rem;
+  padding: 2rem 2.5rem;
+  transition: all 0.6s ease;
 }
 
-.faq-question:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.faq-question.active {
-  background: rgba(164, 113, 72, 0.1);
-  border-color: #a47148;
-}
-
-.faq-toggle {
-  width: 30px;
-  height: 30px;
-  background: rgba(164, 113, 72, 0.2);
+.question-number {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.1));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #a47148;
+  transition: all 0.6s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.luxury-faq-question.active .question-number {
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  color: #000;
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(164, 113, 72, 0.5);
+}
+
+.question-number::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.luxury-faq-question:hover .question-number::before {
+  transform: translateX(100%);
+}
+
+.question-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #FAFAF8;
+  line-height: 1.4;
+  margin: 0;
+  transition: all 0.3s ease;
+}
+
+.luxury-faq-question:hover .question-text {
+  color: #a47148;
+}
+
+.luxury-faq-question.active .question-text {
+  color: #a47148;
+}
+
+.question-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 0.25rem 0.75rem;
+  background: rgba(164, 113, 72, 0.1);
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 15px;
+  font-size: 0.75rem;
   color: #a47148;
   transition: all 0.3s ease;
 }
 
-.faq-question:hover .faq-toggle {
-  background: #a47148;
-  color: #000;
+.luxury-faq-question:hover .tag {
+  background: rgba(164, 113, 72, 0.2);
+  transform: scale(1.05);
 }
 
-.faq-answer {
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 0 0 15px 15px;
-  margin-top: -1px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-top: none;
+.question-toggle-wrapper {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(164, 113, 72, 0.1);
+  border: 1px solid rgba(164, 113, 72, 0.2);
+  border-radius: 50%;
+  transition: all 0.6s ease;
+}
+
+.luxury-faq-question.active .toggle-bg {
+  background: rgba(164, 113, 72, 0.3);
+  border-color: #a47148;
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.3);
+}
+
+.toggle-icon {
+  font-size: 1.5rem;
+  color: #a47148;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  z-index: 1;
+}
+
+.luxury-faq-question.active .toggle-icon {
+  color: #FAFAF8;
+  transform: rotate(180deg);
+}
+
+.question-hover-effects {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hover-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(ellipse, rgba(164, 113, 72, 0.2), transparent);
+  opacity: 0;
+  filter: blur(20px);
+  transition: opacity 0.6s ease;
+}
+
+.luxury-faq-question:hover .hover-glow {
+  opacity: 1;
+}
+
+.hover-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.3), transparent, rgba(164, 113, 72, 0.3));
+  background-clip: padding-box;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.luxury-faq-question:hover .hover-border {
+  opacity: 1;
+}
+
+/* FAQ Answer */
+.luxury-faq-answer {
+  position: relative;
+  overflow: hidden;
+}
+
+.answer-background {
+  position: absolute;
+  inset: 0;
+}
+
+.answer-pattern {
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(45deg, transparent 49%, rgba(164, 113, 72, 0.05) 49%, rgba(164, 113, 72, 0.05) 51%, transparent 51%);
+  background-size: 20px 20px;
+  opacity: 0.3;
 }
 
 .answer-content {
-  color: #ccc;
-  line-height: 1.8;
+  position: relative;
+  z-index: 2;
+  padding: 0 2.5rem 2.5rem 2.5rem;
 }
 
-.answer-content strong {
+.answer-decorator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+.decorator-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+}
+
+.answer-decorator .material-icons {
+  color: #a47148;
+  font-size: 1.2rem;
+  animation: decoratorPulse 2s ease-in-out infinite;
+}
+
+@keyframes decoratorPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+.answer-text {
+  color: #ccc;
+  line-height: 1.8;
+  font-size: 1rem;
+  margin-bottom: 2rem;
+}
+
+.answer-text strong {
   color: #FAFAF8;
+  font-weight: 600;
+}
+
+.related-links {
+  margin-bottom: 2rem;
+}
+
+.related-links h5 {
+  color: #a47148;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.related-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.related-link:hover {
+  background: rgba(164, 113, 72, 0.1);
+  border-color: #a47148;
+  color: #a47148;
+  transform: translateY(-2px);
+}
+
+.related-link .material-icons {
+  color: #a47148;
+  font-size: 1.2rem;
+}
+
+.answer-meta {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1.5rem;
+}
+
+.helpful-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.helpful-question span {
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.helpful-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.helpful-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  color: #ccc;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.helpful-btn.positive:hover {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+}
+
+.helpful-btn.negative:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.helpful-btn .material-icons {
+  font-size: 1rem;
+}
+
+/* Answer Expand Transition */
+.answer-expand-enter-active,
+.answer-expand-leave-active {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.answer-expand-enter-from,
+.answer-expand-leave-to {
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(-20px);
+}
+
+.answer-expand-enter-to,
+.answer-expand-leave-from {
+  opacity: 1;
+  max-height: 1000px;
+  transform: translateY(0);
+}
+
+/* FAQ Slide Transition */
+.faq-slide-enter-active,
+.faq-slide-leave-active {
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.faq-slide-enter-from {
+  opacity: 0;
+  transform: translateX(-50px) scale(0.9);
+}
+
+.faq-slide-leave-to {
+  opacity: 0;
+  transform: translateX(50px) scale(0.9);
+}
+
+/* No Results State */
+.no-results {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  animation: noResultsIn 0.8s ease-out;
+}
+
+@keyframes noResultsIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.no-results-icon {
+  width: 80px;
+  height: 80px;
+  background: rgba(164, 113, 72, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+}
+
+.no-results-icon .material-icons {
+  font-size: 2.5rem;
+  color: #a47148;
+}
+
+.no-results h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #FAFAF8;
+  margin-bottom: 1rem;
+}
+
+.no-results p {
+  color: #999;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 2px solid #a47148;
+  color: #a47148;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  background: #a47148;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Quick Actions */
+.faq-quick-actions {
+  margin-top: 6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+.quick-action-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.1) 0%, 
+    rgba(255, 255, 255, 0.05) 100%);
+  border: 1px solid rgba(164, 113, 72, 0.2);
+  border-radius: 24px;
+  transition: all 0.6s ease;
+  overflow: hidden;
+}
+
+.quick-action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+  transform: translateX(-100%);
+  transition: transform 0.8s ease;
+}
+
+.quick-action-card:hover::before {
+  transform: translateX(100%);
+}
+
+.quick-action-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 60px rgba(164, 113, 72, 0.3);
+  border-color: #a47148;
+}
+
+.action-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  transition: all 0.6s ease;
+}
+
+.quick-action-card:hover .action-icon {
+  transform: scale(1.1) rotateY(180deg);
+  box-shadow: 0 0 30px rgba(164, 113, 72, 0.6);
+}
+
+.action-content {
+  text-align: left;
+}
+
+.action-content h4 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #FAFAF8;
+  margin-bottom: 0.5rem;
+}
+
+.action-content p {
+  color: #ccc;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .category-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .faq-quick-actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .category-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2.5rem;
+  }
+
+  .category-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .category-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .stats-card {
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .question-content {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .question-toggle-wrapper {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 1rem;
+  }
+
+  .helpful-question {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .faq-quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-action-card {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+
+  .action-btn {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .search-wrapper {
+    padding: 0.5rem 1rem;
+  }
+
+  .btn-content {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .category-stats {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .question-content {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .answer-content {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+
+  .luxury-faq-question {
+    border-radius: 15px;
+  }
+
+  .luxury-faq-item {
+    border-radius: 15px;
+  }
+
+  .quick-action-card {
+    padding: 2rem;
+    border-radius: 15px;
+  }
+
+  .summary-card {
+    padding: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* Showroom CTA */
@@ -2209,173 +4260,6 @@ onUnmounted(() => {
   color: #000;
 }
 
-/* Contact Section */
-.contact-section {
-  padding: 6rem 0;
-}
-
-.contact-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-}
-
-.contact-title {
-  font-size: 2.5rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.contact-subtitle {
-  font-size: 1.15rem;
-  color: #999;
-  margin-bottom: 3rem;
-}
-
-.contact-details {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  margin-bottom: 3rem;
-}
-
-.detail-item {
-  display: flex;
-  gap: 1rem;
-}
-
-.detail-item .material-icons {
-  width: 50px;
-  height: 50px;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a47148;
-  font-size: 1.5rem;
-  flex-shrink: 0;
-}
-
-.detail-item h4 {
-  font-size: 1.1rem;
-  font-weight: 400;
-  margin-bottom: 0.5rem;
-  color: #FAFAF8;
-}
-
-.detail-item p,
-.detail-item a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.detail-item a:hover {
-  color: #a47148;
-}
-
-.service-badges {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.badge-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.badge-item .material-icons {
-  color: #a47148;
-  font-size: 1.5rem;
-}
-
-/* Contact Form */
-.contact-form {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  padding: 3rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.contact-form h3 {
-  font-size: 1.5rem;
-  font-weight: 400;
-  margin-bottom: 2rem;
-  color: #FAFAF8;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #FAFAF8;
-  font-size: 1rem;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #666;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: #a47148;
-}
-
-.form-group select option {
-  background: #1a1a1a;
-  color: #FAFAF8;
-}
-
-.form-group textarea {
-  resize: vertical;
-}
-
-.submit-btn {
-  width: 100%;
-  padding: 1rem;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  color: #000;
-  border: none;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.3);
-}
-
 /* Service Modal */
 .service-modal {
   position: fixed;
@@ -2397,6 +4281,7 @@ onUnmounted(() => {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: modalIn 0.4s ease-out;
+  position: relative;
 }
 
 @keyframes modalIn {
@@ -2412,8 +4297,8 @@ onUnmounted(() => {
 
 .modal-close {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: 1.5rem;
+  right: 1.5rem;
   width: 50px;
   height: 50px;
   background: rgba(255, 255, 255, 0.1);
@@ -2425,6 +4310,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(10px);
 }
 
 .modal-close:hover {
@@ -2494,63 +4381,40 @@ onUnmounted(() => {
 .modal-cta {
   display: flex;
   justify-content: center;
-  gap: 1rem;
 }
 
 .modal-btn {
-  padding: 0.875rem 2rem;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 1rem 3rem;
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
   border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: none;
 }
 
 .modal-btn.primary {
   background: linear-gradient(135deg, #a47148, #FAFAF8);
   color: #000;
-  border: none;
 }
 
-.modal-btn.secondary {
-  background: transparent;
-  color: #FAFAF8;
-  border: 2px solid #FAFAF8;
+.modal-btn.full-width {
+  width: 100%;
+  max-width: 400px;
 }
 
 .modal-btn:hover {
   transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.3);
 }
 
 /* Transitions */
-.answer-enter-active,
-.answer-leave-active {
-  transition: all 0.3s ease;
-}
-
-.answer-enter-from,
-.answer-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.faq-transition-enter-active,
-.faq-transition-leave-active {
-  transition: all 0.5s ease;
-}
-
-.faq-transition-enter-from {
-  opacity: 0;
-  transform: translateX(-30px);
-}
-
-.faq-transition-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
 .modal-enter-active,
 .modal-leave-active {
   transition: opacity 0.3s ease;
@@ -2567,80 +4431,108 @@ onUnmounted(() => {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  .contact-content {
-    grid-template-columns: 1fr;
-  }
-  
   .premium-advantages {
     grid-template-columns: 1fr;
   }
   
   .features-luxury-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+  }
+
+  .category-filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .faq-quick-actions {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-  
-  .hero-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .services-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .timeline-step {
-    grid-template-columns: 60px 1fr;
-  }
-  
-  .step-image {
-    display: none;
-  }
-  
-  .cta-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .service-badges {
-    grid-template-columns: 1fr;
-  }
-  
-  .features-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .features-luxury-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .faq-categories {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 2rem;
-  }
-  
-  .section-title {
-    font-size: 2rem;
-  }
-  
-  .showcase-title {
-    font-size: 2rem;
-  }
-  
   .hero-cta {
     flex-direction: column;
   }
   
   .modal-content {
     padding: 2rem;
+  }
+
+  .luxury-feature-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .luxury-feature-icon-3d {
+    width: 100px;
+    height: 100px;
+  }
+
+  .luxury-feature-title {
+    font-size: 1.5rem;
+  }
+
+  .category-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .question-content {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .question-toggle-wrapper {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 1rem;
+  }
+
+  .helpful-question {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 320px) {
+  .luxury-feature-card {
+    min-height: 450px;
+  }
+
+  .features-luxury-grid {
+    gap: 1.5rem;
+  }
+
+  .luxury-feature-icon-3d {
+    width: 80px;
+    height: 80px;
+  }
+
+  .showcase-title {
+    font-size: 1.8rem;
+  }
+
+  .question-content {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .answer-content {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+  }
+}
+
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 </style>
