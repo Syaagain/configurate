@@ -1,10 +1,9 @@
 <template>
   <div class="about-page">
-    <section class="hero-section">
-      <div class="hero-background">
-        <video autoplay muted loop playsinline class="hero-video">
-          <source src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/showroom-video.mp4" type="video/mp4">
-        </video>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" ref="heroBg">
+        <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png" alt="Hero Background">
         <div class="hero-overlay"></div>
       </div>
       
