@@ -6,27 +6,17 @@
         <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png" alt="Hero Background">
         <div class="hero-overlay"></div>
       </div>
-      
-      <div class="hero-content">
-        <div class="hero-badge animate-fade-in">SEIT 1957</div>
-        <h1 class="hero-title">
-          <span class="title-word" v-for="(word, index) in heroTitle" :key="index" :style="{ animationDelay: `${index * 0.1}s` }">
-            {{ word }}
-          </span>
-        </h1>
-        <p class="hero-subtitle animate-fade-up">
-          Europas exklusivste Auswahl an Premium Natursteinen und Design-Verlegung
-        </p>
-        <div class="scroll-indicator" @click="scrollToContent">
-          <span class="material-icons">expand_more</span>
+      <div class="hero-content" ref="heroContent">
+        <div class="title-container">
+          <h1 class="hero-title">ÜBER UNS</h1>
         </div>
+        <div class="hero-badge animate-fade-in">SEIT 1957</div>
       </div>
-      
-      <!-- Floating Elements -->
-      <div class="floating-elements">
-        <div class="float-element element-1"></div>
-        <div class="float-element element-2"></div>
-        <div class="float-element element-3"></div>
+      <div class="hero-subheading" ref="heroSubheading">
+        <p>Europas exklusivste Auswahl an Premium Natursteinen und Design-Verlegung</p>
+      </div>
+      <div class="scroll-indicator" @click="scrollToContent">
+        <span class="material-icons">expand_more</span>
       </div>
     </section>
 
@@ -35,7 +25,7 @@
       <div class="container">
         <div class="story-grid">
           <div class="story-content">
-            <span class="section-badge">UNSERE GESCHICHTE</span>
+            <span class="hero-badge animate-fade-in">UNSERE GESCHICHTE</span>
             <h2 class="section-title story-title">
               <span class="gradient-text title-line-1" data-text="3 GENERATIONEN">3 GENERATIONEN</span>
               <span class="title-line-2" data-text="HANDWERKSKUNST">HANDWERKSKUNST</span>
@@ -55,10 +45,22 @@
             
             <!-- Timeline -->
             <div class="timeline">
-              <div class="timeline-item" v-for="(item, index) in timeline" :key="index" 
-                   :class="{ active: visibleTimeline.includes(index) }">
-                <div class="timeline-year">{{ item.year }}</div>
+              <div class="timeline-line">
+                <div class="timeline-progress" :style="{ height: `${timelineProgress}%` }"></div>
+              </div>
+              <div 
+                v-for="(item, index) in timeline" 
+                :key="index"
+                class="timeline-step"
+                :class="{ active: visibleTimeline.includes(index) }"
+                :data-index="index"
+              >
+                <div class="step-marker">
+                  <div class="timeline-dot"></div>
+                  <div class="marker-pulse"></div>
+                </div>
                 <div class="timeline-content">
+                  <div class="timeline-year">{{ item.year }}</div>
                   <h4>{{ item.title }}</h4>
                   <p>{{ item.description }}</p>
                 </div>
@@ -73,52 +75,17 @@
     <section class="units-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-badge">GESCHÄFTSBEREICHE</span>
+          <span class="hero-badge animate-fade-in">Unternehmensgruppe</span>
           <h2 class="section-title" data-text="ALLES AUS EINER HAND">ALLES AUS EINER HAND</h2>
           <p class="section-subtitle">
-            Unser ganzheitliches Leistungsangebot für Neubauten und Generalsanierungen
+            Unser Leistungsangebot für Neubauten und Generalsanierungen
           </p>
         </div>
         
-        <div class="units-carousel">
-          <div class="carousel-container" :style="{ transform: `translateX(-${currentUnit * 100}%)` }">
-            <div class="unit-card" v-for="unit in businessUnits" :key="unit.id">
-              <div class="unit-icon">
-                <span class="material-icons">{{ unit.icon }}</span>
-              </div>
-              <h3>{{ unit.name }}</h3>
-              <p>{{ unit.description }}</p>
-              <ul class="unit-features">
-                <li v-for="feature in unit.features" :key="feature">
-                  <span class="material-icons">check</span>
-                  {{ feature }}
-                </li>
-              </ul>
-              <button class="unit-btn" @click="openUnitModal(unit)">
-                MEHR ERFAHREN
-                <span class="material-icons">arrow_forward</span>
-              </button>
-            </div>
-          </div>
-          
-          <!-- Carousel Navigation -->
-          <div class="carousel-nav">
-            <button @click="prevUnit" class="nav-btn">
-              <span class="material-icons">chevron_left</span>
-            </button>
-            <div class="carousel-dots">
-              <button 
-                v-for="(unit, index) in businessUnits" 
-                :key="index"
-                @click="currentUnit = index"
-                :class="['dot', { active: currentUnit === index }]"
-              ></button>
-            </div>
-            <button @click="nextUnit" class="nav-btn">
-              <span class="material-icons">chevron_right</span>
-            </button>
-          </div>
-        </div>
+        <LuxurySlider 
+          :units="businessUnits"
+          @unit-click="openUnitModal"
+        />
       </div>
     </section>
 
@@ -127,7 +94,7 @@
       <div class="showroom-bg-pattern"></div>
       <div class="container">
         <div class="section-header">
-          <span class="section-badge">SHOWROOMS</span>
+          <span class="hero-badge animate-fade-in">SHOWROOMS</span>
           <h2 class="section-title" data-text="BESUCHEN SIE UNS">BESUCHEN SIE UNS</h2>
           <p class="section-subtitle">
             Über 2.500 verschiedene Natursteinsorten auf mehr als 2000m² Ausstellungsfläche
@@ -228,7 +195,7 @@
     <section class="locations-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-badge">INTERNATIONAL</span>
+          <span class="hero-badge animate-fade-in">INTERNATIONAL</span>
           <h2 class="section-title" data-text="UNSERE STANDORTE">UNSERE STANDORTE</h2>
           <p class="section-subtitle">Präsenz in ganz Europa für beste Erreichbarkeit</p>
         </div>
@@ -283,75 +250,12 @@
       </div>
     </section>
 
-    <!-- Exclusive Galabau Section -->
-    <section class="galabau-section">
-      <div class="galabau-bg">
-        <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b70b0803723582ed6.png" alt="Galabau">
-        <div class="bg-overlay"></div>
-      </div>
-      
-      <div class="container">
-        <div class="galabau-content">
-          <div class="content-left">
-            <span class="section-badge">EXCLUSIVE GALABAU</span>
-            <h2 class="section-title galabau-title" data-text="GARTEN- UND LANDSCHAFTSBAU">
-              GARTEN- UND<br>
-              <span class="gradient-text">LANDSCHAFTSBAU</span>
-            </h2>
-            <p class="galabau-description">
-              Neben unseren hochwertigen Indoor-Produkten haben wir die Architektur Group 
-              um exklusiven Garten- und Landschaftsbau erweitert. Bei uns steht die 
-              Schönheit und das Design im Mittelpunkt.
-            </p>
-            
-            <div class="galabau-features">
-              <div class="feature-item" v-for="feature in galabauFeatures" :key="feature">
-                <span class="material-icons">landscape</span>
-                <span>{{ feature }}</span>
-              </div>
-            </div>
-            
-            <div class="galabau-actions">
-              <a href="https://exclusive-galabau.de" target="_blank" class="galabau-btn primary">
-                WEBSITE ÖFFNEN
-                <span class="material-icons">open_in_new</span>
-              </a>
-              <button @click="openGalabauGallery" class="galabau-btn secondary">
-                GALERIE ANSEHEN
-                <span class="material-icons">photo_library</span>
-              </button>
-            </div>
-          </div>
-          
-          <div class="content-right">
-            <div class="image-grid">
-              <div class="grid-image image-1">
-                <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b70b0803723582ed6.png" alt="Galabau Terrasse">
-                <div class="image-overlay"></div>
-              </div>
-              <div class="grid-image image-2">
-                <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686576cf622e38e88f0236c5.png" alt="Galabau Garten">
-                <div class="image-overlay"></div>
-              </div>
-              <div class="grid-image image-3">
-                <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png" alt="Galabau Pool">
-                <div class="image-overlay"></div>
-              </div>
-              <div class="grid-image image-4">
-                <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b1ceb7b78f5ed302d.png" alt="Galabau Beleuchtung">
-                <div class="image-overlay"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- Values Section -->
     <section class="values-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-badge">UNSERE WERTE</span>
+          <span class="hero-badge animate-fade-in">UNSERE WERTE</span>
           <h2 class="section-title" data-text="WAS UNS AUSZEICHNET">WAS UNS AUSZEICHNET</h2>
         </div>
         
@@ -361,10 +265,8 @@
             v-for="(value, index) in companyValues" 
             :key="value.id"
             :style="{ animationDelay: `${index * 0.1}s` }"
-            @mouseenter="value.hovered = true"
-            @mouseleave="value.hovered = false"
           >
-            <div class="value-icon" :class="{ hovered: value.hovered }">
+            <div class="value-icon">
               <span class="material-icons">{{ value.icon }}</span>
             </div>
             <h3>{{ value.title }}</h3>
@@ -379,7 +281,7 @@
     <section class="team-section">
       <div class="container">
         <div class="section-header">
-          <span class="section-badge">UNSER TEAM</span>
+          <span class="hero-badge animate-fade-in">UNSER TEAM</span>
           <h2 class="section-title" data-text="EXPERTEN MIT LEIDENSCHAFT">EXPERTEN MIT LEIDENSCHAFT</h2>
           <p class="section-subtitle">
             Speziell geschulte Innenarchitekten und Designer stehen Ihnen zur Seite
@@ -427,8 +329,7 @@
       <div class="container">
         <div class="cta-content">
           <h2 class="cta-title">
-            BEREIT FÜR IHR<br>
-            <span class="gradient-text">TRAUMPROJEKT?</span>
+            BEREIT FÜR IHR <br> TRAUMPROJEKT?
           </h2>
           <p class="cta-subtitle">
             Lassen Sie uns gemeinsam Ihre Vision verwirklichen
@@ -506,18 +407,29 @@
 
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import LuxurySlider from '~/components/LuxurySlider.vue'
 
-// Router
+// Fix imports and page meta
+definePageMeta({
+  layout: 'default'
+})
+
 const router = useRouter()
+const route = useRoute()
 
-// State
+// State refs
 const scrollY = ref(0)
-const currentUnit = ref(0)
 const selectedLocation = ref(null)
 const visibleTimeline = ref([])
 const showUnitModal = ref(false)
 const selectedUnit = ref(null)
+
+// Refs for parallax
+const heroBg = ref(null)
+const heroContent = ref(null)
+const heroSubheading = ref(null)
+const ticking = ref(false)
 
 // Hero Title Animation
 const heroTitle = ['ARCHITEKTUR', 'GROUP']
@@ -557,6 +469,7 @@ const businessUnits = [
     id: 1,
     name: 'Premium Fliesen Design',
     icon: 'layers',
+    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686576cf622e38e88f0236c5.png',
     description: 'Meister-Fachbetrieb seit 1957 in 3. Generation',
     features: [
       'Fugenlose Design-Verlegung',
@@ -568,6 +481,7 @@ const businessUnits = [
     id: 2,
     name: 'Exclusive Bädermanufaktur',
     icon: 'bathtub',
+    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b1ceb7b78f5ed302d.png',
     description: 'Vollumfängliche Badezimmergestaltungen',
     features: [
       'Walk-In Duschen',
@@ -579,6 +493,7 @@ const businessUnits = [
     id: 3,
     name: 'Exclusive Galabau',
     icon: 'park',
+    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b70b0803723582ed6.png', // Added image
     description: 'Garten- und Landschaftsbau der Extraklasse',
     features: [
       'Terrassengestaltung',
@@ -590,6 +505,7 @@ const businessUnits = [
     id: 4,
     name: 'Architektur Services',
     icon: 'architecture',
+    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png', // Added image
     description: 'Komplettservice aus einer Hand',
     features: [
       'Projektleitung',
@@ -668,134 +584,97 @@ const locations = [
   }
 ]
 
-// Galabau Features
-const galabauFeatures = [
-  'Terrassenplatten Verlegung',
-  'Balkone & Dachterrassen',
-  'Edle Gartenarchitektur',
-  'Gartenbeleuchtungen',
-  'Lounge-Areas mit Feuerstellen',
-  'Poolbau und Weggestaltungen'
-]
 
 // Company Values
-const companyValues = reactive([
+const companyValues = [
   {
     id: 1,
     icon: 'star',
     title: 'Exzellenz',
-    description: 'Höchste Qualität in Material und Verarbeitung',
-    hovered: false
+    description: 'Höchste Qualität in Material und Verarbeitung'
   },
   {
     id: 2,
     icon: 'handshake',
     title: 'Vertrauen',
-    description: '67 Jahre Familientradition und Zuverlässigkeit',
-    hovered: false
+    description: '67 Jahre Familientradition und Zuverlässigkeit'
   },
   {
     id: 3,
     icon: 'lightbulb',
     title: 'Innovation',
-    description: 'Modernste Technologien und patentierte Verfahren',
-    hovered: false
+    description: 'Modernste Technologien und patentierte Verfahren'
   },
   {
     id: 4,
     icon: 'favorite',
     title: 'Leidenschaft',
-    description: 'Begeisterung für außergewöhnliches Design',
-    hovered: false
+    description: 'Begeisterung für außergewöhnliches Design'
   },
   {
     id: 5,
     icon: 'eco',
     title: 'Nachhaltigkeit',
-    description: 'Verantwortungsvoller Umgang mit Ressourcen',
-    hovered: false
+    description: 'Verantwortungsvoller Umgang mit Ressourcen'
   },
   {
     id: 6,
     icon: 'group',
     title: 'Partnerschaft',
-    description: 'Gemeinsam zu Ihrem Traumprojekt',
-    hovered: false
+    description: 'Gemeinsam zu Ihrem Traumprojekt'
   }
-])
+]
 
-// Methods
-const scrollToContent = () => {
-  window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
-}
-
+// Update the handleScroll function
 const handleScroll = () => {
   scrollY.value = window.scrollY
   
-  // Timeline visibility
-  const timelineElements = document.querySelectorAll('.timeline-item')
-  timelineElements.forEach((el, index) => {
-    const rect = el.getBoundingClientRect()
-    if (rect.top < window.innerHeight * 0.8 && !visibleTimeline.value.includes(index)) {
-      visibleTimeline.value.push(index)
+  const timelineEl = document.querySelector('.timeline')
+  if (timelineEl) {
+    const timelineRect = timelineEl.getBoundingClientRect()
+    const viewportHeight = window.innerHeight
+    
+    if (timelineRect.top < viewportHeight * 0.8) {
+      const timelineSteps = document.querySelectorAll('.timeline-step')
+      timelineSteps.forEach((step, index) => {
+        const stepRect = step.getBoundingClientRect()
+        if (stepRect.top < viewportHeight * 0.8) {
+          if (!visibleTimeline.value.includes(index)) {
+            visibleTimeline.value.push(index)
+          }
+        }
+      })
     }
-  })
-}
 
-const prevUnit = () => {
-  currentUnit.value = currentUnit.value === 0 
-    ? businessUnits.length - 1 
-    : currentUnit.value - 1
-}
-
-const nextUnit = () => {
-  currentUnit.value = (currentUnit.value + 1) % businessUnits.length
-}
-
-const selectLocation = (location) => {
-  selectedLocation.value = location
-}
-
-const openMap = (location) => {
-  // Open Google Maps with location
-  const addresses = {
-    munich: 'Am Hohenrand 9, 82335 Berg',
-    dusseldorf: 'Düsseldorf, Deutschland'
-  }
-  window.open(`https://maps.google.com/maps?q=${addresses[location]}`, '_blank')
-}
-
-const bookAppointment = (location) => {
-  router.push(`/kontakt?location=${location}`)
-}
-
-const openUnitModal = (unit) => {
-  selectedUnit.value = unit
-  showUnitModal.value = true
-  document.body.style.overflow = 'hidden'
-}
-
-const closeModals = () => {
-  showUnitModal.value = false
-  selectedUnit.value = null
-  document.body.style.overflow = 'auto'
-}
-
-const openGoogleMaps = (location) => {
-  if (location.address) {
-    window.open(`https://maps.google.com/maps?q=${encodeURIComponent(location.address)}`, '_blank')
+    // Update timeline line height
+    const firstDot = timelineEl.querySelector('.timeline-dot')
+    const lastDot = timelineEl.querySelectorAll('.timeline-dot')[timeline.length - 1]
+    
+    if (firstDot && lastDot) {
+      const firstDotRect = firstDot.getBoundingClientRect()
+      const lastDotRect = lastDot.getBoundingClientRect()
+      const lineHeight = lastDotRect.top - firstDotRect.top
+      
+      const timelineLine = timelineEl.querySelector('.timeline-line')
+      if (timelineLine) {
+        timelineLine.style.height = `${lineHeight}px`
+        timelineLine.style.top = `${firstDotRect.top - timelineRect.top}px`
+      }
+    }
   }
 }
 
-const openGalabauGallery = () => {
-  // Open gallery modal or navigate to gallery page
-  router.push('/galerie?filter=galabau')
-}
-
-const playHoverSound = () => {
-  // Play subtle hover sound effect
-  // Optional: Add audio functionality here if needed
-}
+// Update the computed timelineProgress
+const timelineProgress = computed(() => {
+  if (!visibleTimeline.value.length) return 0
+  
+  // Find the most recent visible step
+  const lastVisibleIndex = Math.max(...visibleTimeline.value)
+  const totalSteps = timeline.length - 1 // Subtract 1 for zero-based index
+  
+  // Calculate progress as a percentage of visible distance between dots
+  return ((lastVisibleIndex) / totalSteps) * 100
+})
 
 // Number Counter Animation
 const animateNumbers = () => {
@@ -822,36 +701,192 @@ const animateNumbers = () => {
 
 // Lifecycle
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll)
-  
-  // Animate numbers on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        animateNumbers()
-        observer.unobserve(entry.target)
-      }
-    })
-  }, { threshold: 0.5 })
-  
-  const statsSection = document.querySelector('.stats-cards')
-  if (statsSection) {
-    observer.observe(statsSection)
-  }
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('scroll', requestTick, { passive: true })
+  updateParallax()
   
   // Auto-rotate business units
-  setInterval(() => {
+  const interval = setInterval(() => {
     nextUnit()
   }, 5000)
+
+  return () => {
+    clearInterval(interval)
+    window.removeEventListener('scroll', handleScroll)
+    window.removeEventListener('scroll', requestTick)
+  }
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
   document.body.style.overflow = 'auto'
 })
+
+function updateParallax() {
+  if (!heroBg.value || !heroContent.value || !heroSubheading.value) return
+
+  const scrollY = window.scrollY
+  const viewportHeight = window.innerHeight
+  
+  const heroScrollProgress = Math.min(scrollY / (viewportHeight * 0.8), 1)
+  const bgScale = 1.05 + (heroScrollProgress * 0.1)
+  const bgBrightness = Math.max(0.1, 1 - (heroScrollProgress * 1.5))
+  const bgOpacity = Math.max(0, 1 - (heroScrollProgress * 1.2))
+  
+  //heroBg.value.style.transform = `scale(${bgScale})`
+  heroBg.value.style.filter = `brightness(${bgBrightness})`
+  heroBg.value.style.opacity = bgOpacity
+  
+  const textTranslateY = -scrollY * 0.6
+  
+  heroContent.value.style.transform = `translateY(${textTranslateY}px)`
+  heroSubheading.value.style.transform = `translateY(${textTranslateY}px)`
+  
+  const textFadeStart = 0.7
+  const textOpacity = heroScrollProgress < textFadeStart ? 1 : 
+    Math.max(0, 1 - ((heroScrollProgress - textFadeStart) / (1 - textFadeStart)) * 2)
+  
+  heroContent.value.style.opacity = textOpacity
+  heroSubheading.value.style.opacity = textOpacity
+  
+  ticking.value = false
+}
+
+function requestTick() {
+  if (!ticking.value) {
+    requestAnimationFrame(updateParallax)
+    ticking.value = true
+  }
+}
 </script>
 
 <style scoped>
+/* Update hero styles */
+.hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  will-change: transform, filter;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.5) 50%,
+    rgba(0,0,0,0.9) 100%
+  );
+  z-index: 1;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.2);
+  animation: zoomOut 3s ease-out forwards;
+  transition: transform 0.3s ease;
+}
+
+.hero-content {
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  z-index: 2;
+  color: white;
+  text-align: left;
+  max-width: 1200px;
+  will-change: transform;
+}
+
+/* Removed duplicate styles for .hero-badge */
+.hero-badge {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--primary-gold);
+  color: var(--primary-gold);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.4em;
+  margin-top: 2rem;  /* Changed from margin-bottom to margin-top */
+  clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+  backdrop-filter: blur(10px);
+}
+
+.hero-title {
+  font-size: clamp(2rem, 6vw, 5rem); /* Reduced from clamp(4rem, 12vw, 10rem) */
+  font-weight: 900;
+  line-height: 1;
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--primary-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: slideUpWord 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+
+.hero-subheading {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  transform: translateX(0);
+  z-index: 2;
+  text-align: left;
+  width: 90%;
+  max-width: 800px;
+  will-change: transform;
+}
+
+.hero-subheading p {
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  color: #e6e0d5;
+  margin: 0;
+  line-height: 1.3;
+  font-weight: 300;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: slideUpFromBottom 1.8s ease-out 1.2s forwards;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}
+
+
+@keyframes zoomOut {
+  0% {
+    transform: scale(1.2);
+    filter: blur(2px);
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes slideUpFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* CSS Variables */
 :root {
   --header-height: 80px;
@@ -908,7 +943,7 @@ onUnmounted(() => {
 .hero-content {
   position: relative;
   z-index: 2;
-  text-align: center;
+  text-align: left;
   max-width: 1200px;
   padding: 0 2rem;
 }
@@ -961,77 +996,7 @@ onUnmounted(() => {
   100% { left: 100%; }
 }
 
-.hero-title {
-  font-size: clamp(4rem, 12vw, 10rem);
-  font-weight: 900;
-  line-height: 0.9;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-}
 
-.title-word {
-  display: inline-block;
-  position: relative;
-  animation: titleReveal 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards;
-}
-
-.title-word:first-child {
-  background: linear-gradient(
-    135deg,
-    var(--primary-light) 0%,
-    var(--primary-gold) 50%,
-    var(--primary-light) 100%
-  );
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: 
-    titleReveal 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) backwards,
-    gradientShift 5s ease infinite;
-}
-
-.title-word:last-child {
-  color: var(--primary-light);
-  text-shadow: 
-    0 0 30px rgba(250, 250, 248, 0.5),
-    0 0 60px rgba(164, 113, 72, 0.3),
-    0 0 90px rgba(164, 113, 72, 0.1);
-  animation-delay: 0.2s;
-}
-
-@keyframes titleReveal {
-  from {
-    opacity: 0;
-    transform: translateY(100px) rotateX(-90deg) scale(0.5);
-    filter: blur(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) rotateX(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.hero-subtitle {
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-  color: #ccc;
-  max-width: 800px;
-  margin: 0 auto;
-  font-weight: 300;
-  letter-spacing: 0.1em;
-  opacity: 0;
-  animation: fadeInUp 1.5s ease-out 0.8s forwards;
-}
 
 @keyframes fadeInUp {
   from {
@@ -1143,7 +1108,7 @@ onUnmounted(() => {
 
 /* All Section Headers - CYBER ENHANCEMENT */
 .section-header {
-  text-align: center;
+  text-align: left;
   margin-bottom: 4rem;
   position: relative;
   z-index: 1;
@@ -1266,38 +1231,13 @@ onUnmounted(() => {
   font-weight: 200;
   margin-bottom: 1.5rem;
   line-height: 1;
-  position: relative;
+  position: left;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  animation: titleGlitch 10s infinite;
+  color: var(--primary-light);
+  transition: transform 0.3s ease;
 }
 
-@keyframes titleGlitch {
-  0%, 100% { 
-    text-shadow: 
-      0 0 10px rgba(164, 113, 72, 0.5),
-      0 0 20px rgba(164, 113, 72, 0.3),
-      0 0 30px rgba(164, 113, 72, 0.1);
-  }
-  25% {
-    text-shadow: 
-      -2px 0 var(--primary-gold),
-      2px 0 var(--primary-light),
-      0 0 20px rgba(164, 113, 72, 0.5);
-  }
-  50% {
-    text-shadow: 
-      0 0 15px rgba(250, 250, 248, 0.5),
-      0 0 25px rgba(164, 113, 72, 0.3),
-      0 0 35px rgba(164, 113, 72, 0.1);
-  }
-  75% {
-    text-shadow: 
-      2px 0 var(--primary-light),
-      -2px 0 var(--primary-gold),
-      0 0 20px rgba(250, 250, 248, 0.3);
-  }
-}
 
 .section-title::before {
   content: attr(data-text);
@@ -1306,12 +1246,15 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
-  animation: glitchTop 0.3s ease-in-out infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
   background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.section-title:hover::before {
+  opacity: 1;
 }
 
 .section-title::after {
@@ -1329,35 +1272,6 @@ onUnmounted(() => {
   -webkit-text-fill-color: transparent;
 }
 
-@keyframes glitchTop {
-  2%, 64% {
-    transform: translate(2px, -2px);
-    opacity: 0.5;
-  }
-  4%, 60% {
-    transform: translate(-2px, 2px);
-    opacity: 0;
-  }
-  62% {
-    transform: translate(13px, -1px) skew(-13deg);
-    opacity: 0.8;
-  }
-}
-
-@keyframes glitchBottom {
-  2%, 64% {
-    transform: translate(-2px, 2px);
-    opacity: 0.5;
-  }
-  4%, 60% {
-    transform: translate(2px, -2px);
-    opacity: 0;
-  }
-  62% {
-    transform: translate(-13px, 1px) skew(13deg);
-    opacity: 0.8;
-  }
-}
 
 .gradient-text {
   background: linear-gradient(
@@ -1367,13 +1281,16 @@ onUnmounted(() => {
     var(--primary-light),
     var(--primary-gold)
   );
-  background-size: 400% 400%;
+  background-clip: text;
   -webkit-background-clip: text;
+  color: transparent;
   -webkit-text-fill-color: transparent;
+  background-size: 400% 400%;
   animation: gradientFlow 8s ease infinite;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  text-align: center;
 }
 
 @keyframes gradientFlow {
@@ -1389,27 +1306,18 @@ onUnmounted(() => {
   margin: 0 auto;
   opacity: 0.8;
   animation: subtitleFade 2s ease-out;
-  position: relative;
+  position: absolute;
+  text-align: left;
+  margin-bottom: 8rem; 
 }
 
-@keyframes subtitleFade {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 0.8;
-    transform: translateY(0);
-  }
-}
-
-.section-subtitle::before,
-.section-subtitle::after {
-  content: '//';
-  color: var(--primary-gold);
-  margin: 0 1rem;
-  opacity: 0.5;
-  font-weight: 700;
+/* Add a utility class for sections that follow subtitles */
+.showrooms-grid,
+.values-grid,
+.team-showcase,
+.articles-grid,
+.luxury-slider {
+  margin-top: 6rem; /* Increased top margin for content following subtitles */
 }
 
 /* Story Section Title - ULTRA PREMIUM STYLING */
@@ -1443,7 +1351,7 @@ onUnmounted(() => {
   );
   background-size: 400% 100%;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: white;
   animation: slideInLeft 1s cubic-bezier(0.68, -0.55, 0.265, 1.55),
             gradientMove 6s linear infinite;
 }
@@ -1551,39 +1459,19 @@ onUnmounted(() => {
   text-transform: uppercase;
   letter-spacing: -0.03em;
   position: relative;
+  color: var(--primary-light); /* Added this line to ensure both lines have same color */
+  text-align: center;
 }
 
 .cta-title .gradient-text {
   display: block;
   font-size: clamp(4rem, 9vw, 8rem);
   margin-top: -0.2rem;
-  background: linear-gradient(
-    135deg,
-    var(--primary-gold) 0%,
-    var(--primary-light) 25%,
-    var(--primary-gold) 50%,
-    var(--primary-light) 75%,
-    var(--primary-gold) 100%
-  );
-  background-size: 400% 100%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: epicGradient 3s linear infinite;
-  filter: drop-shadow(0 0 30px rgba(164, 113, 72, 0.5));
-}
-
-@keyframes epicGradient {
-  0% { 
-    background-position: 0% 50%;
-    filter: drop-shadow(0 0 30px rgba(164, 113, 72, 0.5));
-  }
-  50% {
-    filter: drop-shadow(0 0 50px rgba(250, 250, 248, 0.8));
-  }
-  100% { 
-    background-position: 400% 50%;
-    filter: drop-shadow(0 0 30px rgba(164, 113, 72, 0.5));
-  }
+  color: var(--primary-light); /* Remove gradient for consistent color */
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: initial;
+  animation: none;
 }
 
 /* Mobile Responsive */
@@ -1674,60 +1562,79 @@ onUnmounted(() => {
 
 /* Timeline */
 .timeline {
-  margin-top: 4rem;
   position: relative;
   padding-left: 3rem;
+  margin-top: 4rem;
+  padding-bottom: 2rem;
 }
 
-.timeline::before {
-  content: '';
+.timeline-line {
+  position: absolute;
+  left: 68px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 0;
+  transform: translateX(-50%);
+}
+
+.timeline-progress {
   position: absolute;
   left: 0;
   top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(180deg, var(--primary-gold), transparent);
+  width: 100%;
+  background: var(--primary-gold);
+  z-index: 1;
+  transition: height 0.3s ease-out;
 }
 
-.timeline-item {
+.timeline-step {
   position: relative;
   margin-bottom: 3rem;
   opacity: 0;
-  transform: translateX(-30px);
+  transform: translateY(30px);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: grid;
+  grid-template-columns: 40px 1fr; /* Adjust width of dot column */
+  gap: 2rem;
+  z-index: 2;
 }
 
-.timeline-item.active {
-  opacity: 1;
-  transform: translateX(0);
+.step-marker {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin-top: 8px;
+  transform: translateX(10px); /* Center dot on line */
 }
 
-.timeline-item::before {
-  content: '';
-  position: absolute;
-  left: -3.5rem;
-  top: 0.5rem;
-  width: 16px;
-  height: 16px;
+.timeline-dot {
+  width: 20px;
+  height: 20px;
   background: var(--primary-gold);
   border-radius: 50%;
+  position: relative;
+  z-index: 3;
+  border: 2px solid var(--bg-dark);
+  box-shadow: 0 0 0 2px var(--primary-gold);
+}
+
+.marker-pulse {
+  position: absolute;
+  inset: -10px;
+  border: 2px solid var(--primary-gold);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  z-index: 2;
+}
+
+.timeline-step.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-step.active .timeline-dot {
+  background: var(--primary-gold);
   box-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
-}
-
-.timeline-year {
-  color: var(--primary-gold);
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.timeline-content h4 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-  color: var(--primary-light);
-}
-
-.timeline-content p {
-  color: #999;
 }
 
 /* Stats Cards - New Design */
@@ -1837,99 +1744,67 @@ onUnmounted(() => {
 
 /* Business Units Section */
 .units-section {
+  min-height: 100vh;
   padding: 6rem 0;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  padding-bottom: calc(90vh + 6rem);
+  background: #000; /* Changed from gradient to solid black */
+  position: relative; /* Added to create new stacking context */
 }
 
 .units-carousel {
   position: relative;
   overflow: hidden;
   margin-top: 4rem;
+  height: calc(100vh - 20rem); /* Adjust based on your header and padding */
 }
 
 .carousel-container {
   display: flex;
+  height: 100%;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .unit-card {
   min-width: 100%;
-  padding: 3rem;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 45% 1fr;
+  gap: 4rem;
   background: rgba(255, 255, 255, 0.03);
   border-radius: 20px;
   border: 1px solid var(--border-color);
-  text-align: center;
+  overflow: hidden;
+}
+
+.unit-image {
+  height: 100%;
+  overflow: hidden;
+}
+
+.unit-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unit-content {
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .unit-icon {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 2rem;
+  width: 80px;
+  height: 80px;
+  margin-bottom: 2rem;
   background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
-  border-radius: 25px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: var(--bg-dark);
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.unit-card h3 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: var(--primary-light);
-}
-
-.unit-card p {
-  color: #ccc;
-  margin-bottom: 2rem;
-}
-
-.unit-features {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 2rem;
-}
-
-.unit-features li {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 0;
-  color: #ccc;
-}
-
-.unit-features .material-icons {
-  color: var(--primary-gold);
-  font-size: 1.25rem;
-}
-
-.unit-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: transparent;
-  border: 2px solid var(--primary-gold);
-  color: var(--primary-gold);
-  font-size: 0.95rem;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 50px;
-}
-
-.unit-btn:hover {
-  background: var(--primary-gold);
-  color: var(--bg-dark);
-  transform: translateY(-3px);
 }
 
 /* Carousel Navigation */
@@ -2106,9 +1981,23 @@ onUnmounted(() => {
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
+  background: linear-gradient(135deg, var(--primary-gold), #ffd700);
   color: var(--bg-dark);
   border: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 
+    0 10px 30px rgba(164, 113, 72, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn.primary:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 
+    0 20px 40px rgba(164, 113, 72, 0.6),
+    0 0 30px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, #ffd700, var(--primary-gold));
 }
 
 .action-btn.secondary {
@@ -2121,14 +2010,14 @@ onUnmounted(() => {
   transform: translateY(-2px);
 }
 
-/* Locations Section - Updated with Google Maps */
+/* Locations Section - Updated */
 .locations-section {
   padding: 6rem 0;
   background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
 }
 
 .map-container {
-  margin-top: 4rem;
+  margin-top:  4rem;
   position: relative;
 }
 
@@ -2136,7 +2025,7 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0; /* Changed from margin: 0 auto */
   border-radius: 20px;
   overflow: hidden;
   border: 2px solid var(--border-color);
@@ -2179,7 +2068,7 @@ onUnmounted(() => {
 
 .custom-marker .marker-pulse {
   position: absolute;
-  inset: -15px;
+   inset: -15px;
   border: 2px solid var(--primary-gold);
   border-radius: 50%;
   animation: markerPulse 2s infinite;
@@ -2225,6 +2114,7 @@ onUnmounted(() => {
 
 .location-details {
   margin-top: 3rem;
+ 
   padding: 2.5rem;
   background: linear-gradient(135deg, rgba(164, 113, 72, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
   border-radius: 20px;
@@ -2287,150 +2177,6 @@ onUnmounted(() => {
   box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
 }
 
-/* Galabau Section */
-.galabau-section {
-  padding: 6rem 0;
-  position: relative;
-  overflow: hidden;
-}
-
-.galabau-bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.galabau-bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.1;
-}
-
-.bg-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%);
-}
-
-.galabau-content {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.galabau-description {
-  font-size: 1.25rem;
-  line-height: 1.8;
-  color: #ccc;
-  margin-bottom: 2rem;
-}
-
-.galabau-features {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 3rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 10px;
-  color: #ccc;
-}
-
-.feature-item .material-icons {
-  color: var(--primary-gold);
-  font-size: 1.5rem;
-}
-
-.galabau-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.galabau-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  font-size: 0.95rem;
-  letter-spacing: 0.05em;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 50px;
-}
-
-.galabau-btn.primary {
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
-  color: var(--bg-dark);
-  border: none;
-}
-
-.galabau-btn.secondary {
-  background: transparent;
-  color: var(--primary-light);
-  border: 2px solid var(--border-color);
-}
-
-.galabau-btn:hover {
-  transform: translateY(-3px);
-}
-
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  height: 500px;
-}
-
-.grid-image {
-  position: relative;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
-.grid-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.grid-image .image-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.5) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.grid-image:hover .image-overlay {
-  opacity: 1;
-}
-
-.grid-image:hover {
-  transform: scale(1.05);
-  z-index: 2;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-
-.image-1 { 
-  grid-column: span 2;
-  grid-row: span 1;
-  height: 250px;
-}
-.image-2, .image-3, .image-4 { 
-  height: 240px;
-}
 
 /* Values Section */
 .values-section {
@@ -2502,7 +2248,7 @@ onUnmounted(() => {
 }
 
 .value-card h3 {
-  font-size: 1.5rem;
+  font-size:  1.5rem;
   margin-bottom: 1rem;
   color: var(--primary-light);
 }
@@ -2665,9 +2411,23 @@ onUnmounted(() => {
 }
 
 .cta-btn.primary {
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
+  background: linear-gradient(135deg, var(--primary-gold), #ffd700);
   color: var(--bg-dark);
   border: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: 
+    0 10px 30px rgba(164, 113, 72, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.cta-btn.primary:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 
+    0 20px 40px rgba(164, 113, 72, 0.6),
+    0 0 30px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, #ffd700, var(--primary-gold));
 }
 
 .cta-btn.secondary {
@@ -2678,7 +2438,6 @@ onUnmounted(() => {
 
 .cta-btn:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(164, 113, 72, 0.4);
 }
 
 .quick-contact {
@@ -3001,6 +2760,17 @@ onUnmounted(() => {
   
   .stat-card .stat-number {
     font-size: 2.5rem;
+  }
+  
+  .stat-card .stat-icon {
+    width: 50px;
+    height: 50px;
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+  
+  .stat-card .stat-icon .material-icons {
+    font-size: 1.5rem;
   }
   
   .google-map iframe {
