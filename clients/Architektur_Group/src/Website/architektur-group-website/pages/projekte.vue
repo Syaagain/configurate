@@ -36,10 +36,6 @@
                   <span class="stat-label">Jahr</span>
                 </div>
               </div>
-              <button @click="openProject(project)" class="view-project-btn">
-                PROJEKT ANSEHEN
-                <span class="material-icons">arrow_forward</span>
-              </button>
             </div>
           </div>
         </transition-group>
@@ -142,17 +138,6 @@
                     ERKUNDEN
                   </button>
                 </div>
-              </div>
-
-              <div class="project-badges">
-                <span v-if="project.award" class="badge award">
-                  <span class="material-icons">emoji_events</span>
-                  AUSGEZEICHNET
-                </span>
-                <span v-if="project.featured" class="badge featured">
-                  <span class="material-icons">star</span>
-                  HIGHLIGHT
-                </span>
               </div>
             </div>
             
@@ -439,10 +424,6 @@
             <a href="/kontakt" class="cta-button primary">
               KOSTENLOSES ERSTGESPRÄCH
             </a>
-            <button @click="openVirtualShowroom" class="cta-button secondary">
-              <span class="material-icons">view_in_ar</span>
-              VIRTUELLER SHOWROOM
-            </button>
           </div>
         </div>
       </div>
@@ -864,16 +845,25 @@ const filteredProjects = computed(() => {
     ? projects 
     : projects.filter(p => p.categoryId === activeFilter.value)
   
+  // Erstelle eine Kopie des Arrays vor dem Sortieren
+  // um Mutationen des ursprünglichen Arrays zu vermeiden
+  const sortedProjects = [...filtered]
+  
   // Sorting
   switch (currentSort.value) {
     case 'oldest':
-      return filtered.sort((a, b) => a.year.localeCompare(b.year))
+      return sortedProjects.sort((a, b) => a.year.localeCompare(b.year))
     case 'size':
-      return filtered.sort((a, b) => parseInt(b.area) - parseInt(a.area))
+      // Extrahiere die Zahlen aus den area Strings (z.B. "45 m²" -> 45)
+      return sortedProjects.sort((a, b) => {
+        const aSize = parseInt(a.area.replace(/[^\d]/g, ''))
+        const bSize = parseInt(b.area.replace(/[^\d]/g, ''))
+        return bSize - aSize // Größte zuerst
+      })
     case 'location':
-      return filtered.sort((a, b) => a.location.localeCompare(b.location))
+      return sortedProjects.sort((a, b) => a.location.localeCompare(b.location))
     default: // newest
-      return filtered.sort((a, b) => b.year.localeCompare(a.year))
+      return sortedProjects.sort((a, b) => b.year.localeCompare(a.year))
   }
 })
 

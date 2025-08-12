@@ -20,7 +20,6 @@
               <h2>EXCLUSIVE GALABAU</h2>
               <h3>Garten- & Landschaftsbau</h3>
               <p>Von Naturstein über Planung bis zur Ausführung – Außenbereiche in Perfektion.</p>
-              <NuxtLink to="/galabau" class="cta-btn">MEHR ERFAHREN</NuxtLink>
             </div>
           </div>
         </div>
@@ -38,7 +37,6 @@
               <h2>PREMIUM FLIESEN DESIGN</h2>
               <h3>Verlegung auf höchstem Niveau</h3>
               <p>Edle Materialien, präzise Verlegung – für Böden, Bäder und Wände mit Stil.</p>
-              <NuxtLink to="/fliesen" class="cta-btn">MEHR ERFAHREN</NuxtLink>
             </div>
           </div>
         </div>
@@ -56,8 +54,7 @@
               <h2>EXKLUSIVE BÄDERMANUFAKTUR</h2>
               <h3>Individuelle Badträume, meisterhaft realisiert</h3>
               <p>Maßgeschneiderte Bäder mit höchsten Ansprüchen an Design und Funktion – für ein unvergleichliches Wohlfühlerlebnis.</p>
-              <NuxtLink to="/baeder" class="cta-btn">MEHR ERFAHREN</NuxtLink>
-            </div>
+             </div>
           </div>
         </div>
         
@@ -74,7 +71,6 @@
               <h2>EXKLUSIVE TERRASSENPLATTEN</h2>
               <h3>Innovative Lösungen für stilvolle Außenbereiche</h3>
               <p>Langlebige Terrassenplatten in höchster Qualität – robust, elegant und individuell nach Ihren Wünschen gestaltet.</p>
-              <NuxtLink to="/terrassen" class="cta-btn">MEHR ERFAHREN</NuxtLink>
             </div>
           </div>
         </div>

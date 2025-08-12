@@ -64,11 +64,6 @@
           <div class="cta-shine"></div>
           <div class="cta-bg"></div>
         </button>
-        
-        <button @click="watchVideo" class="cta-secondary">
-          <span class="material-icons">play_circle</span>
-          <span>Video ansehen</span>
-        </button>
       </div>
 
       <!-- Scroll Indicator -->

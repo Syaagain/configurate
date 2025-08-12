@@ -64,9 +64,7 @@
       
       <!-- Mobile Gallery -->
       <MobileGallery />
-      
-      <!-- Mobile Testimonials -->
-      <MobileTestimonialCarousel />
+
       
       <!-- Mobile CTA Section -->
       <section class="cta-section py-12 bg-gradient-to-r from-gray-900 to-black">
@@ -120,7 +118,6 @@ import ShowroomContact from '~/components/website/showroomContact.vue'
 import MobileHero from '~/components/mobile/mobileHero.vue'
 import MobileProducts from '~/components/mobile/mobileProducts.vue'
 import MobileGallery from '~/components/mobile/mobileGallery.vue'
-import MobileTestimonialCarousel from '~/components/mobile/mobileTestimonialCarousel.vue'
 import MobileInteractiveMap from '~/components/mobile/mobileInteractiveMap.vue'
 import MobileContactPremium from '~/components/mobile/mobileContactPremium.vue'
 import MobileVideoPlayer from '~/components/mobile/mobileVideoPlayer.vue'

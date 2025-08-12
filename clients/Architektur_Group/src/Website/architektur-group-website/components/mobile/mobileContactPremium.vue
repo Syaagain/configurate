@@ -1,446 +1,505 @@
 <template>
   <div class="mobile-contact-premium">
-    <!-- Animated Header -->
-    <div class="form-header">
-      <div class="header-bg">
-        <div class="bg-pattern"></div>
-        <div class="bg-gradient"></div>
-      </div>
-      <div class="header-content">
-        <div class="header-icon">
-          <span class="material-icons">mail</span>
-          <div class="icon-pulse"></div>
-        </div>
-        <h1 class="header-title">Kontakt aufnehmen</h1>
-        <p class="header-subtitle">Wir freuen uns auf Ihre Nachricht</p>
+    <!-- Background Effects -->
+    <div class="background-effects">
+      <div class="gradient-orb orb-1"></div>
+      <div class="gradient-orb orb-2"></div>
+      <div class="floating-particles">
+        <div v-for="n in 15" :key="n" class="particle" :style="{
+          left: Math.random() * 100 + '%',
+          animationDelay: Math.random() * 5 + 's',
+          animationDuration: (3 + Math.random() * 4) + 's'
+        }"></div>
       </div>
     </div>
 
-    <!-- Progress Steps -->
+    <!-- Header -->
+    <div class="mobile-header">
+      <div class="header-decoration">
+        <div class="decoration-line"></div>
+        <div class="header-badge">
+          <span class="material-icons">diamond</span>
+        </div>
+        <div class="decoration-line"></div>
+      </div>
+      <h1 class="header-title">
+        <span class="title-text">PERSÖNLICHE</span>
+        <span class="title-text gradient-text">BERATUNG</span>
+      </h1>
+      <p class="header-subtitle">Lassen Sie sich von unseren Experten beraten</p>
+    </div>
+
+    <!-- Progress Indicator -->
     <div class="progress-container">
       <div class="progress-track">
         <div class="progress-fill" :style="{ width: progressWidth }"></div>
       </div>
-      <div class="progress-steps">
-        <div 
-          v-for="(step, index) in steps" 
-          :key="step.id"
-          :class="['step-dot', { 
-            active: currentStep === index, 
-            completed: currentStep > index 
-          }]"
-          @click="goToStep(index)"
-        >
-          <span class="step-number">{{ index + 1 }}</span>
-          <span class="step-label">{{ step.label }}</span>
-          <div class="step-ripple"></div>
+      <div class="progress-dots">
+        <div v-for="step in totalSteps" :key="step" 
+             :class="['progress-dot', { 
+               'active': step === currentStep, 
+               'completed': step < currentStep 
+             }]">
+          <span v-if="step < currentStep" class="material-icons">check</span>
+          <span v-else>{{ step }}</span>
         </div>
       </div>
+      <div class="step-label">{{ getStepLabel(currentStep) }}</div>
     </div>
 
     <!-- Form Container -->
     <div class="form-container">
+      <!-- Step 1: Personal Data -->
       <transition name="slide-fade" mode="out-in">
-        <!-- Step 1: Personal Info -->
-        <div v-if="currentStep === 0" key="step1" class="form-step">
-          <div class="step-header">
-            <h2 class="step-title">Persönliche Daten</h2>
-            <p class="step-description">Wie dürfen wir Sie kontaktieren?</p>
+        <div v-if="currentStep === 1" class="form-step" key="step1">
+          <div class="step-icon">
+            <span class="material-icons">person</span>
           </div>
+          <h2 class="step-title">Kontaktdaten</h2>
+          <p class="step-subtitle">Wie dürfen wir Sie erreichen?</p>
 
           <div class="form-fields">
-            <!-- Name Input -->
-            <div class="input-group" :class="{ focused: focusedField === 'name', filled: formData.name }">
-              <div class="input-icon">
-                <span class="material-icons">person</span>
+            <!-- Name Fields -->
+            <div class="name-row">
+              <div class="form-group half-width" :class="{ 'error': errors.firstName, 'success': formData.firstName && !errors.firstName }">
+                <label for="firstName">
+                  <span class="material-icons">badge</span>
+                  Vorname *
+                </label>
+                <div class="input-container">
+                  <input 
+                    type="text" 
+                    id="firstName" 
+                    v-model="formData.firstName"
+                    @input="validateField('firstName')"
+                    @focus="handleFocus('firstName')"
+                    @blur="handleBlur('firstName')"
+                    placeholder="Vorname"
+                    :class="{ 'error': errors.firstName, 'success': formData.firstName && !errors.firstName }"
+                  >
+                  <div class="input-highlight"></div>
+                </div>
+                <transition name="error-slide">
+                  <div v-if="errors.firstName" class="error-message">
+                    <span class="material-icons">error</span>
+                    {{ getErrorMessage('firstName') }}
+                  </div>
+                </transition>
               </div>
-              <div class="input-wrapper">
+
+              <div class="form-group half-width" :class="{ 'error': errors.lastName, 'success': formData.lastName && !errors.lastName }">
+                <label for="lastName">
+                  <span class="material-icons">badge</span>
+                  Nachname *
+                </label>
+                <div class="input-container">
+                  <input 
+                    type="text" 
+                    id="lastName" 
+                    v-model="formData.lastName"
+                    @input="validateField('lastName')"
+                    @focus="handleFocus('lastName')"
+                    @blur="handleBlur('lastName')"
+                    placeholder="Nachname"
+                    :class="{ 'error': errors.lastName, 'success': formData.lastName && !errors.lastName }"
+                  >
+                  <div class="input-highlight"></div>
+                </div>
+                <transition name="error-slide">
+                  <div v-if="errors.lastName" class="error-message">
+                    <span class="material-icons">error</span>
+                    {{ getErrorMessage('lastName') }}
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="form-group" :class="{ 'error': errors.email, 'success': formData.email && !errors.email }">
+              <label for="email">
+                <span class="material-icons">email</span>
+                E-Mail-Adresse *
+              </label>
+              <div class="input-container">
                 <input 
-                  type="text" 
-                  id="name"
-                  v-model="formData.name"
-                  @focus="handleFocus('name')"
-                  @blur="handleBlur('name')"
-                  required
+                  type="email" 
+                  id="email" 
+                  v-model="formData.email"
+                  @input="validateField('email')"
+                  @focus="handleFocus('email')"
+                  @blur="handleBlur('email')"
+                  placeholder="ihre.email@beispiel.de"
+                  :class="{ 'error': errors.email, 'success': formData.email && !errors.email }"
                 >
-                <label for="name">Vollständiger Name</label>
-                <div class="input-line"></div>
+                <div class="input-highlight"></div>
               </div>
-              <transition name="error">
-                <div v-if="errors.name" class="input-error">
+              <transition name="error-slide">
+                <div v-if="errors.email" class="error-message">
                   <span class="material-icons">error</span>
-                  {{ errors.name }}
+                  {{ getErrorMessage('email') }}
                 </div>
               </transition>
             </div>
 
-            <!-- Email Input -->
-            <div class="input-group" :class="{ focused: focusedField === 'email', filled: formData.email }">
-              <div class="input-icon">
-                <span class="material-icons">email</span>
-              </div>
-              <div class="input-wrapper">
-                <input 
-                  type="email" 
-                  id="email"
-                  v-model="formData.email"
-                  @focus="handleFocus('email')"
-                  @blur="handleBlur('email')"
-                  required
-                >
-                <label for="email">E-Mail Adresse</label>
-                <div class="input-line"></div>
-              </div>
-            </div>
-
-            <!-- Phone Input -->
-            <div class="input-group" :class="{ focused: focusedField === 'phone', filled: formData.phone }">
-              <div class="input-icon">
+            <!-- Phone -->
+            <div class="form-group" :class="{ 'error': errors.phone, 'success': formData.phone && !errors.phone }">
+              <label for="phone">
                 <span class="material-icons">phone</span>
+                Telefonnummer *
+              </label>
+              <div class="phone-input-row">
+                <div class="country-select-container">
+                  <select v-model="formData.countryCode" class="country-select">
+                    <option value="+49">🇩🇪 +49</option>
+                    <option value="+43">🇦🇹 +43</option>
+                    <option value="+41">🇨🇭 +41</option>
+                  </select>
+                </div>
+                <div class="input-container flex-1">
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    v-model="formData.phone"
+                    @input="validateField('phone')"
+                    @focus="handleFocus('phone')"
+                    @blur="handleBlur('phone')"
+                    placeholder="0123 456789"
+                    :class="{ 'error': errors.phone, 'success': formData.phone && !errors.phone }"
+                  >
+                  <div class="input-highlight"></div>
+                </div>
               </div>
-              <div class="input-wrapper">
-                <input 
-                  type="tel" 
-                  id="phone"
-                  v-model="formData.phone"
-                  @focus="handleFocus('phone')"
-                  @blur="handleBlur('phone')"
-                  required
-                >
-                <label for="phone">Telefonnummer</label>
-                <div class="input-line"></div>
-              </div>
+              <transition name="error-slide">
+                <div v-if="errors.phone" class="error-message">
+                  <span class="material-icons">error</span>
+                  {{ getErrorMessage('phone') }}
+                </div>
+              </transition>
             </div>
 
-            <!-- Company Input -->
-            <div class="input-group" :class="{ focused: focusedField === 'company', filled: formData.company }">
-              <div class="input-icon">
+            <!-- Company -->
+            <div class="form-group">
+              <label for="company">
                 <span class="material-icons">business</span>
-              </div>
-              <div class="input-wrapper">
+                Unternehmen (optional)
+              </label>
+              <div class="input-container">
                 <input 
                   type="text" 
-                  id="company"
+                  id="company" 
                   v-model="formData.company"
                   @focus="handleFocus('company')"
                   @blur="handleBlur('company')"
+                  placeholder="Ihr Unternehmen"
                 >
-                <label for="company">Firma (optional)</label>
-                <div class="input-line"></div>
+                <div class="input-highlight"></div>
               </div>
             </div>
           </div>
         </div>
+      </transition>
 
-        <!-- Step 2: Project Details -->
-        <div v-else-if="currentStep === 1" key="step2" class="form-step">
-          <div class="step-header">
-            <h2 class="step-title">Projektdetails</h2>
-            <p class="step-description">Erzählen Sie uns von Ihrem Vorhaben</p>
+      <!-- Step 2: Project Details -->
+      <transition name="slide-fade" mode="out-in">
+        <div v-if="currentStep === 2" class="form-step" key="step2">
+          <div class="step-icon">
+            <span class="material-icons">home_work</span>
           </div>
+          <h2 class="step-title">Projektdetails</h2>
+          <p class="step-subtitle">Erzählen Sie uns von Ihrem Vorhaben</p>
 
           <div class="form-fields">
             <!-- Project Type -->
-            <div class="selection-group">
-              <label class="group-label">Projektart</label>
-              <div class="selection-grid">
-                <button 
-                  v-for="type in projectTypes" 
-                  :key="type.id"
-                  @click="selectProjectType(type)"
-                  :class="['selection-card', { selected: formData.projectType === type.id }]"
+            <div class="form-group" :class="{ 'error': errors.projectType, 'success': formData.projectType && !errors.projectType }">
+              <label for="projectType">
+                <span class="material-icons">construction</span>
+                Projekttyp *
+              </label>
+              <div class="select-container">
+                <select 
+                  id="projectType"
+                  v-model="formData.projectType"
+                  @change="validateField('projectType')"
+                  :class="{ 'error': errors.projectType, 'success': formData.projectType && !errors.projectType }"
                 >
-                  <div class="card-icon">
-                    <span class="material-icons">{{ type.icon }}</span>
-                  </div>
-                  <div class="card-content">
-                    <h4>{{ type.name }}</h4>
-                    <p>{{ type.description }}</p>
-                  </div>
-                  <div class="card-check">
-                    <span class="material-icons">check_circle</span>
-                  </div>
-                </button>
+                  <option value="">Bitte wählen...</option>
+                  <option value="Neubau">Neubau</option>
+                  <option value="Renovierung">Renovierung</option>
+                  <option value="Sanierung">Sanierung</option>
+                  <option value="Erweiterung">Erweiterung</option>
+                </select>
+                <span class="select-arrow material-icons">expand_more</span>
               </div>
+              <transition name="error-slide">
+                <div v-if="errors.projectType" class="error-message">
+                  <span class="material-icons">error</span>
+                  {{ getErrorMessage('projectType') }}
+                </div>
+              </transition>
             </div>
 
-            <!-- Budget Range -->
-            <div class="range-group">
-              <label class="group-label">Budget-Rahmen</label>
-              <div class="range-display">
-                <span class="range-value">€{{ formatNumber(budgetValue) }}</span>
-                <span class="range-label">{{ getBudgetLabel(budgetValue) }}</span>
-              </div>
-              <div class="range-slider">
-                <input 
-                  type="range" 
-                  v-model="budgetValue"
-                  min="10000"
-                  max="500000"
-                  step="10000"
-                  @input="handleBudgetChange"
+            <!-- Room -->
+            <div class="form-group" :class="{ 'error': errors.room, 'success': formData.room && !errors.room }">
+              <label for="room">
+                <span class="material-icons">room</span>
+                Bereich *
+              </label>
+              <div class="select-container">
+                <select 
+                  id="room"
+                  v-model="formData.room"
+                  @change="validateField('room')"
+                  :class="{ 'error': errors.room, 'success': formData.room && !errors.room }"
                 >
-                <div class="range-track">
-                  <div class="range-progress" :style="{ width: budgetProgress + '%' }"></div>
-                </div>
-                <div class="range-markers">
-                  <span>10k</span>
-                  <span>100k</span>
-                  <span>250k</span>
-                  <span>500k+</span>
-                </div>
+                  <option value="">Bitte wählen...</option>
+                  <option value="Wohnzimmer">Wohnzimmer</option>
+                  <option value="Küche">Küche</option>
+                  <option value="Badezimmer">Badezimmer</option>
+                  <option value="Schlafzimmer">Schlafzimmer</option>
+                  <option value="Terrasse/Balkon">Terrasse/Balkon</option>
+                  <option value="Treppe">Treppe</option>
+                  <option value="Gesamtes Haus">Gesamtes Haus</option>
+                  <option value="Sonstiges">Sonstiges</option>
+                </select>
+                <span class="select-arrow material-icons">expand_more</span>
               </div>
+              <transition name="error-slide">
+                <div v-if="errors.room" class="error-message">
+                  <span class="material-icons">error</span>
+                  {{ getErrorMessage('room') }}
+                </div>
+              </transition>
+            </div>
+
+            <!-- Size -->
+            <div class="form-group" :class="{ 'error': errors.size, 'success': formData.size && !errors.size }">
+              <label for="size">
+                <span class="material-icons">square_foot</span>
+                Ungefähre Fläche in m² *
+              </label>
+              <div class="input-container">
+                <input 
+                  type="number" 
+                  id="size" 
+                  v-model="formData.size"
+                  @input="validateField('size')"
+                  @focus="handleFocus('size')"
+                  @blur="handleBlur('size')"
+                  placeholder="z.B. 25"
+                  min="1"
+                  max="10000"
+                  :class="{ 'error': errors.size, 'success': formData.size && !errors.size }"
+                >
+                <div class="input-suffix">m²</div>
+                <div class="input-highlight"></div>
+              </div>
+              <transition name="error-slide">
+                <div v-if="errors.size" class="error-message">
+                  <span class="material-icons">error</span>
+                  {{ getErrorMessage('size') }}
+                </div>
+              </transition>
             </div>
 
             <!-- Timeline -->
-            <div class="timeline-group">
-              <label class="group-label">Zeitrahmen</label>
-              <div class="timeline-options">
-                <button 
-                  v-for="time in timelines" 
-                  :key="time.id"
-                  @click="selectTimeline(time.id)"
-                  :class="['timeline-btn', { selected: formData.timeline === time.id }]"
-                >
-                  <span class="btn-icon material-icons">{{ time.icon }}</span>
-                  <span class="btn-text">{{ time.label }}</span>
-                </button>
+            <div class="form-group">
+              <label for="timeline">
+                <span class="material-icons">schedule</span>
+                Gewünschter Zeitrahmen (optional)
+              </label>
+              <div class="select-container">
+                <select id="timeline" v-model="formData.timeline">
+                  <option value="">Keine Angabe</option>
+                  <option value="sofort">So schnell wie möglich</option>
+                  <option value="1-monat">Innerhalb 1 Monat</option>
+                  <option value="3-monate">Innerhalb 3 Monate</option>
+                  <option value="6-monate">Innerhalb 6 Monate</option>
+                  <option value="planung">Noch in Planung</option>
+                </select>
+                <span class="select-arrow material-icons">expand_more</span>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Step 3: Message & Attachments -->
-        <div v-else-if="currentStep === 2" key="step3" class="form-step">
-          <div class="step-header">
-            <h2 class="step-title">Ihre Nachricht</h2>
-            <p class="step-description">Beschreiben Sie Ihr Projekt im Detail</p>
-          </div>
-
-          <div class="form-fields">
-            <!-- Message Textarea -->
-            <div class="textarea-group" :class="{ focused: focusedField === 'message', filled: formData.message }">
-              <div class="textarea-wrapper">
+            <!-- Message -->
+            <div class="form-group">
+              <label for="message">
+                <span class="material-icons">message</span>
+                Ihre Nachricht (optional)
+              </label>
+              <div class="textarea-container">
                 <textarea 
-                  id="message"
+                  id="message" 
                   v-model="formData.message"
                   @focus="handleFocus('message')"
                   @blur="handleBlur('message')"
-                  rows="6"
-                  required
+                  rows="4"
+                  placeholder="Beschreiben Sie Ihr Projekt oder stellen Sie Fragen..."
                 ></textarea>
-                <label for="message">Ihre Nachricht</label>
-                <div class="char-counter">{{ formData.message.length }} / 1000</div>
+                <div class="textarea-highlight"></div>
               </div>
-            </div>
-
-            <!-- File Upload -->
-            <div class="upload-group">
-              <label class="group-label">Dateien anhängen</label>
-              <div 
-                class="upload-zone"
-                :class="{ dragging: isDragging }"
-                @drop="handleDrop"
-                @dragover.prevent
-                @dragenter.prevent="isDragging = true"
-                @dragleave.prevent="isDragging = false"
-              >
-                <input 
-                  type="file" 
-                  ref="fileInput"
-                  @change="handleFileSelect"
-                  multiple
-                  accept="image/*,.pdf,.doc,.docx"
-                  hidden
-                >
-                
-                <div class="upload-content" @click="$refs.fileInput.click()">
-                  <div class="upload-icon">
-                    <span class="material-icons">cloud_upload</span>
-                  </div>
-                  <p class="upload-text">Dateien hier ablegen oder klicken</p>
-                  <p class="upload-hint">JPG, PNG, PDF, DOC bis 10MB</p>
-                </div>
-
-                <!-- Uploaded Files -->
-                <transition-group name="file-list" tag="div" class="uploaded-files" v-if="uploadedFiles.length">
-                  <div v-for="file in uploadedFiles" :key="file.id" class="file-item">
-                    <div class="file-icon">
-                      <span class="material-icons">{{ getFileIcon(file.type) }}</span>
-                    </div>
-                    <div class="file-info">
-                      <p class="file-name">{{ file.name }}</p>
-                      <p class="file-size">{{ formatFileSize(file.size) }}</p>
-                    </div>
-                    <button @click="removeFile(file.id)" class="file-remove">
-                      <span class="material-icons">close</span>
-                    </button>
-                  </div>
-                </transition-group>
-              </div>
-            </div>
-
-            <!-- Additional Options -->
-            <div class="options-group">
-              <label class="checkbox-wrapper">
-                <input type="checkbox" v-model="formData.newsletter">
-                <span class="checkbox-custom">
-                  <span class="material-icons">check</span>
-                </span>
-                <span class="checkbox-label">Newsletter abonnieren</span>
-              </label>
-
-              <label class="checkbox-wrapper">
-                <input type="checkbox" v-model="formData.privacy" required>
-                <span class="checkbox-custom">
-                  <span class="material-icons">check</span>
-                </span>
-                <span class="checkbox-label">Datenschutz akzeptieren *</span>
-              </label>
             </div>
           </div>
         </div>
+      </transition>
 
-        <!-- Step 4: Review & Submit -->
-        <div v-else-if="currentStep === 3" key="step4" class="form-step">
-          <div class="step-header">
-            <h2 class="step-title">Zusammenfassung</h2>
-            <p class="step-description">Bitte überprüfen Sie Ihre Angaben</p>
+      <!-- Step 3: Summary -->
+      <transition name="slide-fade" mode="out-in">
+        <div v-if="currentStep === 3" class="form-step" key="step3">
+          <div class="step-icon">
+            <span class="material-icons">check_circle</span>
           </div>
+          <h2 class="step-title">Zusammenfassung</h2>
+          <p class="step-subtitle">Bitte überprüfen Sie Ihre Angaben</p>
 
           <div class="summary-container">
-            <div class="summary-section">
-              <h3 class="section-title">
-                <span class="material-icons">person</span>
-                Kontaktdaten
-              </h3>
+            <!-- Personal Data Summary -->
+            <div class="summary-card">
+              <div class="summary-header">
+                <div class="header-left">
+                  <span class="material-icons">person</span>
+                  <h3>Kontaktdaten</h3>
+                </div>
+                <button @click="goToStep(1)" class="edit-btn">
+                  <span class="material-icons">edit</span>
+                </button>
+              </div>
               <div class="summary-content">
-                <div class="summary-item">
-                  <span class="item-label">Name:</span>
-                  <span class="item-value">{{ formData.name }}</span>
+                <div class="summary-row">
+                  <span class="label">Name:</span>
+                  <span class="value">{{ formData.firstName }} {{ formData.lastName }}</span>
                 </div>
-                <div class="summary-item">
-                  <span class="item-label">E-Mail:</span>
-                  <span class="item-value">{{ formData.email }}</span>
+                <div class="summary-row">
+                  <span class="label">E-Mail:</span>
+                  <span class="value">{{ formData.email }}</span>
                 </div>
-                <div class="summary-item">
-                  <span class="item-label">Telefon:</span>
-                  <span class="item-value">{{ formData.phone }}</span>
+                <div class="summary-row">
+                  <span class="label">Telefon:</span>
+                  <span class="value">{{ formData.countryCode }} {{ formData.phone }}</span>
                 </div>
-                <div class="summary-item" v-if="formData.company">
-                  <span class="item-label">Firma:</span>
-                  <span class="item-value">{{ formData.company }}</span>
+                <div v-if="formData.company" class="summary-row">
+                  <span class="label">Unternehmen:</span>
+                  <span class="value">{{ formData.company }}</span>
                 </div>
               </div>
             </div>
 
-            <div class="summary-section">
-              <h3 class="section-title">
-                <span class="material-icons">architecture</span>
-                Projektdetails
-              </h3>
+            <!-- Project Data Summary -->
+            <div class="summary-card">
+              <div class="summary-header">
+                <div class="header-left">
+                  <span class="material-icons">home_work</span>
+                  <h3>Projektdetails</h3>
+                </div>
+                <button @click="goToStep(2)" class="edit-btn">
+                  <span class="material-icons">edit</span>
+                </button>
+              </div>
               <div class="summary-content">
-                <div class="summary-item">
-                  <span class="item-label">Projektart:</span>
-                  <span class="item-value">{{ getProjectTypeName(formData.projectType) }}</span>
+                <div class="summary-row">
+                  <span class="label">Projekttyp:</span>
+                  <span class="value">{{ formData.projectType }}</span>
                 </div>
-                <div class="summary-item">
-                  <span class="item-label">Budget:</span>
-                  <span class="item-value">€{{ formatNumber(budgetValue) }}</span>
+                <div class="summary-row">
+                  <span class="label">Bereich:</span>
+                  <span class="value">{{ formData.room }}</span>
                 </div>
-                <div class="summary-item">
-                  <span class="item-label">Zeitrahmen:</span>
-                  <span class="item-value">{{ getTimelineLabel(formData.timeline) }}</span>
+                <div class="summary-row">
+                  <span class="label">Fläche:</span>
+                  <span class="value">{{ formData.size }} m²</span>
+                </div>
+                <div v-if="formData.timeline" class="summary-row">
+                  <span class="label">Zeitrahmen:</span>
+                  <span class="value">{{ getTimelineLabel(formData.timeline) }}</span>
+                </div>
+                <div v-if="formData.message" class="summary-row">
+                  <span class="label">Nachricht:</span>
+                  <span class="value message-preview">{{ formData.message }}</span>
                 </div>
               </div>
             </div>
 
-            <div class="summary-section">
-              <h3 class="section-title">
-                <span class="material-icons">message</span>
-                Nachricht
-              </h3>
-              <div class="summary-content">
-                <p class="message-preview">{{ formData.message }}</p>
-                <div class="summary-item" v-if="uploadedFiles.length">
-                  <span class="item-label">Anhänge:</span>
-                  <span class="item-value">{{ uploadedFiles.length }} Datei(en)</span>
-                </div>
+            <!-- Privacy -->
+            <div class="privacy-card">
+              <div class="checkbox-container">
+                <label class="checkbox-wrapper" @click="togglePrivacy">
+                  <input type="checkbox" v-model="privacyAccepted" @change="validatePrivacy">
+                  <span class="checkmark">
+                    <span class="material-icons">check</span>
+                  </span>
+                  <span class="checkbox-text">
+                    Ich habe die <a href="/datenschutz" target="_blank" @click.stop>Datenschutzerklärung</a> gelesen und akzeptiere diese.*
+                  </span>
+                </label>
               </div>
+              <transition name="error-slide">
+                <div v-if="errors.privacy" class="error-message">
+                  <span class="material-icons">error</span>
+                  {{ getErrorMessage('privacy') }}
+                </div>
+              </transition>
             </div>
           </div>
-
-          <!-- Success Animation -->
-          <transition name="success">
-            <div v-if="isSubmitted" class="success-overlay">
-              <div class="success-content">
-                <div class="success-icon">
-                  <span class="material-icons">check_circle</span>
-                  <div class="success-ripple"></div>
-                </div>
-                <h3>Vielen Dank!</h3>
-                <p>Ihre Nachricht wurde erfolgreich versendet.</p>
-                <p>Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
-              </div>
-            </div>
-          </transition>
         </div>
       </transition>
     </div>
 
     <!-- Navigation -->
-    <div class="form-navigation">
+    <div class="navigation-container">
       <button 
-        @click="previousStep" 
-        v-if="currentStep > 0"
-        class="nav-btn prev"
+        v-if="currentStep > 1"
+        @click="previousStep"
+        class="nav-btn back-btn"
       >
         <span class="material-icons">arrow_back</span>
         Zurück
       </button>
 
       <button 
-        @click="submitForm" 
-        v-if="currentStep === 3 && !isSubmitted"
-        :disabled="!canSubmit"
-        class="nav-btn submit"
+        v-if="currentStep < totalSteps"
+        @click="nextStep"
+        :disabled="!canProceed"
+        class="nav-btn next-btn"
       >
-        <span v-if="!isSubmitting">
-          Absenden
+        Weiter
+        <span class="material-icons">arrow_forward</span>
+      </button>
+
+      <button 
+        v-if="currentStep === totalSteps"
+        @click="submitForm"
+        :disabled="isSubmitting || !canSubmit"
+        class="nav-btn submit-btn"
+      >
+        <span v-if="!isSubmitting" class="submit-content">
           <span class="material-icons">send</span>
+          Absenden
         </span>
-        <div v-else class="submit-loader">
-          <div class="loader-spinner"></div>
+        <div v-else class="submit-loading">
+          <div class="loading-spinner"></div>
+          Wird gesendet...
         </div>
       </button>
     </div>
 
-    <!-- Floating Action Button -->
-    <button @click="toggleQuickContact" class="fab">
-      <span class="material-icons">{{ quickContactOpen ? 'close' : 'message' }}</span>
-      <div class="fab-pulse"></div>
-    </button>
-
-    <!-- Quick Contact -->
-    <transition name="quick-contact">
-      <div v-if="quickContactOpen" class="quick-contact">
-        <div class="quick-header">
-          <h3>Schnellkontakt</h3>
-          <p>Wir sind für Sie da!</p>
-        </div>
-        <div class="quick-options">
-          <a href="tel:+4981713868770" class="quick-option">
-            <span class="material-icons">phone</span>
-            <span>Anrufen</span>
-          </a>
-          <a href="https://wa.me/4981713868770" class="quick-option">
-            <span class="material-icons">chat</span>
-            <span>WhatsApp</span>
-          </a>
-          <a href="mailto:info@architektur-group.de" class="quick-option">
-            <span class="material-icons">email</span>
-            <span>E-Mail</span>
-          </a>
+    <!-- Success Modal -->
+    <transition name="modal-fade">
+      <div v-if="showSuccessModal" class="success-modal-overlay" @click="closeSuccessModal">
+        <div class="success-modal" @click.stop>
+          <div class="success-animation">
+            <div class="success-circle">
+              <span class="material-icons">check</span>
+            </div>
+            <div class="success-ripples">
+              <div class="ripple"></div>
+              <div class="ripple"></div>
+              <div class="ripple"></div>
+            </div>
+          </div>
+          <h3>Vielen Dank!</h3>
+          <p>Ihre Anfrage wurde erfolgreich übermittelt. Wir melden uns innerhalb von 24 Stunden bei Ihnen.</p>
+          <button @click="closeSuccessModal" class="success-close-btn">
+            Schließen
+          </button>
         </div>
       </div>
     </transition>
@@ -448,346 +507,419 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed } from 'vue'
 
-const currentStep = ref(0)
-const focusedField = ref(null)
-const isDragging = ref(false)
+// State Management
+const currentStep = ref(1)
+const totalSteps = 3
 const isSubmitting = ref(false)
-const isSubmitted = ref(false)
-const quickContactOpen = ref(false)
-const budgetValue = ref(50000)
-const uploadedFiles = ref([])
+const showSuccessModal = ref(false)
+const privacyAccepted = ref(false)
+const focusedField = ref(null)
 
+// Form Data - Same structure as luxury-contact-form
 const formData = reactive({
-  name: '',
+  firstName: '',
+  lastName: '',
   email: '',
   phone: '',
+  countryCode: '+49',
   company: '',
-  projectType: null,
-  timeline: null,
-  message: '',
-  newsletter: false,
+  projectType: '',
+  room: '',
+  size: '',
+  timeline: '',
+  message: ''
+})
+
+// Error Management
+const errors = reactive({
+  firstName: false,
+  lastName: false,
+  email: false,
+  phone: false,
+  projectType: false,
+  room: false,
+  size: false,
   privacy: false
 })
 
-const errors = reactive({
-  name: '',
-  email: '',
-  phone: ''
-})
+const errorMessages = {
+  firstName: 'Bitte geben Sie einen gültigen Vornamen ein (mindestens 2 Zeichen)',
+  lastName: 'Bitte geben Sie einen gültigen Nachnamen ein (mindestens 2 Zeichen)',
+  email: 'Bitte geben Sie eine gültige E-Mail-Adresse ein',
+  phone: 'Bitte geben Sie eine gültige Telefonnummer ein (mindestens 5 Ziffern)',
+  projectType: 'Bitte wählen Sie einen Projekttyp aus',
+  room: 'Bitte wählen Sie einen Bereich aus',
+  size: 'Bitte geben Sie eine gültige Fläche ein (1-10000 m²)',
+  privacy: 'Bitte akzeptieren Sie die Datenschutzerklärung'
+}
 
-const steps = [
-  { id: 1, label: 'Kontakt' },
-  { id: 2, label: 'Projekt' },
-  { id: 3, label: 'Nachricht' },
-  { id: 4, label: 'Absenden' }
-]
-
-const projectTypes = [
-  { id: 'bathroom', name: 'Badezimmer', description: 'Luxusbäder', icon: 'bathtub' },
-  { id: 'tiles', name: 'Fliesen', description: 'Premium Design', icon: 'dashboard' },
-  { id: 'garden', name: 'Garten', description: 'Landschaftsbau', icon: 'park' },
-  { id: 'terrace', name: 'Terrasse', description: 'Außenbereich', icon: 'deck' }
-]
-
-const timelines = [
-  { id: 'asap', label: 'Sofort', icon: 'bolt' },
-  { id: '3months', label: '3 Monate', icon: 'schedule' },
-  { id: '6months', label: '6 Monate', icon: 'event' },
-  { id: 'planning', label: 'Planung', icon: 'architecture' }
-]
-
+// Computed Properties
 const progressWidth = computed(() => {
-  return `${((currentStep.value + 1) / steps.length) * 100}%`
-})
-
-const budgetProgress = computed(() => {
-  return ((budgetValue.value - 10000) / (500000 - 10000)) * 100
+  return `${(currentStep.value / totalSteps) * 100}%`
 })
 
 const canProceed = computed(() => {
   switch (currentStep.value) {
-    case 0:
-      return formData.name && formData.email && formData.phone
     case 1:
-      return formData.projectType && formData.timeline
+      return formData.firstName && formData.lastName && formData.email && formData.phone && 
+             !errors.firstName && !errors.lastName && !errors.email && !errors.phone
     case 2:
-      return formData.message && formData.privacy
+      return formData.projectType && formData.room && formData.size && 
+             !errors.projectType && !errors.room && !errors.size
+    case 3:
+      return true
     default:
       return true
   }
 })
 
 const canSubmit = computed(() => {
-  return formData.privacy && !isSubmitted.value
+  return privacyAccepted.value && !errors.privacy && 
+         formData.firstName && formData.lastName && formData.email && formData.phone &&
+         formData.projectType && formData.room && formData.size &&
+         !errors.firstName && !errors.lastName && !errors.email && !errors.phone &&
+         !errors.projectType && !errors.room && !errors.size
 })
 
+// Helper Functions
+const getStepLabel = (step) => {
+  const labels = {
+    1: 'Kontaktdaten',
+    2: 'Projektdetails', 
+    3: 'Bestätigung'
+  }
+  return labels[step] || ''
+}
+
+const getTimelineLabel = (timeline) => {
+  const labels = {
+    'sofort': 'So schnell wie möglich',
+    '1-monat': 'Innerhalb 1 Monat',
+    '3-monate': 'Innerhalb 3 Monate',
+    '6-monate': 'Innerhalb 6 Monate',
+    'planung': 'Noch in Planung'
+  }
+  return labels[timeline] || timeline
+}
+
+const getErrorMessage = (field) => {
+  return errorMessages[field] || 'Fehler'
+}
+
+// Validation Functions
+const validateField = (field) => {
+  switch (field) {
+    case 'firstName':
+    case 'lastName':
+      errors[field] = !formData[field] || !/^[A-Za-zÄÖÜäöüß\s-]{2,}$/.test(formData[field])
+      break
+    case 'email':
+      errors[field] = !formData[field] || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData[field])
+      break
+    case 'phone':
+      errors[field] = !formData[field] || !/^\d{5,}$/.test(formData[field])
+      break
+    case 'projectType':
+    case 'room':
+      errors[field] = !formData[field]
+      break
+    case 'size':
+      const size = parseInt(formData[field])
+      errors[field] = !formData[field] || isNaN(size) || size < 1 || size > 10000
+      break
+  }
+  
+  // Haptic feedback on mobile
+  if (navigator.vibrate && errors[field]) {
+    navigator.vibrate(50)
+  }
+}
+
+const validatePrivacy = () => {
+  errors.privacy = !privacyAccepted.value
+}
+
+// Event Handlers
 const handleFocus = (field) => {
   focusedField.value = field
-  vibrate(10)
+  // Light haptic feedback
+  if (navigator.vibrate) {
+    navigator.vibrate(10)
+  }
 }
 
 const handleBlur = (field) => {
   focusedField.value = null
-  validateField(field)
-}
-
-const validateField = (field) => {
-  switch (field) {
-    case 'name':
-      errors.name = formData.name.length < 2 ? 'Name ist zu kurz' : ''
-      break
-    case 'email':
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      errors.email = !emailRegex.test(formData.email) ? 'Ungültige E-Mail' : ''
-      break
-    case 'phone':
-      errors.phone = formData.phone.length < 6 ? 'Telefonnummer ist zu kurz' : ''
-      break
+  if (['firstName', 'lastName', 'email', 'phone', 'size'].includes(field)) {
+    validateField(field)
   }
 }
 
-const selectProjectType = (type) => {
-  formData.projectType = type.id
-  vibrate(20)
+const togglePrivacy = () => {
+  privacyAccepted.value = !privacyAccepted.value
+  validatePrivacy()
+  if (navigator.vibrate) {
+    navigator.vibrate(20)
+  }
 }
 
-const selectTimeline = (id) => {
-  formData.timeline = id
-  vibrate(20)
-}
-
-const handleBudgetChange = () => {
-  vibrate(5)
-}
-
-const handleDrop = (e) => {
-  e.preventDefault()
-  isDragging.value = false
-  handleFiles(e.dataTransfer.files)
-}
-
-const handleFileSelect = (e) => {
-  handleFiles(e.target.files)
-}
-
-const handleFiles = (files) => {
-  Array.from(files).forEach(file => {
-    if (file.size <= 10485760) { // 10MB
-      uploadedFiles.value.push({
-        id: Date.now() + Math.random(),
-        name: file.name,
-        size: file.size,
-        type: file.type
-      })
-      vibrate(30)
+// Navigation Functions
+const nextStep = () => {
+  if (canProceed.value && currentStep.value < totalSteps) {
+    currentStep.value++
+    // Haptic feedback
+    if (navigator.vibrate) {
+      navigator.vibrate(30)
     }
-  })
-}
-
-const removeFile = (id) => {
-  uploadedFiles.value = uploadedFiles.value.filter(f => f.id !== id)
-  vibrate(20)
-}
-
-const goToStep = (index) => {
-  if (index < currentStep.value || canProceed.value) {
-    currentStep.value = index
-    vibrate(20)
   }
 }
 
 const previousStep = () => {
-  if (currentStep.value > 0) {
+  if (currentStep.value > 1) {
     currentStep.value--
-    vibrate(20)
+    if (navigator.vibrate) {
+      navigator.vibrate(20)
+    }
   }
 }
 
-const nextStep = () => {
-  if (canProceed.value && currentStep.value < 3) {
-    currentStep.value++
-    vibrate(20)
+const goToStep = (step) => {
+  if (step >= 1 && step <= totalSteps) {
+    currentStep.value = step
+    if (navigator.vibrate) {
+      navigator.vibrate(20)
+    }
   }
 }
 
+// Form Submission
 const submitForm = async () => {
-  if (!canSubmit.value) return
+  // Final validation
+  validatePrivacy()
+  Object.keys(formData).forEach(key => {
+    if (['firstName', 'lastName', 'email', 'phone', 'projectType', 'room', 'size'].includes(key)) {
+      validateField(key)
+    }
+  })
+  
+  if (!canSubmit.value) {
+    if (navigator.vibrate) {
+      navigator.vibrate(100)
+    }
+    return
+  }
   
   isSubmitting.value = true
-  vibrate(30)
   
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 2000))
-  
-  isSubmitting.value = false
-  isSubmitted.value = true
-  vibrate([50, 100, 50])
-  
-  // Reset after success
-  setTimeout(() => {
-    resetForm()
-  }, 5000)
+  try {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    
+    console.log('Form submitted:', formData)
+    
+    showSuccessModal.value = true
+    
+    // Haptic success feedback
+    if (navigator.vibrate) {
+      navigator.vibrate([100, 50, 100])
+    }
+    
+    // Reset form after successful submission
+    setTimeout(() => {
+      resetForm()
+    }, 3000)
+    
+  } catch (error) {
+    console.error('Error submitting form:', error)
+    alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.')
+    if (navigator.vibrate) {
+      navigator.vibrate(200)
+    }
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 const resetForm = () => {
-  currentStep.value = 0
-  isSubmitted.value = false
   Object.keys(formData).forEach(key => {
-    formData[key] = typeof formData[key] === 'boolean' ? false : ''
+    if (typeof formData[key] === 'string') {
+      formData[key] = ''
+    }
   })
-  uploadedFiles.value = []
+  formData.countryCode = '+49'
+  
+  Object.keys(errors).forEach(key => {
+    errors[key] = false
+  })
+  
+  privacyAccepted.value = false
+  currentStep.value = 1
 }
 
-const toggleQuickContact = () => {
-  quickContactOpen.value = !quickContactOpen.value
-  vibrate(20)
-}
-
-const vibrate = (pattern) => {
-  if (navigator.vibrate) {
-    navigator.vibrate(pattern)
-  }
-}
-
-const formatNumber = (num) => {
-  return num.toLocaleString('de-DE')
-}
-
-const formatFileSize = (bytes) => {
-  if (bytes < 1024) return bytes + ' B'
-  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB'
-  return (bytes / 1048576).toFixed(1) + ' MB'
-}
-
-const getFileIcon = (type) => {
-  if (type.startsWith('image/')) return 'image'
-  if (type === 'application/pdf') return 'picture_as_pdf'
-  return 'description'
-}
-
-const getBudgetLabel = (value) => {
-  if (value < 50000) return 'Klein'
-  if (value < 150000) return 'Mittel'
-  if (value < 300000) return 'Groß'
-  return 'Premium'
-}
-
-const getProjectTypeName = (id) => {
-  return projectTypes.find(t => t.id === id)?.name || ''
-}
-
-const getTimelineLabel = (id) => {
-  return timelines.find(t => t.id === id)?.label || ''
+const closeSuccessModal = () => {
+  showSuccessModal.value = false
 }
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
 .mobile-contact-premium {
   min-height: 100vh;
-  background: #000;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
   color: #FAFAF8;
-  padding-bottom: 100px;
-}
-
-/* Form Header */
-.form-header {
   position: relative;
-  height: 250px;
   overflow: hidden;
+  padding: 0;
 }
 
-.header-bg {
-  position: absolute;
+/* Background Effects */
+.background-effects {
+  position: fixed;
   inset: 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.bg-pattern {
+.gradient-orb {
   position: absolute;
-  inset: 0;
-  background-image: 
-    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(164, 113, 72, 0.03) 35px, rgba(164, 113, 72, 0.03) 70px);
-  animation: patternSlide 20s linear infinite;
-}
-
-@keyframes patternSlide {
-  from { transform: translateX(0); }
-  to { transform: translateX(70px); }
-}
-
-.bg-gradient {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 50% 50%, rgba(164, 113, 72, 0.2) 0%, transparent 70%);
-}
-
-.header-content {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
-}
-
-.header-icon {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: orbFloat 8s ease-in-out infinite;
 }
 
-.header-icon .material-icons {
-  font-size: 36px;
-  color: #000;
+.orb-1 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #a47148, transparent);
+  top: 10%;
+  left: -10%;
 }
 
-.icon-pulse {
+.orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #FAFAF8, transparent);
+  bottom: 10%;
+  right: -15%;
+  animation-delay: -4s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.1); }
+}
+
+.floating-particles {
   position: absolute;
-  inset: -10px;
-  border: 2px solid #a47148;
-  border-radius: 50%;
-  animation: pulse 2s ease-out infinite;
+  inset: 0;
 }
 
-@keyframes pulse {
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: #a47148;
+  border-radius: 50%;
+  animation: particleFloat 6s linear infinite;
+}
+
+@keyframes particleFloat {
   0% {
-    transform: scale(1);
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
     opacity: 1;
   }
   100% {
-    transform: scale(1.3);
+    transform: translateY(-100px) rotate(360deg);
     opacity: 0;
   }
 }
 
+/* Header */
+.mobile-header {
+  padding: 3rem 1.5rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.header-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.decoration-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148, transparent);
+}
+
+.header-badge {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  animation: badgeGlow 3s ease-in-out infinite;
+}
+
+.header-badge .material-icons {
+  color: #a47148;
+  font-size: 1.2rem;
+}
+
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(164, 113, 72, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(164, 113, 72, 0.4); }
+}
+
 .header-title {
   font-size: 2rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.title-text {
+  display: block;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 50%, #FAFAF8 100%);
+  background-size: 200% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: titleShimmer 4s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
 }
 
 .header-subtitle {
   font-size: 1rem;
-  color: #999;
+  color: #ccc;
   font-weight: 300;
 }
 
-/* Progress Container */
+/* Progress Indicator */
 .progress-container {
-  padding: 2rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
+  padding: 2rem 1.5rem;
+  position: relative;
+  z-index: 2;
 }
 
 .progress-track {
@@ -802,27 +934,18 @@ const getTimelineLabel = (id) => {
   height: 100%;
   background: linear-gradient(90deg, #a47148, #FAFAF8);
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
+  box-shadow: 0 0 10px rgba(164, 113, 72, 0.5);
 }
 
-.progress-steps {
+.progress-dots {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
-.step-dot {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.step-number {
-  width: 32px;
-  height: 32px;
+.progress-dot {
+  width: 36px;
+  height: 36px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
@@ -831,74 +954,296 @@ const getTimelineLabel = (id) => {
   justify-content: center;
   font-size: 0.875rem;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  color: #ccc;
 }
 
-.step-dot.active .step-number {
+.progress-dot.active {
   background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-color: transparent;
-  color: #000;
-  transform: scale(1.2);
-}
-
-.step-dot.completed .step-number {
-  background: #a47148;
   border-color: #a47148;
   color: #000;
+  transform: scale(1.15);
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.6);
+}
+
+.progress-dot.completed {
+  background: #a47148;
+  border-color: #a47148;
+  color: #FAFAF8;
+}
+
+.progress-dot .material-icons {
+  font-size: 1rem;
 }
 
 .step-label {
-  font-size: 0.75rem;
-  color: #666;
-  transition: color 0.3s ease;
-}
-
-.step-dot.active .step-label,
-.step-dot.completed .step-label {
+  text-align: center;
+  font-size: 0.875rem;
   color: #a47148;
-}
-
-.step-ripple {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 32px;
-  border: 2px solid #a47148;
-  border-radius: 50%;
-  opacity: 0;
-}
-
-.step-dot.active .step-ripple {
-  animation: stepRipple 1.5s ease-out infinite;
-}
-
-@keyframes stepRipple {
-  0% {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(-50%) scale(2);
-    opacity: 0;
-  }
+  font-weight: 500;
 }
 
 /* Form Container */
 .form-container {
-  padding: 2rem 1rem;
-  min-height: 400px;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 2;
+  min-height: 60vh;
 }
 
 .form-step {
-  animation: stepFadeIn 0.5s ease-out;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  backdrop-filter: blur(20px);
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes stepFadeIn {
+.step-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+.step-icon .material-icons {
+  font-size: 1.8rem;
+  color: #000;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.step-subtitle {
+  font-size: 0.95rem;
+  color: #ccc;
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+/* Form Fields */
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.name-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group.half-width {
+  flex: 1;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: #FAFAF8;
+  font-size: 0.9rem;
+}
+
+.form-group label .material-icons {
+  color: #a47148;
+  font-size: 1.1rem;
+}
+
+.input-container,
+.textarea-container {
+  position: relative;
+}
+
+.input-container.flex-1 {
+  flex: 1;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #FAFAF8;
+  padding: 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #a47148;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.3);
+}
+
+.form-group input.success {
+  border-color: #4CAF50;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
+}
+
+.form-group input.error,
+.form-group textarea.error {
+  border-color: #e74c3c;
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.2);
+  animation: inputShake 0.5s ease-in-out;
+}
+
+@keyframes inputShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.input-highlight,
+.textarea-highlight {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(45deg, transparent, rgba(164, 113, 72, 0.3), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.form-group.success .input-highlight {
+  background: linear-gradient(45deg, transparent, rgba(76, 175, 80, 0.3), transparent);
+  opacity: 1;
+}
+
+.input-suffix {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a47148;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+/* Phone Input */
+.phone-input-row {
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.country-select-container {
+  flex: 0 0 100px;
+}
+
+.country-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #FAFAF8;
+  padding: 1rem 0.75rem;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Select Styling */
+.select-container {
+  position: relative;
+}
+
+.form-group select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #FAFAF8;
+  padding: 1rem;
+  font-size: 1rem;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.form-group select:focus {
+  border-color: #a47148;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.3);
+}
+
+.form-group select.success {
+  border-color: #4CAF50;
+  box-shadow: 0 0 15px rgba(76, 175, 80, 0.2);
+}
+
+.form-group select.error {
+  border-color: #e74c3c;
+  box-shadow: 0 0 15px rgba(231, 76, 60, 0.2);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #a47148;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.form-group select:focus + .select-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+/* Textarea */
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+/* Error Messages */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  animation: errorSlideDown 0.3s ease-out;
+}
+
+@keyframes errorSlideDown {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
@@ -906,705 +1251,260 @@ const getTimelineLabel = (id) => {
   }
 }
 
-.step-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.step-title {
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #FAFAF8;
-  margin-bottom: 0.5rem;
-}
-
-.step-description {
-  font-size: 0.875rem;
-  color: #999;
-}
-
-/* Input Groups */
-.input-group {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.input-icon {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #666;
-  transition: all 0.3s ease;
-}
-
-.input-group.focused .input-icon {
-  background: rgba(164, 113, 72, 0.1);
-  color: #a47148;
-}
-
-.input-wrapper {
-  flex: 1;
-  position: relative;
-}
-
-.input-wrapper input,
-.textarea-wrapper textarea {
-  width: 100%;
-  padding: 1rem 0;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #FAFAF8;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.input-wrapper label,
-.textarea-wrapper label {
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  color: #666;
-  font-size: 1rem;
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-
-.input-group.focused .input-wrapper label,
-.input-group.filled .input-wrapper label,
-.textarea-group.focused label,
-.textarea-group.filled label {
-  top: -0.5rem;
-  font-size: 0.75rem;
-  color: #a47148;
-}
-
-.input-line {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #a47148, #FAFAF8);
-  transition: width 0.3s ease;
-}
-
-.input-group.focused .input-line {
-  width: 100%;
-}
-
-.input-error {
-  position: absolute;
-  bottom: -1.5rem;
-  left: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  color: #e74c3c;
-  font-size: 0.75rem;
-}
-
-/* Selection Group */
-.selection-group {
-  margin-bottom: 2rem;
-}
-
-.group-label {
-  display: block;
-  font-size: 0.875rem;
-  color: #999;
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.selection-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.selection-card {
-  position: relative;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-
-.selection-card:active {
-  transform: scale(0.98);
-}
-
-.selection-card.selected {
-  background: rgba(164, 113, 72, 0.1);
-  border-color: #a47148;
-}
-
-.card-icon {
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease;
-}
-
-.selection-card.selected .card-icon {
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-}
-
-.card-icon .material-icons {
-  font-size: 24px;
-  color: #666;
-  transition: color 0.3s ease;
-}
-
-.selection-card.selected .card-icon .material-icons {
-  color: #000;
-}
-
-.card-content h4 {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #FAFAF8;
-  margin-bottom: 0.25rem;
-}
-
-.card-content p {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.card-check {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  opacity: 0;
-  transform: scale(0);
-  transition: all 0.3s ease;
-}
-
-.selection-card.selected .card-check {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.card-check .material-icons {
-  font-size: 20px;
-  color: #a47148;
-}
-
-/* Range Slider */
-.range-group {
-  margin-bottom: 2rem;
-}
-
-.range-display {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  margin-bottom: 1rem;
-}
-
-.range-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #a47148;
-}
-
-.range-label {
-  font-size: 0.875rem;
-  color: #666;
-  padding: 0.25rem 0.75rem;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 12px;
-}
-
-.range-slider {
-  position: relative;
-}
-
-.range-slider input[type="range"] {
-  width: 100%;
-  height: 40px;
-  background: transparent;
-  cursor: pointer;
-  -webkit-appearance: none;
-  position: relative;
-  z-index: 2;
-}
-
-.range-slider input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 24px;
-  height: 24px;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(164, 113, 72, 0.3);
-}
-
-.range-track {
-  position: absolute;
-  top: 18px;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.range-progress {
-  height: 100%;
-  background: linear-gradient(90deg, #a47148, #FAFAF8);
-  transition: width 0.1s ease;
-}
-
-.range-markers {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.5rem;
-  padding: 0 0.5rem;
-}
-
-.range-markers span {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-/* Timeline Options */
-.timeline-options {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
-
-.timeline-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  color: #666;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.timeline-btn.selected {
-  background: rgba(164, 113, 72, 0.1);
-  border-color: #a47148;
-  color: #a47148;
-}
-
-.btn-icon {
-  font-size: 24px;
-}
-
-.btn-text {
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-/* Textarea Group */
-.textarea-group {
-  margin-bottom: 2rem;
-  position: relative;
-}
-
-.textarea-wrapper {
-  position: relative;
-}
-
-.textarea-wrapper textarea {
-  resize: vertical;
-  min-height: 120px;
-  padding: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-}
-
-.textarea-group.focused textarea {
-  border-color: #a47148;
-}
-
-.char-counter {
-  position: absolute;
-  bottom: 0.5rem;
-  right: 0.5rem;
-  font-size: 0.75rem;
-  color: #666;
-}
-
-/* Upload Zone */
-.upload-zone {
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 2px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.upload-zone.dragging {
-  background: rgba(164, 113, 72, 0.1);
-  border-color: #a47148;
-}
-
-.upload-content {
-  text-align: center;
-}
-
-.upload-icon {
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-}
-
-.upload-icon .material-icons {
-  font-size: 32px;
-  color: #666;
-}
-
-.upload-text {
-  font-size: 1rem;
-  color: #FAFAF8;
-  margin-bottom: 0.5rem;
-}
-
-.upload-hint {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-/* Uploaded Files */
-.uploaded-files {
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.file-item {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  margin-bottom: 0.5rem;
-}
-
-.file-icon {
-  width: 40px;
-  height: 40px;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #a47148;
-}
-
-.file-info {
-  flex: 1;
-}
-
-.file-name {
-  font-size: 0.875rem;
-  color: #FAFAF8;
-  margin-bottom: 0.25rem;
-}
-
-.file-size {
-  font-size: 0.75rem;
-  color: #666;
-}
-
-.file-remove {
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  border-radius: 50%;
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.file-remove:active {
-  background: rgba(231, 76, 60, 0.2);
-  color: #e74c3c;
-}
-
-/* Checkbox */
-.checkbox-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.checkbox-wrapper input {
-  display: none;
-}
-
-.checkbox-custom {
-  width: 24px;
-  height: 24px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.checkbox-wrapper input:checked + .checkbox-custom {
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-color: transparent;
-}
-
-.checkbox-custom .material-icons {
-  font-size: 16px;
-  color: #000;
-  opacity: 0;
-  transform: scale(0);
-  transition: all 0.3s ease;
-}
-
-.checkbox-wrapper input:checked + .checkbox-custom .material-icons {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.checkbox-label {
-  font-size: 0.875rem;
-  color: #FAFAF8;
+.error-message .material-icons {
+  font-size: 0.9rem;
 }
 
 /* Summary */
 .summary-container {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 16px;
-  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.summary-section {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
+.summary-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.summary-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.summary-section:last-child {
-  margin-bottom: 0;
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.section-title {
+.header-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #FAFAF8;
-  margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
-.section-title .material-icons {
-  font-size: 20px;
+.summary-header .material-icons {
   color: #a47148;
+  font-size: 1.3rem;
 }
 
-.summary-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-}
-
-.item-label {
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.item-value {
-  font-size: 0.875rem;
-  color: #FAFAF8;
+.summary-header h3 {
+  font-size: 1.1rem;
   font-weight: 500;
-}
-
-.message-preview {
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: #ccc;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-/* Success Overlay */
-.success-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-}
-
-.success-content {
-  text-align: center;
-  padding: 2rem;
-}
-
-.success-icon {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(135deg, #4caf50, #8bc34a);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 2rem;
-  animation: successBounce 0.6s ease-out;
-}
-
-@keyframes successBounce {
-  0% { transform: scale(0); }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); }
-}
-
-.success-icon .material-icons {
-  font-size: 48px;
-  color: #fff;
-}
-
-.success-ripple {
-  position: absolute;
-  inset: -20px;
-  border: 3px solid #4caf50;
-  border-radius: 50%;
-  animation: successRipple 1.5s ease-out;
-}
-
-@keyframes successRipple {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-
-.success-content h3 {
-  font-size: 1.5rem;
   color: #FAFAF8;
-  margin-bottom: 1rem;
 }
 
-.success-content p {
-  font-size: 1rem;
-  color: #ccc;
-  margin-bottom: 0.5rem;
-}
-
-/* Navigation */
-.form-navigation {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  gap: 1rem;
-  z-index: 10;
-}
-
-.nav-btn {
-  flex: 1;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  color: #FAFAF8;
-  font-size: 1rem;
-  font-weight: 500;
+.edit-btn {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 2px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50%;
+  color: #a47148;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.nav-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+.edit-btn:hover,
+.edit-btn:active {
+  background: rgba(164, 113, 72, 0.1);
+  border-color: #a47148;
+  transform: scale(1.1);
 }
 
-.nav-btn.prev {
-  flex: 0 0 120px;
+.edit-btn .material-icons {
+  font-size: 1rem;
 }
 
-.nav-btn.next,
-.nav-btn.submit {
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-color: transparent;
-  color: #000;
+.summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.nav-btn:active:not(:disabled) {
-  transform: scale(0.95);
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
-.submit-loader {
+.summary-row .label {
+  color: #ccc;
+  font-size: 0.9rem;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.summary-row .value {
+  color: #FAFAF8;
+  text-align: right;
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.message-preview {
+  text-align: left !important;
+  font-style: italic;
+  line-height: 1.4;
+  font-size: 0.85rem !important;
+  color: #ccc !important;
+}
+
+/* Privacy */
+.privacy-card {
+  background: rgba(164, 113, 72, 0.05);
+  border: 1px solid rgba(164, 113, 72, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.loader-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(0, 0, 0, 0.2);
-  border-top-color: #000;
+.checkmark .material-icons {
+  font-size: 14px;
+  color: #FAFAF8;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+
+.checkbox-wrapper input:checked + .checkmark {
+  background: #a47148;
+  border-color: #a47148;
+  box-shadow: 0 0 15px rgba(164, 113, 72, 0.4);
+}
+
+.checkbox-wrapper input:checked + .checkmark .material-icons {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkbox-text {
+  color: #ccc;
+  line-height: 1.4;
+  font-size: 0.85rem;
+}
+
+.checkbox-text a {
+  color: #a47148;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.checkbox-text a:hover {
+  border-bottom-color: #a47148;
+}
+
+/* Navigation */
+.navigation-container {
+  padding: 2rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  flex: 1;
+  min-height: 50px;
+}
+
+.back-btn {
+  background: transparent;
+  color: #FAFAF8;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.back-btn:hover,
+.back-btn:active {
+  border-color: #FAFAF8;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.next-btn,
+.submit-btn {
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  color: #000;
+}
+
+.next-btn:hover:not(:disabled),
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(164, 113, 72, 0.4);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.submit-content,
+.submit-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 50%;
+  border-top-color: #000;
   animation: spin 0.8s linear infinite;
 }
 
@@ -1612,181 +1512,237 @@ const getTimelineLabel = (id) => {
   to { transform: rotate(360deg); }
 }
 
-/* FAB */
-.fab {
+/* Success Modal */
+.success-modal-overlay {
   position: fixed;
-  bottom: 100px;
-  right: 20px;
-  width: 56px;
-  height: 56px;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+}
+
+.success-modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.success-animation {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.success-circle {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 20px rgba(164, 113, 72, 0.4);
-  cursor: pointer;
-  z-index: 9;
-  border: none;
-  color: #000;
+  margin: 0 auto;
+  animation: successScale 0.6s ease-out;
 }
 
-.fab .material-icons {
-  font-size: 24px;
+@keyframes successScale {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
 
-.fab-pulse {
+.success-circle .material-icons {
+  font-size: 2.5rem;
+  color: #FAFAF8;
+}
+
+.success-ripples {
   position: absolute;
-  inset: -8px;
-  border: 2px solid #a47148;
-  border-radius: 50%;
-  animation: fabPulse 2s ease-out infinite;
+  inset: -40px;
 }
 
-@keyframes fabPulse {
+.ripple {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #4CAF50;
+  border-radius: 50%;
+  animation: rippleExpand 2s ease-out infinite;
+}
+
+.ripple:nth-child(2) { animation-delay: 0.5s; }
+.ripple:nth-child(3) { animation-delay: 1s; }
+
+@keyframes rippleExpand {
   0% {
-    transform: scale(1);
+    transform: scale(0.8);
     opacity: 1;
   }
   100% {
-    transform: scale(1.3);
+    transform: scale(2);
     opacity: 0;
   }
 }
 
-/* Quick Contact */
-.quick-contact {
-  position: fixed;
-  bottom: 170px;
-  right: 20px;
-  width: 280px;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  z-index: 8;
+.success-modal h3 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 1rem;
+  color: #4CAF50;
 }
 
-.quick-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
+.success-modal p {
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.5;
+  margin-bottom: 2rem;
 }
 
-.quick-header h3 {
-  font-size: 1.125rem;
+.success-close-btn {
+  background: linear-gradient(135deg, #4CAF50, #8BC34A);
   color: #FAFAF8;
-  margin-bottom: 0.25rem;
-}
-
-.quick-header p {
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.quick-options {
-  display: flex;
-  gap: 1rem;
-}
-
-.quick-option {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 0.75rem 2rem;
   border-radius: 12px;
-  color: #FAFAF8;
-  text-decoration: none;
-  font-size: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.quick-option:active {
-  background: rgba(164, 113, 72, 0.2);
-  transform: scale(0.95);
+.success-close-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
 }
 
-.quick-option .material-icons {
-  font-size: 20px;
-  color: #a47148;
-}
-
-/* Animations */
+/* Transitions */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .slide-fade-enter-from {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateX(30px) scale(0.95);
 }
 
 .slide-fade-leave-to {
   opacity: 0;
-  transform: translateX(-20px);
+  transform: translateX(-30px) scale(0.95);
 }
 
-.error-enter-active,
-.error-leave-active {
+.error-slide-enter-active,
+.error-slide-leave-active {
   transition: all 0.3s ease;
 }
 
-.error-enter-from,
-.error-leave-to {
+.error-slide-enter-from,
+.error-slide-leave-to {
   opacity: 0;
   transform: translateY(-10px);
 }
 
-.file-list-enter-active,
-.file-list-leave-active {
-  transition: all 0.3s ease;
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.4s ease;
 }
 
-.file-list-enter-from,
-.file-list-leave-to {
+.modal-fade-enter-from,
+.modal-fade-leave-to {
   opacity: 0;
-  transform: scale(0.8);
 }
 
-.success-enter-active {
-  animation: fadeIn 0.3s ease;
+.modal-fade-enter-active .success-modal,
+.modal-fade-leave-active .success-modal {
+  transition: transform 0.4s ease;
 }
 
-.success-leave-active {
-  animation: fadeIn 0.3s ease reverse;
+.modal-fade-enter-from .success-modal,
+.modal-fade-leave-to .success-modal {
+  transform: scale(0.8) rotateX(-15deg);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.quick-contact-enter-active,
-.quick-contact-leave-active {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.quick-contact-enter-from,
-.quick-contact-leave-to {
-  opacity: 0;
-  transform: scale(0.8) translateY(20px);
-}
-
-/* Responsive */
-@media (min-width: 768px) {
-  .selection-grid {
-    grid-template-columns: repeat(4, 1fr);
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .mobile-header {
+    padding: 2rem 1rem 1.5rem;
   }
   
-  .timeline-options {
-    grid-template-columns: repeat(4, 1fr);
+  .header-title {
+    font-size: 1.75rem;
+  }
+  
+  .progress-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .form-container {
+    padding: 0 1rem;
+  }
+  
+  .form-step {
+    padding: 1.5rem 1rem;
+  }
+  
+  .name-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .phone-input-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .country-select-container {
+    flex: none;
+  }
+  
+  .navigation-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .summary-row {
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+  }
+  
+  .summary-row .value {
+    text-align: left;
+  }
+  
+  .success-modal {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-title {
+    font-size: 1.5rem;
+  }
+  
+  .step-title {
+    font-size: 1.25rem;
+  }
+  
+  .form-group label {
+    font-size: 0.85rem;
+  }
+  
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 0.875rem;
+    font-size: 0.95rem;
   }
 }
 </style>

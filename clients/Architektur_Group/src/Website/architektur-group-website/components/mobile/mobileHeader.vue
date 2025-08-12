@@ -4,7 +4,7 @@
     <div class="top-bar" :class="{ 'scrolled': isScrolled }">
       <div class="header-content">
         <!-- Logo -->
-        <div class="logo-wrapper" @click="navigateTo('/')">
+        <div class="logo-wrapper" @click="navigateToHome">
           <div class="logo-shield">
             <span class="logo-text">AG</span>
           </div>
@@ -14,7 +14,7 @@
         <!-- Center Title (Dynamic) -->
         <div class="page-title">
           <transition name="title-fade" mode="out-in">
-            <span :key="currentPage">{{ currentPage }}</span>
+            <span :key="currentPageTitle">{{ currentPageTitle }}</span>
           </transition>
         </div>
 
@@ -36,23 +36,11 @@
     <!-- Fullscreen Luxury Menu -->
     <transition name="menu-reveal">
       <div v-if="menuOpen" class="luxury-menu">
-        <!-- Background Effects -->
         <div class="menu-bg-pattern"></div>
         <div class="menu-gradient"></div>
         
         <!-- Menu Content -->
         <div class="menu-content">
-          <!-- User Profile Section -->
-          <div class="user-section">
-            <div class="user-avatar">
-              <span class="material-icons">account_circle</span>
-            </div>
-            <div class="user-greeting">
-              <p class="greeting-text">Willkommen zurück</p>
-              <p class="user-name">Geschätzter Kunde</p>
-            </div>
-          </div>
-
           <!-- Navigation Links -->
           <nav class="menu-nav">
             <div 
@@ -60,7 +48,7 @@
               :key="item.id"
               class="menu-item"
               :style="{ animationDelay: `${index * 0.1}s` }"
-              @click="navigateTo(item.route)"
+              @click="navigateToPage(item.route)"
             >
               <div class="menu-item-bg"></div>
               <div class="menu-item-content">
@@ -85,9 +73,13 @@
               <span class="material-icons">phone</span>
               <span>Anrufen</span>
             </button>
-            <button class="action-btn" @click="openChat">
+            <button class="action-btn" @click="openWhatsApp">
               <span class="material-icons">chat</span>
-              <span>Chat</span>
+              <span>WhatsApp</span>
+            </button>
+            <button class="action-btn" @click="navigateToContact">
+              <span class="material-icons">contact_mail</span>
+              <span>Kontakt</span>
             </button>
             <button class="action-btn" @click="shareApp">
               <span class="material-icons">share</span>
@@ -97,8 +89,14 @@
 
           <!-- Social Links -->
           <div class="menu-social">
-            <a href="#" class="social-link" v-for="social in socials" :key="social">
-              <span class="material-icons">{{ social }}</span>
+            <a href="https://www.facebook.com/your-page" target="_blank" class="social-link">
+              <span class="material-icons">facebook</span>
+            </a>
+            <a href="https://www.instagram.com/your-account" target="_blank" class="social-link">
+              <span class="material-icons">camera_alt</span>
+            </a>
+            <a href="https://www.youtube.com/your-channel" target="_blank" class="social-link">
+              <span class="material-icons">play_arrow</span>
             </a>
           </div>
 
@@ -125,142 +123,252 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
+// Nuxt.js Router
+const router = useRouter()
+const route = useRoute()
+
+// Reactive state
 const menuOpen = ref(false)
 const isScrolled = ref(false)
-const currentPage = ref('Architektur Group')
-const currentRoute = ref('/')
+const currentPageTitle = ref('Architektur Group')
 const currentLang = ref('DE')
-const showBottomNav = ref(true)
 
 const menuItems = [
   {
     id: 1,
+    title: 'Startseite',
+    subtitle: 'Zurück zur Hauptseite',
+    icon: 'home',
+    route: '/'
+  },
+  {
+    id: 2,
     title: 'Über uns',
     subtitle: 'Unsere Geschichte & Vision',
     icon: 'business',
     route: '/ueber-uns'
   },
   {
-    id: 2,
+    id: 3,
     title: 'Sortiment',
     subtitle: '200+ Premium Materialien',
     icon: 'inventory',
     route: '/sortiment'
   },
   {
-    id: 3,
-    title: 'Galabau',
-    subtitle: 'Garten & Landschaft',
-    icon: 'park',
-    route: '/galabau'
-  },
-  {
     id: 4,
-    title: 'Fliesen',
-    subtitle: 'Premium Design',
-    icon: 'dashboard',
-    route: '/fliesen'
-  },
-  {
-    id: 5,
-    title: 'Bäder',
-    subtitle: 'Luxus Badgestaltung',
-    icon: 'bathtub',
-    route: '/baeder'
-  },
-  {
-    id: 6,
-    title: 'Terrassen',
-    subtitle: 'Outdoor Living',
-    icon: 'deck',
-    route: '/terrassen'
-  },
-  {
-    id: 7,
-    title: 'Europe',
-    subtitle: 'Internationale Projekte',
-    icon: 'public',
-    route: '/europe'
+    title: 'Kontakt',
+    subtitle: 'Nehmen Sie Kontakt auf',
+    icon: 'contact_mail',
+    route: '/kontakt'
   }
 ]
 
-
-const socials = ['facebook', 'instagram', 'youtube']
 const languages = ['DE', 'EN', 'FR']
 
+// Page title mapping
+const pageTitles = {
+  '/': 'Architektur Group',
+  '/ueber-uns': 'Über uns',
+  '/sortiment': 'Sortiment',
+  '/kontakt': 'Kontakt'
+}
+
+// Navigation functions
+const navigateToHome = async () => {
+  closeMenu()
+  try {
+    await router.push('/')
+  } catch (error) {
+    console.error('Navigation error:', error)
+  }
+}
+
+const navigateToPage = async (routePath) => {
+  closeMenu()
+  
+  // Haptic feedback
+  if (navigator.vibrate) {
+    navigator.vibrate(20)
+  }
+  
+  try {
+    await router.push(routePath)
+  } catch (error) {
+    console.error('Navigation error:', error)
+    // Fallback: use window.location if router fails
+    window.location.href = routePath
+  }
+}
+
+const navigateToContact = async () => {
+  closeMenu()
+  
+  if (navigator.vibrate) {
+    navigator.vibrate(30)
+  }
+  
+  try {
+    await router.push('/kontakt')
+  } catch (error) {
+    window.location.href = '/kontakt'
+  }
+}
+
+// Menu controls
 const toggleMenu = () => {
   menuOpen.value = !menuOpen.value
-  document.body.style.overflow = menuOpen.value ? 'hidden' : 'auto'
+  
+  // Prevent body scroll when menu is open
+  if (process.client) {
+    document.body.style.overflow = menuOpen.value ? 'hidden' : 'auto'
+  }
   
   // Haptic feedback for mobile
   if (navigator.vibrate) {
-    navigator.vibrate(10)
+    navigator.vibrate(menuOpen.value ? 30 : 10)
   }
 }
 
 const closeMenu = () => {
   menuOpen.value = false
-  document.body.style.overflow = 'auto'
+  
+  if (process.client) {
+    document.body.style.overflow = 'auto'
+  }
 }
 
-const navigateTo = (route) => {
-  closeMenu()
-  // Router navigation
-  console.log('Navigate to:', route)
-}
-
+// Quick actions
 const callUs = () => {
+  closeMenu()
+  
+  if (navigator.vibrate) {
+    navigator.vibrate(50)
+  }
+  
   window.location.href = 'tel:+4981713868770'
 }
 
-const openChat = () => {
-  console.log('Open chat widget')
+const openWhatsApp = () => {
+  closeMenu()
+  
+  if (navigator.vibrate) {
+    navigator.vibrate(30)
+  }
+  
+  window.open('https://wa.me/4981713868770', '_blank')
 }
 
-const shareApp = () => {
+const shareApp = async () => {
+  closeMenu()
+  
+  if (navigator.vibrate) {
+    navigator.vibrate(20)
+  }
+  
   if (navigator.share) {
-    navigator.share({
-      title: 'Architektur Group',
-      text: 'Exklusive Naturstein & Design',
-      url: window.location.href
-    })
+    try {
+      await navigator.share({
+        title: 'Architektur Group',
+        text: 'Exklusive Naturstein & Design Solutions',
+        url: window.location.href
+      })
+    } catch (error) {
+      console.log('Share cancelled or failed:', error)
+    }
+  } else {
+    // Fallback: Copy URL to clipboard
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      alert('Link wurde in die Zwischenablage kopiert!')
+    } catch (error) {
+      console.error('Could not copy text:', error)
+    }
   }
 }
 
 const switchLanguage = (lang) => {
   currentLang.value = lang
+  
+  if (navigator.vibrate) {
+    navigator.vibrate(10)
+  }
+  
+  // Here you would implement actual language switching logic
+  console.log('Switch language to:', lang)
+  
+  // Example: emit event or use i18n
+  // emit('language-changed', lang)
+  
+  closeMenu()
 }
+
+// Update page title based on current route
+const updatePageTitle = () => {
+  const currentPath = route.path
+  currentPageTitle.value = pageTitles[currentPath] || 'Architektur Group'
+}
+
+// Watchers and lifecycle
+watch(() => route.path, () => {
+  updatePageTitle()
+  closeMenu() // Close menu when route changes
+})
 
 onMounted(() => {
   let lastScroll = 0
+  
+  // Update page title on mount
+  updatePageTitle()
   
   // Scroll detection
   const handleScroll = () => {
     const currentScroll = window.scrollY
     isScrolled.value = currentScroll > 20
-    
-    // Hide bottom nav on scroll down, show on scroll up
-    showBottomNav.value = currentScroll < lastScroll || currentScroll < 100
     lastScroll = currentScroll
   }
   
-  window.addEventListener('scroll', handleScroll)
+  // Keyboard event listener for ESC key
+  const handleKeydown = (event) => {
+    if (event.key === 'Escape' && menuOpen.value) {
+      closeMenu()
+    }
+  }
   
-  // Detect current route
-  currentRoute.value = window.location.pathname
+  // Add event listeners
+  window.addEventListener('scroll', handleScroll)
+  document.addEventListener('keydown', handleKeydown)
+  
+  // Cleanup function will be handled by onUnmounted
+  return () => {
+    window.removeEventListener('scroll', handleScroll)
+    document.removeEventListener('keydown', handleKeydown)
+  }
 })
 
 onUnmounted(() => {
-  document.body.style.overflow = 'auto'
+  // Ensure body scroll is restored
+  if (process.client) {
+    document.body.style.overflow = 'auto'
+  }
 })
+
+// Handle browser back button when menu is open
+if (process.client) {
+  window.addEventListener('popstate', () => {
+    if (menuOpen.value) {
+      closeMenu()
+    }
+  })
+}
 </script>
 
 <style scoped>
 .mobile-header {
   --header-height: 60px;
-  --bottom-nav-height: 65px;
 }
 
 /* Top Bar */
@@ -470,48 +578,6 @@ onUnmounted(() => {
   min-height: 100vh;
 }
 
-/* User Section */
-.user-section {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  margin-bottom: 2rem;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.user-avatar {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 32px rgba(164, 113, 72, 0.3);
-}
-
-.user-avatar .material-icons {
-  font-size: 32px;
-  color: #000;
-}
-
-.greeting-text {
-  font-size: 0.875rem;
-  color: #999;
-  margin-bottom: 0.25rem;
-}
-
-.user-name {
-  font-size: 1.125rem;
-  color: #FAFAF8;
-  font-weight: 500;
-}
-
 /* Menu Navigation */
 .menu-nav {
   margin-bottom: 2rem;
@@ -616,13 +682,13 @@ onUnmounted(() => {
 
 /* Quick Actions */
 .quick-actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
 }
 
 .action-btn {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -668,6 +734,7 @@ onUnmounted(() => {
   justify-content: center;
   color: #FAFAF8;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .social-link:active {
@@ -743,72 +810,6 @@ onUnmounted(() => {
   }
 }
 
-/* Bottom Navigation */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: var(--bottom-nav-height);
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  z-index: 998;
-  padding-bottom: env(safe-area-inset-bottom);
-  transition: transform 0.3s ease;
-}
-
-.nav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  background: transparent;
-  border: none;
-  color: #666;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
-  padding: 0.5rem;
-}
-
-.nav-item.active {
-  color: #a47148;
-}
-
-.nav-item .material-icons {
-  font-size: 24px;
-  transition: transform 0.3s ease;
-}
-
-.nav-item:active .material-icons {
-  transform: scale(0.9);
-}
-
-.nav-label {
-  font-size: 0.625rem;
-  font-weight: 500;
-}
-
-.nav-indicator {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #a47148, transparent);
-  transition: width 0.3s ease;
-}
-
-.nav-item.active .nav-indicator {
-  width: 60%;
-}
-
 /* Responsive adjustments */
 @media (max-width: 360px) {
   .page-title {
@@ -819,16 +820,21 @@ onUnmounted(() => {
     font-size: 1rem;
   }
   
-  .nav-label {
-    font-size: 0.5625rem;
+  .quick-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .action-btn {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.7rem;
   }
 }
 
 /* iOS specific fixes */
 @supports (-webkit-touch-callout: none) {
   .top-bar,
-  .luxury-menu,
-  .bottom-nav {
+  .luxury-menu {
     -webkit-transform: translateZ(0);
   }
 }

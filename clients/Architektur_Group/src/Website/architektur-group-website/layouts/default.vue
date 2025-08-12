@@ -11,8 +11,8 @@
     
     <!-- Desktop Footer -->
     <AppFooter v-if="!isMobile" />
-    <!-- Mobile Bottom Sheet für Navigation -->
-    <MobileBottomSheet v-else />
+    <!-- Mobile Footer -->
+    <MobileFooter v-else />
   </div>
 </template>
 
@@ -23,7 +23,7 @@ import AppFooter from '~/components/website/appFooter.vue'
 
 // Mobile Components
 import MobileHeader from '~/components/mobile/mobileHeader.vue'
-import MobileBottomSheet from '~/components/mobile/mobileBottomSheet.vue'
+import MobileFooter from '~/components/mobile/mobileFooter.vue'
 
 // Device Detection
 import { useDevice } from '~/composables/useDevice'
@@ -39,5 +39,12 @@ const { isMobile } = useDevice()
 
 main {
   flex: 1;
+}
+
+/* Ensure proper spacing for mobile footer */
+@media (max-width: 768px) {
+  main {
+    padding-bottom: 0; /* Remove any bottom padding since we now have a footer */
+  }
 }
 </style>

@@ -20,12 +20,6 @@
         
         <!-- Mobile Contact Premium Component -->
         <MobileContactPremium />
-        
-        <!-- Optional: Mobile AR View für Showroom -->
-        <div class="mt-8">
-          <h2 class="text-xl font-light text-center mb-4">Virtueller Showroom</h2>
-          <MobileARView />
-        </div>
       </div>
     </template>
   </div>
@@ -37,7 +31,6 @@ import ContactForm from '~/components/website/contactForm.vue'
 
 // Mobile Components
 import MobileContactPremium from '~/components/mobile/mobileContactPremium.vue'
-import MobileARView from '~/components/mobile/mobileARView.vue'
 
 // Device Detection
 import { useDevice } from '~/composables/useDevice'
