@@ -75,7 +75,7 @@
     <section class="units-section">
       <div class="container">
         <div class="section-header">
-          <span class="hero-badge animate-fade-in">Unternehmensgruppe</span>
+          <span class="hero-badge animate-fade-in">UNTERNEHMENSGRUPPE</span>
           <h2 class="section-title" data-text="ALLES AUS EINER HAND">ALLES AUS EINER HAND</h2>
           <p class="section-subtitle">
             Unser Leistungsangebot für Neubauten und Generalsanierungen
@@ -1109,41 +1109,9 @@ function requestTick() {
 /* All Section Headers - CYBER ENHANCEMENT */
 .section-header {
   text-align: left;
-  margin-bottom: 4rem;
+  margin-bottom: 8rem;
   position: relative;
   z-index: 1;
-}
-
-.section-header::before,
-.section-header::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  width: 100px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--primary-gold));
-  animation: lineSlide 3s ease-in-out infinite;
-}
-
-.section-header::before {
-  left: -120px;
-  background: linear-gradient(90deg, transparent, var(--primary-gold));
-}
-
-.section-header::after {
-  right: -120px;
-  background: linear-gradient(270deg, transparent, var(--primary-gold));
-}
-
-@keyframes lineSlide {
-  0%, 100% {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-  50% {
-    opacity: 1;
-    transform: scaleX(1);
-  }
 }
 
 /* Additional hover effects for interactive sections */
@@ -1228,75 +1196,22 @@ function requestTick() {
 
 .section-title {
   font-size: clamp(3rem, 7vw, 6rem);
-  font-weight: 200;
+  font-weight: 300;
   margin-bottom: 1.5rem;
   line-height: 1;
   position: left;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--primary-light);
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   transition: transform 0.3s ease;
 }
 
-
-.section-title::before {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-gold) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.section-title:hover::before {
-  opacity: 1;
-}
-
+/* Removed the ::before and ::after pseudo-elements since they're no longer needed */
+.section-title::before,
 .section-title::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  animation: glitchBottom 0.3s ease-in-out infinite;
-  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-  background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-
-.gradient-text {
-  background: linear-gradient(
-    270deg,
-    var(--primary-light),
-    var(--primary-gold),
-    var(--primary-light),
-    var(--primary-gold)
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  background-size: 400% 400%;
-  animation: gradientFlow 8s ease infinite;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  text-align: center;
-}
-
-@keyframes gradientFlow {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  content: none;
 }
 
 .section-subtitle {
@@ -1317,7 +1232,7 @@ function requestTick() {
 .team-showcase,
 .articles-grid,
 .luxury-slider {
-  margin-top: 6rem; /* Increased top margin for content following subtitles */
+  margin-top: 0rem; /* Increased top margin for content following subtitles */
 }
 
 /* Story Section Title - ULTRA PREMIUM STYLING */
@@ -1374,14 +1289,14 @@ function requestTick() {
   display: block;
   font-size: clamp(3rem, 6vw, 5rem);
   font-weight: 300;
-  color: var(--primary-light);
   position: relative;
   animation: slideInRight 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s backwards;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  text-shadow: 
-    0 0 30px rgba(250, 250, 248, 0.3),
-    0 0 60px rgba(164, 113, 72, 0.2);
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
 }
 
 .story-title .title-line-2::after {
@@ -1454,24 +1369,20 @@ function requestTick() {
 .cta-title {
   font-size: clamp(3.5rem, 8vw, 7rem) !important;
   font-weight: 900;
-  line-height: 0.9;
+  line-height: 1.1; /* Adjusted from 0.9 */
   margin-bottom: 1.5rem;
   text-transform: uppercase;
   letter-spacing: -0.03em;
   position: relative;
-  color: var(--primary-light); /* Added this line to ensure both lines have same color */
+  color: var(--primary-light);
   text-align: center;
+  width: 100%;
+  display: inline-block; /* Changed from block to inline-block */
+  white-space: nowrap; /* Added to prevent unwanted line breaks */
 }
 
-.cta-title .gradient-text {
-  display: block;
-  font-size: clamp(4rem, 9vw, 8rem);
-  margin-top: -0.2rem;
-  color: var(--primary-light); /* Remove gradient for consistent color */
-  background: none;
-  -webkit-background-clip: initial;
-  -webkit-text-fill-color: initial;
-  animation: none;
+.cta-title br {
+  display: block; /* Added to ensure line break works */
 }
 
 /* Mobile Responsive */
@@ -2361,7 +2272,7 @@ function requestTick() {
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
+    0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
@@ -2370,15 +2281,27 @@ function requestTick() {
   position: relative;
   z-index: 1;
   text-align: center;
-  max-width: 800px;
+  max-width: 1200px; /* Increased from 800px */
   margin: 0 auto;
 }
 
 .cta-title {
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 300;
-  line-height: 1.1;
+  font-size: clamp(3.5rem, 8vw, 7rem) !important;
+  font-weight: 900;
+  line-height: 1.1; /* Adjusted from 0.9 */
   margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  position: relative;
+  color: var(--primary-light);
+  text-align: center;
+  width: 100%;
+  display: inline-block; /* Changed from block to inline-block */
+  white-space: nowrap; /* Added to prevent unwanted line breaks */
+}
+
+.cta-title br {
+  display: block; /* Added to ensure line break works */
 }
 
 .cta-subtitle {
@@ -2620,7 +2543,6 @@ function requestTick() {
 .modal-btn.primary {
   background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
   color: var(--bg-dark);
-  border: none;
 }
 
 .modal-btn.secondary {
