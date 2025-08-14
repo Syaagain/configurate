@@ -1,45 +1,22 @@
 <template>
   <div class="sortiment-page">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-background">
+    <!-- Hero Section - Nachgebaut im Über uns Style -->
+    <section class="hero" id="hero">
+      <div class="hero-bg" ref="heroBg">
+        <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png" alt="Hero Background">
         <div class="hero-overlay"></div>
-        <img 
-          src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png" 
-          alt="Sortiment"
-          class="hero-image"
-        >
-        <div class="hero-particles">
-          <div v-for="n in 12" :key="n" class="floating-particle" :style="{ 
-            left: Math.random() * 100 + '%',
-            animationDelay: Math.random() * 4 + 's',
-            animationDuration: (3 + Math.random() * 2) + 's'
-          }"></div>
-        </div>
       </div>
-      <div class="hero-content">
-        <div class="hero-text">
-          <h1 class="hero-title">
-            <span v-for="(word, index) in heroWords" 
-                  :key="index" 
-                  class="title-word" 
-                  :style="{ animationDelay: index * 0.3 + 's' }">
-              {{ word }}
-            </span>
-          </h1>
-          <p class="hero-subtitle">Über 200 verschiedene Naturstein- und Keramik-Oberflächen</p>
-          <div class="hero-stats">
-            <div class="stat-item">
-              <span class="stat-number">650+</span>
-              <span class="stat-label">Natursteinsorten</span>
-            </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-              <span class="stat-number">2500m²</span>
-              <span class="stat-label">Showroom-Fläche</span>
-            </div>
-          </div>
+      <div class="hero-content" ref="heroContent">
+        <div class="title-container">
+          <h1 class="hero-title">SORTIMENT</h1>
         </div>
+        <div class="hero-badge animate-fade-in">PREMIUM AUSWAHL</div>
+      </div>
+      <div class="hero-subheading" ref="heroSubheading">
+        <p>Über 650 verschiedene Naturstein- und Keramik-Oberflächen auf 2500m² Showroom-Fläche</p>
+      </div>
+      <div class="scroll-indicator" @click="scrollToContent">
+        <span class="material-icons">expand_more</span>
       </div>
     </section>
 
@@ -94,9 +71,8 @@
       <div class="container">
         <div class="products-header">
           <h3 class="products-title">
-            {{ activeCategory === 'alle' ? 'Gesamte Kollektion' : categories.find(c => c.id === activeCategory)?.name }}
+            {{ activeCategory === 'alle' ? 'Kollektion' : categories.find(c => c.id === activeCategory)?.name }}
           </h3>
-          <div class="products-count">{{ filteredProducts.length }} Produkte</div>
         </div>
         <div class="products-grid">
           <div 
@@ -121,12 +97,6 @@
                 <div class="product-actions">
                   <button class="action-btn view">
                     <span class="material-icons">visibility</span>
-                  </button>
-                  <button class="action-btn favorite">
-                    <span class="material-icons">favorite_border</span>
-                  </button>
-                  <button class="action-btn share">
-                    <span class="material-icons">share</span>
                   </button>
                 </div>
               </div>
@@ -187,33 +157,13 @@
           <div class="modal-body">
             <div class="modal-image">
               <img :src="selectedProduct.image" :alt="selectedProduct.name">
-              <div class="image-overlay-effects">
-                <div class="shimmer-effect"></div>
-              </div>
             </div>
             <div class="modal-info">
               <div class="modal-header">
-                <span class="modal-badge">{{ selectedProduct.category }}</span>
                 <h2 class="modal-title">{{ selectedProduct.name }}</h2>
-                <div class="modal-rating">
-                  <div class="stars">
-                    <span v-for="n in 5" :key="n" class="material-icons star">star</span>
-                  </div>
-                  <span class="rating-text">Premium Qualität</span>
-                </div>
               </div>
               
               <p class="modal-description">{{ selectedProduct.description }}</p>
-              
-              <div class="modal-features">
-                <h4>Eigenschaften:</h4>
-                <div class="features-grid">
-                  <div v-for="feature in selectedProduct.features" :key="feature" class="feature-item">
-                    <span class="material-icons">check_circle</span>
-                    <span>{{ feature }}</span>
-                  </div>
-                </div>
-              </div>
               
               <div class="modal-specs">
                 <h4>Technische Daten:</h4>
@@ -238,10 +188,6 @@
                   <span class="material-icons">contact_mail</span>
                   ANFRAGE STELLEN
                 </NuxtLink>
-                <button class="secondary-button">
-                  <span class="material-icons">info</span>
-                  MEHR INFORMATIONEN
-                </button>
               </div>
             </div>
           </div>
@@ -249,63 +195,70 @@
       </div>
     </transition>
 
-    <!-- Showroom CTA -->
-    <section class="showroom-cta">
+    <!-- Interactive Locations Map -->
+    <section class="locations-section">
       <div class="container">
-        <div class="section-header center">
+        <div class="section-header">
           <div class="header-decoration">
             <div class="decoration-line left"></div>
             <div class="section-badge premium">
               <span class="material-icons">location_on</span>
-              SHOWROOMS
+              INTERNATIONAL
             </div>
             <div class="decoration-line right"></div>
           </div>
           <h2 class="section-title">
-            <span class="title-gradient">BESUCHEN SIE UNS</span>
+            <span class="title-gradient">UNSERE STANDORTE</span>
           </h2>
+          <p class="section-subtitle">Präsenz in ganz Europa für beste Erreichbarkeit</p>
         </div>
         
-        <div class="cta-grid">
-          <div class="cta-card munich">
-            <div class="card-background">
-              <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686576cf622e38e88f0236c5.png" alt="München">
-              <div class="card-overlay"></div>
-            </div>
-            <div class="card-content">
-              <span class="location-badge">SHOWROOM</span>
-              <h3>MÜNCHEN / STARNBERG</h3>
-              <p>Lassen Sie sich in unserem Showroom im Großraum München inspirieren!</p>
-              <div class="card-features">
-                <span><span class="material-icons">square_foot</span> 2.500 m² Showroom</span>
-                <span><span class="material-icons">inventory</span> 650+ Natursteinsorten</span>
+        <div class="map-container">
+          <!-- Google Maps Embed -->
+          <div class="google-map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5570665.339444434!2d5.866341973291837!3d50.503887287677804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75f9a38c5fd9%3A0x10cb84a7db1987d!2sMunich%2C%20Germany!5e0!3m2!1sen!2sus!4v1706285439215!5m2!1sen!2sus"
+              width="100%"
+              height="500"
+              style="border:0; border-radius: 20px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            
+            <!-- Custom Location Markers Overlay -->
+            <div class="location-markers-overlay">
+              <div 
+                v-for="location in locations" 
+                :key="location.id"
+                class="custom-marker"
+                :style="{ left: location.mapX + '%', top: location.mapY + '%' }"
+                @click="selectLocation(location)"
+                :class="{ active: selectedLocation?.id === location.id }"
+              >
+                <div class="marker-pulse"></div>
+                <div class="marker-dot"></div>
+                <div class="marker-label">{{ location.city }}</div>
               </div>
-              <a href="/kontakt" class="card-btn">
-                TERMIN VEREINBAREN
-                <span class="material-icons">calendar_today</span>
-              </a>
             </div>
           </div>
           
-          <div class="cta-card dusseldorf">
-            <div class="card-background">
-              <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b1ceb7b78f5ed302d.png" alt="Düsseldorf">
-              <div class="card-overlay"></div>
-            </div>
-            <div class="card-content">
-              <span class="location-badge">SHOWROOM</span>
-              <h3>DÜSSELDORF / NEUSS</h3>
-              <p>Besuchen Sie Europas größte Auswahl an Premium Natursteinen!</p>
-              <div class="card-features">
-                <span><span class="material-icons">visibility</span> 1.500 m² Showroom</span>
-                <span><span class="material-icons">local_shipping</span> Europaweite Lieferung</span>
+          <!-- Location Details -->
+          <transition name="slide-fade">
+            <div v-if="selectedLocation" class="location-details">
+              <h3>{{ selectedLocation.city }}</h3>
+              <p>{{ selectedLocation.country }}</p>
+              <div class="detail-info">
+                <span class="material-icons">{{ selectedLocation.icon }}</span>
+                <span>{{ selectedLocation.type }}</span>
               </div>
-              <a href="/kontakt" class="card-btn">
-                TERMIN VEREINBAREN
-                <span class="material-icons">calendar_today</span>
-              </a>
+              <p class="detail-description">{{ selectedLocation.description }}</p>
+              <button @click="openGoogleMaps(selectedLocation)" class="location-btn">
+                <span class="material-icons">directions</span>
+                ROUTE PLANEN
+              </button>
             </div>
-          </div>
+          </transition>
         </div>
       </div>
     </section>
@@ -313,10 +266,19 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+
+// State refs
 const activeCategory = ref('alle')
 const selectedProduct = ref(null)
+const selectedLocation = ref(null)
+const scrollY = ref(0)
+const ticking = ref(false)
 
-const heroWords = ['EXKLUSIVES', 'SORTIMENT']
+// Refs for parallax
+const heroBg = ref(null)
+const heroContent = ref(null)
+const heroSubheading = ref(null)
 
 const categories = [
   { id: 'alle', name: 'Alle Produkte', icon: 'apps' },
@@ -406,31 +368,74 @@ const products = [
     surface: 'Hochglanz poliert',
     thickness: '30mm'
   },
+]
+
+// Locations with Google Maps positions
+const locations = [
   {
-    id: 7,
-    name: 'Jura Gelb',
-    category: 'Kalkstein',
-    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b70b0803723582ed6.png',
-    features: ['Regional', 'Nachhaltig', 'Klassisch'],
-    description: 'Regionaler Jura Kalkstein in warmer gelber Färbung.',
-    categoryId: 'travertin',
-    price: 38,
-    origin: 'Deutschland',
-    surface: 'Gesägt',
-    thickness: '40mm'
+    id: 1,
+    city: 'München',
+    country: 'Deutschland',
+    x: 52,
+    y: 48,
+    mapX: 60,
+    mapY: 55,
+    type: 'Showroom & Hauptsitz',
+    icon: 'business',
+    description: '2500m² Showroom mit Europas größter Natursteinauswahl',
+    address: 'Am Hohenrand 9, 82335 Berg'
   },
   {
-    id: 8,
-    name: 'Basalt Anthrazit',
-    category: 'Basalt',
-    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b097a8069ca3ac95a.png',
-    features: ['Vulkanisch', 'Extrem Hart', 'Zeitlos'],
-    description: 'Vulkanischer Basalt in elegantem Anthrazit.',
-    categoryId: 'schiefer',
-    price: 68,
-    origin: 'Deutschland',
-    surface: 'Geflammt',
-    thickness: '30mm'
+    id: 2,
+    city: 'Düsseldorf',
+    country: 'Deutschland',
+    x: 48,
+    y: 42,
+    mapX: 40,
+    mapY: 40,
+    type: 'Showroom & Lager',
+    icon: 'warehouse',
+    description: '80.000m² Lagerfläche für sofortige Verfügbarkeit',
+    address: 'Düsseldorf, Deutschland'
+  },
+  {
+    id: 3,
+    city: 'Zürich',
+    country: 'Schweiz',
+    x: 50,
+    y: 55,
+    mapX: 55,
+    mapY: 65,
+    type: 'Vertriebsbüro',
+    icon: 'store',
+    description: 'Beratung und Vertrieb für die Schweiz',
+    address: 'Zürich, Schweiz'
+  },
+  {
+    id: 4,
+    city: 'Côte d\'Azur',
+    country: 'Frankreich',
+    x: 45,
+    y: 65,
+    mapX: 45,
+    mapY: 75,
+    type: 'Partner Showroom',
+    icon: 'handshake',
+    description: 'Exklusive Präsenz an der französischen Riviera',
+    address: 'Nice, Frankreich'
+  },
+  {
+    id: 5,
+    city: 'Bergamo',
+    country: 'Italien',
+    x: 55,
+    y: 60,
+    mapX: 58,
+    mapY: 70,
+    type: 'Produktionspartner',
+    icon: 'factory',
+    description: 'Direkte Zusammenarbeit mit italienischen Steinbrüchen',
+    address: 'Bergamo, Italien'
   }
 ]
 
@@ -456,6 +461,15 @@ const closeModal = () => {
   document.body.style.overflow = 'auto'
 }
 
+const selectLocation = (location) => {
+  selectedLocation.value = location
+}
+
+const openGoogleMaps = (location) => {
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`
+  window.open(url, '_blank')
+}
+
 const createRipple = (event) => {
   const card = event.currentTarget
   const rippleContainer = card.querySelector('.interaction-ripples')
@@ -476,13 +490,80 @@ const createRipple = (event) => {
   }, 1000)
 }
 
+const scrollToContent = () => {
+  const filterSection = document.querySelector('.filter-section')
+  if (filterSection) {
+    filterSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+// Parallax functions
+const handleScroll = () => {
+  scrollY.value = window.scrollY
+}
+
+function updateParallax() {
+  if (!heroBg.value || !heroContent.value || !heroSubheading.value) return
+
+  const scrollY = window.scrollY
+  const viewportHeight = window.innerHeight
+  
+  const heroScrollProgress = Math.min(scrollY / (viewportHeight * 0.8), 1)
+  const bgScale = 1.05 + (heroScrollProgress * 0.1)
+  const bgBrightness = Math.max(0.1, 1 - (heroScrollProgress * 1.5))
+  const bgOpacity = Math.max(0, 1 - (heroScrollProgress * 1.2))
+  
+  heroBg.value.style.filter = `brightness(${bgBrightness})`
+  heroBg.value.style.opacity = bgOpacity
+  
+  const textTranslateY = -scrollY * 0.6
+  
+  heroContent.value.style.transform = `translateY(${textTranslateY}px)`
+  heroSubheading.value.style.transform = `translateY(${textTranslateY}px)`
+  
+  const textFadeStart = 0.7
+  const textOpacity = heroScrollProgress < textFadeStart ? 1 : 
+    Math.max(0, 1 - ((heroScrollProgress - textFadeStart) / (1 - textFadeStart)) * 2)
+  
+  heroContent.value.style.opacity = textOpacity
+  heroSubheading.value.style.opacity = textOpacity
+  
+  ticking.value = false
+}
+
+function requestTick() {
+  if (!ticking.value) {
+    requestAnimationFrame(updateParallax)
+    ticking.value = true
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  window.addEventListener('scroll', requestTick, { passive: true })
+  updateParallax()
+})
+
 onUnmounted(() => {
   document.body.style.overflow = 'auto'
+  window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', requestTick)
 })
 </script>
 
 <style scoped>
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+/* CSS Variables */
+:root {
+  --header-height: 80px;
+  --primary-gold: #a47148;
+  --primary-light: #FAFAF8;
+  --bg-dark: #000;
+  --bg-dark-alt: #0a0a0a;
+  --text-gray: #999;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
 
 .sortiment-page {
   min-height: 100vh;
@@ -493,184 +574,190 @@ onUnmounted(() => {
   overflow-x: hidden;
 }
 
-/* Hero Section */
-.hero-section {
+/* Hero Section - Optimiert für Scroll-Indikator */
+.hero {
   position: relative;
-  height: 80vh;
+  height: 100vh;
   overflow: hidden;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.hero-background {
-  position: absolute;
-  inset: 0;
-}
-
-.hero-image {
+.hero-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 100vh;
+  z-index: 0;
+  will-change: transform, filter;
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: 
-    radial-gradient(circle at 30% 30%, rgba(164, 113, 72, 0.3) 0%, transparent 60%),
-    linear-gradient(45deg, rgba(0,0,0,0.8), rgba(164, 113, 72, 0.2));
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.5) 50%,
+    rgba(0,0,0,0.9) 100%
+  );
   z-index: 1;
 }
 
-.hero-particles {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.floating-particle {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  background: radial-gradient(circle, #a47148, transparent);
-  border-radius: 50%;
-  animation: floatParticle 4s ease-in-out infinite;
-}
-
-@keyframes floatParticle {
-  0%, 100% {
-    transform: translateY(100px) translateX(0) scale(0);
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-    transform: translateY(80px) translateX(10px) scale(1);
-  }
-  90% {
-    opacity: 1;
-    transform: translateY(-50px) translateX(-10px) scale(0.5);
-  }
-  100% {
-    opacity: 0;
-  }
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.2);
+  animation: zoomOut 3s ease-out forwards;
+  transition: transform 0.3s ease;
 }
 
 .hero-content {
-  position: relative;
+  position: absolute;
+  top: 15%; /* Reduziert von 20% */
+  left: 10%;
   z-index: 2;
-  text-align: center;
-  max-width: 1000px;
-  padding: 0 2rem;
+  color: white;
+  text-align: left;
+  max-width: 1200px;
+  will-change: transform;
 }
 
 .hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, rgba(164, 113, 72, 0.3), rgba(255, 255, 255, 0.1));
-  border: 1px solid rgba(164, 113, 72, 0.5);
-  border-radius: 50px;
-  backdrop-filter: blur(20px);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: #a47148;
-  margin-bottom: 2rem;
-  animation: badgeGlow 3s ease-in-out infinite;
-}
-
-@keyframes badgeGlow {
-  0%, 100% { box-shadow: 0 0 0 rgba(164, 113, 72, 0.5); }
-  50% { box-shadow: 0 0 30px rgba(164, 113, 72, 0.4); }
+  display: inline-block;
+  padding: 0.8rem 2.5rem; /* Reduziert von 1rem 3rem */
+  background: rgba(0, 0, 0, 0.3);
+  border: 3px solid var(--primary-gold);
+  color: var(--primary-gold);
+  font-size: 0.9rem; /* Reduziert von 1rem */
+  font-weight: 900;
+  letter-spacing: 0.4em;
+  margin-top: 1.5rem; /* Reduziert von 2rem */
+  clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
+  backdrop-filter: blur(10px);
 }
 
 .hero-title {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  margin-bottom: 2rem;
-  line-height: 1.1;
+  font-size: clamp(1.8rem, 5.5vw, 4.5rem); /* Reduziert von clamp(2rem, 6vw, 5rem) */
+  font-weight: 900;
+  line-height: 1;
+  opacity: 1;
+  transform: translateY(0);
+  color: var(--primary-light);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: slideUpWord 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+  text-align: left;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0;
 }
 
-.title-word {
-  display: inline-block;
-  margin-right: 2rem;
+.hero-subheading {
+  position: absolute;
+  bottom: 25%; /* Erhöht von 20% um mehr Platz für Scroll-Indikator */
+  left: 10%;
+  transform: translateX(0);
+  z-index: 2;
+  text-align: left;
+  width: 90%;
+  max-width: 800px;
+  will-change: transform;
+}
+
+.hero-subheading p {
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem); /* Reduziert von clamp(1.2rem, 2vw, 1.8rem) */
+  color: #e6e0d5;
+  margin: 0;
+  line-height: 1.3;
+  font-weight: 300;
   opacity: 0;
-  transform: translateY(50px) rotateX(-90deg);
-  animation: titleWordReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 50%, #FAFAF8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 100%;
-  animation: titleWordReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
-             shimmerEffect 3s ease-in-out infinite 1.5s;
+  transform: translateY(30px);
+  animation: slideUpFromBottom 1.8s ease-out 1.2s forwards;
+  padding: 0.8rem 1.5rem; /* Reduziert von 1rem 2rem */
+  border-radius: 8px;
 }
 
-@keyframes titleWordReveal {
-  to {
-    opacity: 1;
-    transform: translateY(0) rotateX(0);
-  }
-}
-
-@keyframes shimmerEffect {
-  0%, 100% { background-position: 200% 0; }
-  50% { background-position: -200% 0; }
-}
-
-.hero-subtitle {
-  font-size: 1.5rem;
-  font-weight: 300;
-  opacity: 0.9;
-  margin-bottom: 3rem;
-  animation: fadeInUp 1s ease-out 1s backwards;
-}
-
-.hero-stats {
+.scroll-indicator {
+  position: absolute;
+  bottom: 4rem; /* Erhöht von 2rem */
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  animation: bounce 2s infinite;
+  z-index: 10; /* Erhöht von 2 */
+  color: var(--primary-gold);
+  background: rgba(0, 0, 0, 0.3); /* Hinzugefügt für bessere Sichtbarkeit */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
-  animation: fadeInUp 1s ease-out 1.2s backwards;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(164, 113, 72, 0.3);
+  transition: all 0.3s ease;
 }
 
-.stat-item {
-  text-align: center;
+.scroll-indicator:hover {
+  background: rgba(164, 113, 72, 0.2);
+  border-color: var(--primary-gold);
+  transform: translateX(-50%) scale(1.1);
 }
 
-.stat-number {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: #a47148;
-  line-height: 1;
+.scroll-indicator .material-icons {
+  font-size: 2.5rem; /* Reduziert von 3rem */
+  color: var(--primary-gold);
+  text-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
 }
 
-.stat-label {
-  font-size: 0.875rem;
-  color: #ccc;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+@keyframes zoomOut {
+  0% {
+    transform: scale(1.2);
+    filter: blur(2px);
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
 }
 
-.stat-divider {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, transparent, #a47148, transparent);
-}
-
-@keyframes fadeInUp {
-  from {
+@keyframes slideUpFromBottom {
+  0% {
     opacity: 0;
     transform: translateY(30px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes slideUpWord {
+  0% {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Filter Section */
@@ -763,6 +850,11 @@ onUnmounted(() => {
   color: #a47148;
 }
 
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(164, 113, 72, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(164, 113, 72, 0.4); }
+}
+
 .section-title {
   font-size: 2.5rem;
   font-weight: 300;
@@ -780,6 +872,16 @@ onUnmounted(() => {
 @keyframes titleShimmer {
   0%, 100% { background-position: 200% 0; }
   50% { background-position: -200% 0; }
+}
+
+.section-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-gray);
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.8;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .filter-buttons {
@@ -1630,202 +1732,170 @@ onUnmounted(() => {
   color: #000;
 }
 
-/* Showroom CTA */
-.showroom-cta {
-  padding: 8rem 0;
-  background: 
-    radial-gradient(circle at 30% 20%, rgba(164, 113, 72, 0.08) 0%, transparent 60%),
-    radial-gradient(circle at 70% 80%, rgba(164, 113, 72, 0.05) 0%, transparent 50%),
-    linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
-  position: relative;
+/* Locations Section - Updated */
+.locations-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
 }
 
-.cta-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-  gap: 3rem;
+.map-container {
   margin-top: 4rem;
-}
-
-.cta-card {
   position: relative;
-  height: 500px;
-  border-radius: 24px;
-  overflow: hidden;
-  transition: all 0.6s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.cta-card:hover {
-  transform: translateY(-10px) scale(1.02);
-  box-shadow: 0 30px 60px rgba(164, 113, 72, 0.3);
-}
-
-.card-background {
-  position: absolute;
-  inset: 0;
-}
-
-.card-background img {
+.google-map {
+  position: relative;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
+  max-width: 1200px;
+  margin: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid var(--border-color);
 }
 
-.cta-card:hover .card-background img {
-  transform: scale(1.1);
+.google-map iframe {
+  width: 100%;
+  height: 500px;
+  filter: grayscale(50%) contrast(1.1);
+  transition: filter 0.3s ease;
 }
 
-.card-overlay {
+.google-map:hover iframe {
+  filter: grayscale(0%) contrast(1);
+}
+
+.location-markers-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, rgba(0,0,0,0.8), rgba(164, 113, 72, 0.3));
+  pointer-events: none;
 }
 
-.card-content {
+.custom-marker {
+  position: absolute;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+.custom-marker .marker-dot {
+  width: 20px;
+  height: 20px;
+  background: var(--primary-gold);
+  border-radius: 50%;
+  border: 3px solid var(--bg-dark);
   position: relative;
   z-index: 2;
-  height: 100%;
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #FAFAF8;
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
 }
 
-.location-badge {
-  display: inline-block;
+.custom-marker .marker-pulse {
+  position: absolute;
+  inset: -15px;
+  border: 2px solid var(--primary-gold);
+  border-radius: 50%;
+  animation: markerPulse 2s infinite;
+}
+
+@keyframes markerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.custom-marker .marker-label {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-dark);
   padding: 0.5rem 1rem;
-  background: rgba(164, 113, 72, 0.8);
-  color: #FAFAF8;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border: 1px solid var(--primary-gold);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.custom-marker:hover .marker-label,
+.custom-marker.active .marker-label {
+  opacity: 1;
+}
+
+.custom-marker.active .marker-dot {
+  background: var(--primary-light);
+  transform: scale(1.5);
+  box-shadow: 0 0 30px rgba(250, 250, 248, 0.8);
+}
+
+.location-details {
+  margin-top: 3rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
   border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  width: fit-content;
-  margin-bottom: 1rem;
+  border: 1px solid var(--border-color);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.card-content h3 {
+.location-details h3 {
   font-size: 2rem;
-  font-weight: 400;
+  margin-bottom: 0.5rem;
+  color: var(--primary-light);
+}
+
+.location-details p {
+  color: #999;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
-.card-content p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  opacity: 0.9;
-}
-
-.card-features {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.card-features span {
+.detail-info {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.95rem;
-  opacity: 0.8;
+  padding: 1rem;
+  background: rgba(164, 113, 72, 0.1);
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
 }
 
-.card-features .material-icons {
-  color: #a47148;
-  font-size: 1.25rem;
+.detail-info .material-icons {
+  color: var(--primary-gold);
+  font-size: 1.5rem;
 }
 
-.card-btn {
+.detail-description {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.location-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  color: #000;
-  text-decoration: none;
+  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
+  color: var(--bg-dark);
+  border: none;
   border-radius: 50px;
+  font-size: 0.95rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
-  transition: all 0.4s ease;
-  width: fit-content;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.card-btn:hover {
+.location-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.5);
-}
-
-/* Final CTA Section */
-.final-cta-section {
-  padding: 8rem 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-  text-align: center;
-}
-
-.cta-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.cta-icon {
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 2rem;
-  animation: iconFloat 3s ease-in-out infinite;
-}
-
-@keyframes iconFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-.cta-icon .material-icons {
-  font-size: 2.5rem;
-  color: #000;
-}
-
-.final-cta-section .cta-title {
-  font-size: 3rem;
-  font-weight: 300;
-  margin-bottom: 2rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.final-cta-section .cta-text {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  margin-bottom: 3rem;
-  color: #ccc;
-}
-
-.cta-buttons {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.cta-button.secondary {
-  background: transparent;
-  color: #FAFAF8;
-  border: 2px solid #FAFAF8;
+  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
 }
 
 /* Modal Transitions */
@@ -1849,8 +1919,53 @@ onUnmounted(() => {
   transform: scale(0.8) rotateX(-15deg);
 }
 
+/* Slide fade transition for location details */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
+}
+
 /* Responsive */
+@media (max-width: 1200px) {
+  .google-map iframe {
+    height: 400px;
+  }
+}
+
 @media (max-width: 768px) {
+  .hero-title {
+    font-size: clamp(1.5rem, 5vw, 3rem);
+  }
+  
+  .hero-subheading {
+    bottom: 30%;
+  }
+  
+  .hero-subheading p {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    padding: 0.6rem 1rem;
+  }
+  
+  .scroll-indicator {
+    bottom: 6rem;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .scroll-indicator .material-icons {
+    font-size: 2rem;
+  }
+  
   .products-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -1870,35 +1985,18 @@ onUnmounted(() => {
     gap: 1rem;
   }
   
-  .cta-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .hero-title {
-    font-size: 3rem;
-  }
-  
-  .hero-stats {
-    flex-direction: column;
-    gap: 2rem;
-  }
-  
-  .stat-divider {
-    width: 60px;
-    height: 1px;
-    margin: 0 auto;
-  }
-  
   .products-header {
     flex-direction: column;
     gap: 1rem;
     text-align: center;
   }
   
-  .cta-buttons {
-    flex-direction: column;
-    align-items: center;
+  .google-map iframe {
+    height: 350px;
+  }
+  
+  .location-markers-overlay {
+    display: none;
   }
 }
 
@@ -1907,16 +2005,29 @@ onUnmounted(() => {
     padding: 0 1rem;
   }
   
-  .hero-title {
-    font-size: 2.5rem;
+  .hero-content {
+    left: 5%;
+    top: 12%;
+  }
+  
+  .hero-subheading {
+    left: 5%;
+    width: 85%;
+    bottom: 35%;
+  }
+  
+  .hero-badge {
+    padding: 0.6rem 2rem;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+  }
+  
+  .scroll-indicator {
+    bottom: 8rem;
   }
   
   .section-title {
     font-size: 2rem;
-  }
-  
-  .final-cta-section .cta-title {
-    font-size: 2.5rem;
   }
   
   .modal-content {
@@ -1930,6 +2041,10 @@ onUnmounted(() => {
   
   .modal-actions {
     flex-direction: column;
+  }
+  
+  .google-map iframe {
+    height: 300px;
   }
 }
 </style>

@@ -67,7 +67,6 @@
       <div class="container">
         <div class="filter-header">
           <h2 class="filter-title">UNSERE REFERENZEN</h2>
-          <p class="filter-subtitle">{{ filteredProjects.length }} Projekte</p>
         </div>
         
         <div class="filter-controls">
@@ -212,6 +211,74 @@
             <p class="award-year">{{ award.year }}</p>
             <p class="award-description">{{ award.description }}</p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Locations Map -->
+    <section class="locations-section">
+      <div class="container">
+        <div class="section-header">
+          <div class="header-decoration">
+            <div class="decoration-line left"></div>
+            <div class="section-badge premium">
+              <span class="material-icons">location_on</span>
+              INTERNATIONAL
+            </div>
+            <div class="decoration-line right"></div>
+          </div>
+          <h2 class="section-title">
+            <span class="title-gradient">UNSERE STANDORTE</span>
+          </h2>
+          <p class="section-subtitle">Präsenz in ganz Europa für beste Erreichbarkeit</p>
+        </div>
+        
+        <div class="map-container">
+          <!-- Google Maps Embed -->
+          <div class="google-map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5570665.339444434!2d5.866341973291837!3d50.503887287677804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75f9a38c5fd9%3A0x10cb84a7db1987d!2sMunich%2C%20Germany!5e0!3m2!1sen!2sus!4v1706285439215!5m2!1sen!2sus"
+              width="100%"
+              height="500"
+              style="border:0; border-radius: 20px;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            
+            <!-- Custom Location Markers Overlay -->
+            <div class="location-markers-overlay">
+              <div 
+                v-for="location in locations" 
+                :key="location.id"
+                class="custom-marker"
+                :style="{ left: location.mapX + '%', top: location.mapY + '%' }"
+                @click="selectLocation(location)"
+                :class="{ active: selectedLocation?.id === location.id }"
+              >
+                <div class="marker-pulse"></div>
+                <div class="marker-dot"></div>
+                <div class="marker-label">{{ location.city }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Location Details -->
+          <transition name="slide-fade">
+            <div v-if="selectedLocation" class="location-details">
+              <h3>{{ selectedLocation.city }}</h3>
+              <p>{{ selectedLocation.country }}</p>
+              <div class="detail-info">
+                <span class="material-icons">{{ selectedLocation.icon }}</span>
+                <span>{{ selectedLocation.type }}</span>
+              </div>
+              <p class="detail-description">{{ selectedLocation.description }}</p>
+              <button @click="openGoogleMaps(selectedLocation)" class="location-btn">
+                <span class="material-icons">directions</span>
+                ROUTE PLANEN
+              </button>
+            </div>
+          </transition>
         </div>
       </div>
     </section>
@@ -406,28 +473,6 @@
         </div>
       </div>
     </transition>
-
-    <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="cta-background">
-        <!-- Ersetzt Video mit statischem Hintergrundbild -->
-        <div class="cta-bg-image"></div>
-        <div class="cta-overlay"></div>
-      </div>
-      <div class="container">
-        <div class="cta-content">
-          <h2 class="cta-title">STARTEN SIE IHR PROJEKT</h2>
-          <p class="cta-text">
-            Von der ersten Idee bis zur finalen Umsetzung – wir begleiten Sie auf dem Weg zu Ihrem Traumbad
-          </p>
-          <div class="cta-actions">
-            <a href="/kontakt" class="cta-button primary">
-              KOSTENLOSES ERSTGESPRÄCH
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
   </div>
 </template>
 
@@ -438,6 +483,7 @@ const activeFilter = ref('alle')
 const currentSort = ref('newest')
 const sortMenuOpen = ref(false)
 const selectedProject = ref(null)
+const selectedLocation = ref(null)
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
 const sliderPosition = ref(50)
@@ -475,6 +521,75 @@ const showcaseProjects = [
     area: '500 m²',
     duration: '8 Monate',
     year: '2023'
+  }
+]
+
+// Locations with Google Maps positions
+const locations = [
+  {
+    id: 1,
+    city: 'München',
+    country: 'Deutschland',
+    x: 52,
+    y: 48,
+    mapX: 60,
+    mapY: 55,
+    type: 'Showroom & Hauptsitz',
+    icon: 'business',
+    description: '2500m² Showroom mit Europas größter Natursteinauswahl',
+    address: 'Am Hohenrand 9, 82335 Berg'
+  },
+  {
+    id: 2,
+    city: 'Düsseldorf',
+    country: 'Deutschland',
+    x: 48,
+    y: 42,
+    mapX: 40,
+    mapY: 40,
+    type: 'Showroom & Lager',
+    icon: 'warehouse',
+    description: '80.000m² Lagerfläche für sofortige Verfügbarkeit',
+    address: 'Düsseldorf, Deutschland'
+  },
+  {
+    id: 3,
+    city: 'Zürich',
+    country: 'Schweiz',
+    x: 50,
+    y: 55,
+    mapX: 55,
+    mapY: 65,
+    type: 'Vertriebsbüro',
+    icon: 'store',
+    description: 'Beratung und Vertrieb für die Schweiz',
+    address: 'Zürich, Schweiz'
+  },
+  {
+    id: 4,
+    city: 'Côte d\'Azur',
+    country: 'Frankreich',
+    x: 45,
+    y: 65,
+    mapX: 45,
+    mapY: 75,
+    type: 'Partner Showroom',
+    icon: 'handshake',
+    description: 'Exklusive Präsenz an der französischen Riviera',
+    address: 'Nice, Frankreich'
+  },
+  {
+    id: 5,
+    city: 'Bergamo',
+    country: 'Italien',
+    x: 55,
+    y: 60,
+    mapX: 58,
+    mapY: 70,
+    type: 'Produktionspartner',
+    icon: 'factory',
+    description: 'Direkte Zusammenarbeit mit italienischen Steinbrüchen',
+    address: 'Bergamo, Italien'
   }
 ]
 
@@ -907,6 +1022,15 @@ const closeModal = () => {
   document.body.style.overflow = 'auto'
 }
 
+const selectLocation = (location) => {
+  selectedLocation.value = location
+}
+
+const openGoogleMaps = (location) => {
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`
+  window.open(url, '_blank')
+}
+
 const openLightbox = (index) => {
   currentImageIndex.value = index
   lightboxOpen.value = true
@@ -1143,44 +1267,6 @@ watch(activeFilter, () => {
   color: #999;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-}
-
-.view-project-btn {
-  padding: 1rem 2.5rem;
-  background: transparent;
-  border: 2px solid #FAFAF8;
-  color: #FAFAF8;
-  font-size: 0.95rem;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.view-project-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  transform: translateY(100%);
-  transition: transform 0.4s ease;
-}
-
-.view-project-btn:hover {
-  color: #000;
-}
-
-.view-project-btn:hover::before {
-  transform: translateY(0);
-}
-
-.view-project-btn span {
-  position: relative;
-  z-index: 1;
 }
 
 /* Slider Controls */
@@ -1543,41 +1629,6 @@ watch(activeFilter, () => {
   color: #000;
 }
 
-.project-badges {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.badge {
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  border-radius: 20px;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  backdrop-filter: blur(10px);
-}
-
-.badge.award {
-  background: linear-gradient(135deg, #FFD700, #FFA500);
-  color: #000;
-}
-
-.badge.featured {
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  color: #000;
-}
-
-.badge .material-icons {
-  font-size: 0.875rem;
-}
-
 .project-info {
   padding: 2rem;
 }
@@ -1773,6 +1824,249 @@ watch(activeFilter, () => {
   font-size: 0.95rem;
   color: #ccc;
   line-height: 1.4;
+}
+
+/* Locations Section - New Implementation */
+.locations-section {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.header-decoration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.decoration-line {
+  width: 100px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #a47148);
+}
+
+.decoration-line.left {
+  background: linear-gradient(90deg, transparent, #a47148);
+}
+
+.decoration-line.right {
+  background: linear-gradient(90deg, #a47148, transparent);
+}
+
+.section-badge.premium {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.2), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+  animation: badgeGlow 3s ease-in-out infinite;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: #a47148;
+}
+
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(164, 113, 72, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(164, 113, 72, 0.4); }
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+}
+
+.title-gradient {
+  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 50%, #FAFAF8 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleShimmer 4s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 200% 0; }
+  50% { background-position: -200% 0; }
+}
+
+.section-subtitle {
+  font-size: 1.25rem;
+  color: #999;
+  max-width: 800px;
+  margin: 0 auto;
+  opacity: 0.8;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.map-container {
+  margin-top: 4rem;
+  position: relative;
+}
+
+.google-map {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.google-map iframe {
+  width: 100%;
+  height: 500px;
+  filter: grayscale(50%) contrast(1.1);
+  transition: filter 0.3s ease;
+}
+
+.google-map:hover iframe {
+  filter: grayscale(0%) contrast(1);
+}
+
+.location-markers-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.custom-marker {
+  position: absolute;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+.custom-marker .marker-dot {
+  width: 20px;
+  height: 20px;
+  background: #a47148;
+  border-radius: 50%;
+  border: 3px solid #000;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
+}
+
+.custom-marker .marker-pulse {
+  position: absolute;
+  inset: -15px;
+  border: 2px solid #a47148;
+  border-radius: 50%;
+  animation: markerPulse 2s infinite;
+}
+
+@keyframes markerPulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.custom-marker .marker-label {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border: 1px solid #a47148;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.custom-marker:hover .marker-label,
+.custom-marker.active .marker-label {
+  opacity: 1;
+}
+
+.custom-marker.active .marker-dot {
+  background: #FAFAF8;
+  transform: scale(1.5);
+  box-shadow: 0 0 30px rgba(250, 250, 248, 0.8);
+}
+
+.location-details {
+  margin-top: 3rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(164, 113, 72, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.location-details h3 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #FAFAF8;
+}
+
+.location-details p {
+  color: #999;
+  margin-bottom: 1rem;
+}
+
+.detail-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(164, 113, 72, 0.1);
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.detail-info .material-icons {
+  color: #a47148;
+  font-size: 1.5rem;
+}
+
+.detail-description {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.location-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #a47148, #FAFAF8);
+  color: #000;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.location-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
 }
 
 /* Project Modal */
@@ -2379,106 +2673,6 @@ watch(activeFilter, () => {
   backdrop-filter: blur(10px);
 }
 
-/* CTA Section */
-.cta-section {
-  position: relative;
-  padding: 8rem 0;
-  overflow: hidden;
-}
-
-.cta-background {
-  position: absolute;
-  inset: 0;
-}
-
-.cta-bg-image {
-  width: 100%;
-  height: 100%;
-  background-image: url('https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.cta-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, rgba(0,0,0,0.9), rgba(164, 113, 72, 0.3));
-}
-
-.cta-content {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.cta-title {
-  font-size: 3.5rem;
-  font-weight: 600;
-  margin-bottom: 2rem;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.cta-text {
-  font-size: 1.25rem;
-  line-height: 1.6;
-  margin-bottom: 3rem;
-  color: #ccc;
-}
-
-.cta-actions {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.cta-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border-radius: 50px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-}
-
-.cta-button.primary {
-  background: linear-gradient(135deg, #a47148, #FAFAF8);
-  color: #000;
-}
-
-.cta-button.secondary {
-  background: transparent;
-  color: #FAFAF8;
-  border-color: #FAFAF8;
-}
-
-.cta-button:hover {
-  transform: translateY(-3px);
-}
-
-.cta-button.primary:hover {
-  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
-}
-
-.cta-button.secondary:hover {
-  background: #FAFAF8;
-  color: #000;
-}
-
 /* Transitions */
 .project-transition-enter-active,
 .project-transition-leave-active {
@@ -2536,7 +2730,29 @@ watch(activeFilter, () => {
   opacity: 0;
 }
 
+/* Slide fade transition for location details */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+
+.slide-fade-enter-from {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+
+.slide-fade-leave-to {
+  transform: translateX(30px);
+  opacity: 0;
+}
+
 /* Responsive Design */
+@media (max-width: 1200px) {
+  .google-map iframe {
+    height: 400px;
+  }
+}
+
 @media (max-width: 1024px) {
   .projects-grid {
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -2604,17 +2820,16 @@ watch(activeFilter, () => {
     grid-template-columns: repeat(2, 1fr);
   }
   
-  .cta-title {
-    font-size: 2.5rem;
-  }
-  
-  .cta-actions {
-    flex-direction: column;
-    align-items: center;
-  }
-  
   .awards-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .google-map iframe {
+    height: 350px;
+  }
+  
+  .location-markers-overlay {
+    display: none;
   }
 }
 
@@ -2637,6 +2852,10 @@ watch(activeFilter, () => {
   
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .google-map iframe {
+    height: 300px;
   }
 }
 </style>
