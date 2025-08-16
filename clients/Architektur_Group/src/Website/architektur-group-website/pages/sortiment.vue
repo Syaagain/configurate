@@ -1,6 +1,6 @@
 <template>
   <div class="sortiment-page">
-    <!-- Hero Section - Nachgebaut im Über uns Style -->
+    <!-- Hero Section -->
     <section class="hero" id="hero">
       <div class="hero-bg" ref="heroBg">
         <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png" alt="Hero Background">
@@ -29,7 +29,7 @@
             <div class="decoration-line left"></div>
             <div class="section-badge premium">
               <span class="material-icons">auto_awesome</span>
-              PREMIUM AUSWAHL
+               AUSWAHL
             </div>
             <div class="decoration-line right"></div>
           </div>
@@ -195,72 +195,13 @@
       </div>
     </transition>
 
-    <!-- Interactive Locations Map -->
-    <section class="locations-section">
-      <div class="container">
-        <div class="section-header">
-          <div class="header-decoration">
-            <div class="decoration-line left"></div>
-            <div class="section-badge premium">
-              <span class="material-icons">location_on</span>
-              INTERNATIONAL
-            </div>
-            <div class="decoration-line right"></div>
-          </div>
-          <h2 class="section-title">
-            <span class="title-gradient">UNSERE STANDORTE</span>
-          </h2>
-          <p class="section-subtitle">Präsenz in ganz Europa für beste Erreichbarkeit</p>
-        </div>
-        
-        <div class="map-container">
-          <!-- Google Maps Embed -->
-          <div class="google-map">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5570665.339444434!2d5.866341973291837!3d50.503887287677804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75f9a38c5fd9%3A0x10cb84a7db1987d!2sMunich%2C%20Germany!5e0!3m2!1sen!2sus!4v1706285439215!5m2!1sen!2sus"
-              width="100%"
-              height="500"
-              style="border:0; border-radius: 20px;"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-            
-            <!-- Custom Location Markers Overlay -->
-            <div class="location-markers-overlay">
-              <div 
-                v-for="location in locations" 
-                :key="location.id"
-                class="custom-marker"
-                :style="{ left: location.mapX + '%', top: location.mapY + '%' }"
-                @click="selectLocation(location)"
-                :class="{ active: selectedLocation?.id === location.id }"
-              >
-                <div class="marker-pulse"></div>
-                <div class="marker-dot"></div>
-                <div class="marker-label">{{ location.city }}</div>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Location Details -->
-          <transition name="slide-fade">
-            <div v-if="selectedLocation" class="location-details">
-              <h3>{{ selectedLocation.city }}</h3>
-              <p>{{ selectedLocation.country }}</p>
-              <div class="detail-info">
-                <span class="material-icons">{{ selectedLocation.icon }}</span>
-                <span>{{ selectedLocation.type }}</span>
-              </div>
-              <p class="detail-description">{{ selectedLocation.description }}</p>
-              <button @click="openGoogleMaps(selectedLocation)" class="location-btn">
-                <span class="material-icons">directions</span>
-                ROUTE PLANEN
-              </button>
-            </div>
-          </transition>
-        </div>
-      </div>
+    <!-- Device-based Maps Section -->
+    <section class="maps-section">
+      <!-- Desktop Map -->
+      <LocationsMap v-if="!isMobile" />
+      
+      <!-- Mobile Map -->
+      <MobilePremiumMap v-if="isMobile" />
     </section>
   </div>
 </template>
@@ -268,10 +209,36 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
+// Import Map Components
+import LocationsMap from '~/components/website/locationsMap.vue'
+import MobilePremiumMap from '~/components/mobile/mobileInteractiveMap.vue'
+
+// Device Detection Composable
+const useDevice = () => {
+  const isMobile = ref(false)
+  
+  onMounted(() => {
+    const checkDevice = () => {
+      isMobile.value = window.innerWidth <= 768
+    }
+    
+    checkDevice()
+    window.addEventListener('resize', checkDevice)
+    
+    onUnmounted(() => {
+      window.removeEventListener('resize', checkDevice)
+    })
+  })
+  
+  return { isMobile }
+}
+
+// Use Device Detection
+const { isMobile } = useDevice()
+
 // State refs
 const activeCategory = ref('alle')
 const selectedProduct = ref(null)
-const selectedLocation = ref(null)
 const scrollY = ref(0)
 const ticking = ref(false)
 
@@ -370,75 +337,6 @@ const products = [
   },
 ]
 
-// Locations with Google Maps positions
-const locations = [
-  {
-    id: 1,
-    city: 'München',
-    country: 'Deutschland',
-    x: 52,
-    y: 48,
-    mapX: 60,
-    mapY: 55,
-    type: 'Showroom & Hauptsitz',
-    icon: 'business',
-    description: '2500m² Showroom mit Europas größter Natursteinauswahl',
-    address: 'Am Hohenrand 9, 82335 Berg'
-  },
-  {
-    id: 2,
-    city: 'Düsseldorf',
-    country: 'Deutschland',
-    x: 48,
-    y: 42,
-    mapX: 40,
-    mapY: 40,
-    type: 'Showroom & Lager',
-    icon: 'warehouse',
-    description: '80.000m² Lagerfläche für sofortige Verfügbarkeit',
-    address: 'Düsseldorf, Deutschland'
-  },
-  {
-    id: 3,
-    city: 'Zürich',
-    country: 'Schweiz',
-    x: 50,
-    y: 55,
-    mapX: 55,
-    mapY: 65,
-    type: 'Vertriebsbüro',
-    icon: 'store',
-    description: 'Beratung und Vertrieb für die Schweiz',
-    address: 'Zürich, Schweiz'
-  },
-  {
-    id: 4,
-    city: 'Côte d\'Azur',
-    country: 'Frankreich',
-    x: 45,
-    y: 65,
-    mapX: 45,
-    mapY: 75,
-    type: 'Partner Showroom',
-    icon: 'handshake',
-    description: 'Exklusive Präsenz an der französischen Riviera',
-    address: 'Nice, Frankreich'
-  },
-  {
-    id: 5,
-    city: 'Bergamo',
-    country: 'Italien',
-    x: 55,
-    y: 60,
-    mapX: 58,
-    mapY: 70,
-    type: 'Produktionspartner',
-    icon: 'factory',
-    description: 'Direkte Zusammenarbeit mit italienischen Steinbrüchen',
-    address: 'Bergamo, Italien'
-  }
-]
-
 const filteredProducts = computed(() => {
   if (activeCategory.value === 'alle') {
     return products
@@ -459,15 +357,6 @@ const openProductModal = (product) => {
 const closeModal = () => {
   selectedProduct.value = null
   document.body.style.overflow = 'auto'
-}
-
-const selectLocation = (location) => {
-  selectedLocation.value = location
-}
-
-const openGoogleMaps = (location) => {
-  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`
-  window.open(url, '_blank')
 }
 
 const createRipple = (event) => {
@@ -538,6 +427,25 @@ function requestTick() {
   }
 }
 
+// SEO Meta
+useHead({
+  title: 'Premium Naturstein Sortiment | Exklusive Auswahl',
+  meta: [
+    {
+      name: 'description',
+      content: 'Über 650 verschiedene Naturstein- und Keramik-Oberflächen auf 2500m² Showroom-Fläche. Entdecken Sie unsere exklusive Premium-Auswahl.'
+    },
+    {
+      property: 'og:title',
+      content: 'Premium Naturstein Sortiment | Exklusive Auswahl'
+    },
+    {
+      property: 'og:description',
+      content: 'Über 650 verschiedene Naturstein- und Keramik-Oberflächen auf 2500m² Showroom-Fläche. Entdecken Sie unsere exklusive Premium-Auswahl.'
+    }
+  ]
+})
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('scroll', requestTick, { passive: true })
@@ -574,7 +482,7 @@ onUnmounted(() => {
   overflow-x: hidden;
 }
 
-/* Hero Section - Optimiert für Scroll-Indikator */
+/* Hero Section */
 .hero {
   position: relative;
   height: 100vh;
@@ -617,7 +525,7 @@ onUnmounted(() => {
 
 .hero-content {
   position: absolute;
-  top: 15%; /* Reduziert von 20% */
+  top: 15%;
   left: 10%;
   z-index: 2;
   color: white;
@@ -628,20 +536,20 @@ onUnmounted(() => {
 
 .hero-badge {
   display: inline-block;
-  padding: 0.8rem 2.5rem; /* Reduziert von 1rem 3rem */
+  padding: 0.8rem 2.5rem;
   background: rgba(0, 0, 0, 0.3);
   border: 3px solid var(--primary-gold);
   color: var(--primary-gold);
-  font-size: 0.9rem; /* Reduziert von 1rem */
+  font-size: 0.9rem;
   font-weight: 900;
   letter-spacing: 0.4em;
-  margin-top: 1.5rem; /* Reduziert von 2rem */
+  margin-top: 1.5rem;
   clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
   backdrop-filter: blur(10px);
 }
 
 .hero-title {
-  font-size: clamp(1.8rem, 5.5vw, 4.5rem); /* Reduziert von clamp(2rem, 6vw, 5rem) */
+  font-size: clamp(1.8rem, 5.5vw, 4.5rem);
   font-weight: 900;
   line-height: 1;
   opacity: 1;
@@ -657,7 +565,7 @@ onUnmounted(() => {
 
 .hero-subheading {
   position: absolute;
-  bottom: 25%; /* Erhöht von 20% um mehr Platz für Scroll-Indikator */
+  bottom: 25%;
   left: 10%;
   transform: translateX(0);
   z-index: 2;
@@ -668,7 +576,7 @@ onUnmounted(() => {
 }
 
 .hero-subheading p {
-  font-size: clamp(1.1rem, 1.8vw, 1.6rem); /* Reduziert von clamp(1.2rem, 2vw, 1.8rem) */
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
   color: #e6e0d5;
   margin: 0;
   line-height: 1.3;
@@ -676,20 +584,20 @@ onUnmounted(() => {
   opacity: 0;
   transform: translateY(30px);
   animation: slideUpFromBottom 1.8s ease-out 1.2s forwards;
-  padding: 0.8rem 1.5rem; /* Reduziert von 1rem 2rem */
+  padding: 0.8rem 1.5rem;
   border-radius: 8px;
 }
 
 .scroll-indicator {
   position: absolute;
-  bottom: 4rem; /* Erhöht von 2rem */
+  bottom: 4rem;
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
   animation: bounce 2s infinite;
-  z-index: 10; /* Erhöht von 2 */
+  z-index: 10;
   color: var(--primary-gold);
-  background: rgba(0, 0, 0, 0.3); /* Hinzugefügt für bessere Sichtbarkeit */
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -708,11 +616,18 @@ onUnmounted(() => {
 }
 
 .scroll-indicator .material-icons {
-  font-size: 2.5rem; /* Reduziert von 3rem */
+  font-size: 2.5rem;
   color: var(--primary-gold);
   text-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
 }
 
+/* Maps Section */
+.maps-section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Animations */
 @keyframes zoomOut {
   0% {
     transform: scale(1.2);
@@ -808,10 +723,6 @@ onUnmounted(() => {
   margin-bottom: 4rem;
 }
 
-.section-header.center {
-  text-align: center;
-}
-
 .header-decoration {
   display: flex;
   align-items: center;
@@ -872,16 +783,6 @@ onUnmounted(() => {
 @keyframes titleShimmer {
   0%, 100% { background-position: 200% 0; }
   50% { background-position: -200% 0; }
-}
-
-.section-subtitle {
-  font-size: 1.25rem;
-  color: var(--text-gray);
-  max-width: 800px;
-  margin: 0 auto;
-  opacity: 0.8;
-  text-align: center;
-  margin-bottom: 2rem;
 }
 
 .filter-buttons {
@@ -1083,16 +984,6 @@ onUnmounted(() => {
   background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-.products-count {
-  padding: 0.5rem 1.5rem;
-  background: rgba(164, 113, 72, 0.2);
-  border: 1px solid rgba(164, 113, 72, 0.3);
-  border-radius: 25px;
-  color: #a47148;
-  font-size: 0.875rem;
-  font-weight: 500;
 }
 
 .products-grid {
@@ -1555,28 +1446,6 @@ onUnmounted(() => {
   border-radius: 16px;
 }
 
-.image-overlay-effects {
-  position: absolute;
-  inset: 2rem;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.shimmer-effect {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% { left: -100%; }
-  100% { left: 100%; }
-}
-
 .modal-info {
   padding: 2rem;
   display: flex;
@@ -1589,19 +1458,6 @@ onUnmounted(() => {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.modal-badge {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background: rgba(164, 113, 72, 0.2);
-  color: #a47148;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
-}
-
 .modal-title {
   font-size: 2.5rem;
   font-weight: 400;
@@ -1612,55 +1468,16 @@ onUnmounted(() => {
   line-height: 1.2;
 }
 
-.modal-rating {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.stars {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.star {
-  color: #a47148;
-  font-size: 1.25rem;
-}
-
-.rating-text {
-  color: #ccc;
-  font-size: 0.875rem;
-}
-
 .modal-description {
   font-size: 1.1rem;
   line-height: 1.8;
   color: #ccc;
 }
 
-.modal-features h4,
 .modal-specs h4 {
   font-size: 1.25rem;
   margin-bottom: 1rem;
   color: #FAFAF8;
-}
-
-.features-grid {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.feature-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #ccc;
-}
-
-.feature-item .material-icons {
-  color: #a47148;
-  font-size: 1.25rem;
 }
 
 .specs-grid {
@@ -1692,8 +1509,7 @@ onUnmounted(() => {
 }
 
 /* Buttons */
-.cta-button,
-.secondary-button {
+.cta-button {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1716,184 +1532,7 @@ onUnmounted(() => {
   color: #000;
 }
 
-.secondary-button {
-  background: transparent;
-  color: #FAFAF8;
-  border: 2px solid #FAFAF8;
-}
-
 .cta-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
-}
-
-.secondary-button:hover {
-  background: #FAFAF8;
-  color: #000;
-}
-
-/* Locations Section - Updated */
-.locations-section {
-  padding: 6rem 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-}
-
-.map-container {
-  margin-top: 4rem;
-  position: relative;
-}
-
-.google-map {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0;
-  border-radius: 20px;
-  overflow: hidden;
-  border: 2px solid var(--border-color);
-}
-
-.google-map iframe {
-  width: 100%;
-  height: 500px;
-  filter: grayscale(50%) contrast(1.1);
-  transition: filter 0.3s ease;
-}
-
-.google-map:hover iframe {
-  filter: grayscale(0%) contrast(1);
-}
-
-.location-markers-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.custom-marker {
-  position: absolute;
-  cursor: pointer;
-  pointer-events: all;
-  transition: all 0.3s ease;
-}
-
-.custom-marker .marker-dot {
-  width: 20px;
-  height: 20px;
-  background: var(--primary-gold);
-  border-radius: 50%;
-  border: 3px solid var(--bg-dark);
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
-}
-
-.custom-marker .marker-pulse {
-  position: absolute;
-  inset: -15px;
-  border: 2px solid var(--primary-gold);
-  border-radius: 50%;
-  animation: markerPulse 2s infinite;
-}
-
-@keyframes markerPulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(2.5);
-    opacity: 0;
-  }
-}
-
-.custom-marker .marker-label {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-dark);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border: 1px solid var(--primary-gold);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.custom-marker:hover .marker-label,
-.custom-marker.active .marker-label {
-  opacity: 1;
-}
-
-.custom-marker.active .marker-dot {
-  background: var(--primary-light);
-  transform: scale(1.5);
-  box-shadow: 0 0 30px rgba(250, 250, 248, 0.8);
-}
-
-.location-details {
-  margin-top: 3rem;
-  padding: 2.5rem;
-  background: linear-gradient(135deg, rgba(164, 113, 72, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.location-details h3 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: var(--primary-light);
-}
-
-.location-details p {
-  color: #999;
-  margin-bottom: 1rem;
-}
-
-.detail-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-}
-
-.detail-info .material-icons {
-  color: var(--primary-gold);
-  font-size: 1.5rem;
-}
-
-.detail-description {
-  color: #ccc;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.location-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
-  color: var(--bg-dark);
-  border: none;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.location-btn:hover {
   transform: translateY(-3px);
   box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
 }
@@ -1919,29 +1558,7 @@ onUnmounted(() => {
   transform: scale(0.8) rotateX(-15deg);
 }
 
-/* Slide fade transition for location details */
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.5s ease;
-}
-
-.slide-fade-enter-from {
-  transform: translateX(-30px);
-  opacity: 0;
-}
-
-.slide-fade-leave-to {
-  transform: translateX(30px);
-  opacity: 0;
-}
-
 /* Responsive */
-@media (max-width: 1200px) {
-  .google-map iframe {
-    height: 400px;
-  }
-}
-
 @media (max-width: 768px) {
   .hero-title {
     font-size: clamp(1.5rem, 5vw, 3rem);
@@ -1990,14 +1607,6 @@ onUnmounted(() => {
     gap: 1rem;
     text-align: center;
   }
-  
-  .google-map iframe {
-    height: 350px;
-  }
-  
-  .location-markers-overlay {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -2041,10 +1650,6 @@ onUnmounted(() => {
   
   .modal-actions {
     flex-direction: column;
-  }
-  
-  .google-map iframe {
-    height: 300px;
   }
 }
 </style>

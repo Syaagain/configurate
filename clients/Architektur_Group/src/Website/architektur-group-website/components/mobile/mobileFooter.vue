@@ -10,35 +10,6 @@
       </div>
     </div>
 
-    <!-- Contact Information -->
-    <div class="px-6 py-8 space-y-8">
-      <!-- Showroom Düsseldorf -->
-      <div class="text-center">
-        <h3 class="text-lg font-light mb-3 uppercase tracking-wide text-white">
-          Showroom Düsseldorf
-        </h3>
-        <a 
-          href="tel:+4921314501055" 
-          class="inline-flex items-center justify-center px-6 py-3 bg-transparent border border-gray-600 text-gray-300 hover:border-white hover:text-white transition-all duration-300 rounded-sm tracking-wider"
-        >
-          +49 2131 4501055
-        </a>
-      </div>
-
-      <!-- Showroom Starnberg -->
-      <div class="text-center">
-        <h3 class="text-lg font-light mb-3 uppercase tracking-wide text-white">
-          Showroom Starnberg  
-        </h3>
-        <a 
-          href="tel:+4981713868770" 
-          class="inline-flex items-center justify-center px-6 py-3 bg-transparent border border-gray-600 text-gray-300 hover:border-white hover:text-white transition-all duration-300 rounded-sm tracking-wider"
-        >
-          +49 8171 3868770
-        </a>
-      </div>
-    </div>
-
     <!-- Newsletter Section -->
     <div class="px-6 py-8 border-t border-gray-800">
       <div class="text-center mb-6">

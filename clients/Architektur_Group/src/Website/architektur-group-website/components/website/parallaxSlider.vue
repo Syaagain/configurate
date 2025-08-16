@@ -88,8 +88,7 @@
               <h2>ARCHITEKTUR GROUP EUROPE</h2>
               <h3>Spezialisiert auf Frankreich & Schweiz</h3>
               <p>Höchste Expertise und ein europaweites Netzwerk – perfekt zugeschnitten auf exklusive Projekte in Frankreich und der Schweiz.</p>
-              <NuxtLink to="/europe" class="cta-btn">MEHR ERFAHREN</NuxtLink>
-            </div>
+             </div>
           </div>
         </div>
       </div>

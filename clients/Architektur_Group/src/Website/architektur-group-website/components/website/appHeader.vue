@@ -43,10 +43,11 @@
         <div class="w-full md:w-1/2 flex items-center justify-center">
           <nav class="vertical-menu">
             <ul class="flex flex-col items-center justify-center">
-              <li><NuxtLink to="/ueber-uns" @click="closeMenu" class="submenu-item">Über uns</NuxtLink></li>
+              <li><NuxtLink to="/" @click="closeMenu" class="submenu-item">Startseite</NuxtLink></li>
+              <!--<li><NuxtLink to="/magazin" @click="closeMenu" class="submenu-item">Magazin</NuxtLink></li>-->
               <li><NuxtLink to="/sortiment" @click="closeMenu" class="submenu-item">Sortiment</NuxtLink></li>
               <li><NuxtLink to="/projekte" @click="closeMenu" class="submenu-item">Projekte</NuxtLink></li>
-              <li><NuxtLink to="/magazin" @click="closeMenu" class="submenu-item">Magazin</NuxtLink></li>
+              <li><NuxtLink to="/ueber-uns" @click="closeMenu" class="submenu-item">Über uns</NuxtLink></li>
               <li><NuxtLink to="/service" @click="closeMenu" class="submenu-item">Service</NuxtLink></li>
             </ul>
           </nav>

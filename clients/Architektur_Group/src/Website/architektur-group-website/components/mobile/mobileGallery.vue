@@ -72,15 +72,6 @@
               <div class="item-badge">
                 <span class="badge-text">{{ item.category }}</span>
               </div>
-
-              <!-- Like Button -->
-              <button 
-                @click.stop="toggleLike(item)"
-                :class="['like-btn', { liked: item.isLiked }]"
-              >
-                <span class="material-icons">{{ item.isLiked ? 'favorite' : 'favorite_border' }}</span>
-                <div class="like-ripple"></div>
-              </button>
             </div>
 
             <!-- Item Content -->
@@ -139,13 +130,6 @@
           <p>Wischen Sie für mehr</p>
         </div>
       </div>
-
-      <!-- AR View Button -->
-      <button @click="openARView" class="ar-fab">
-        <span class="material-icons">view_in_ar</span>
-        <span class="ar-text">360° Ansicht</span>
-        <div class="ar-pulse"></div>
-      </button>
     </div>
 
     <!-- View Toggle -->
@@ -669,11 +653,6 @@ const nextImage = () => {
     lightboxItem.value = currentGalleryItems.value[lightboxIndex.value]
     vibrate(20)
   }
-}
-
-const openARView = () => {
-  console.log('Open AR View')
-  vibrate(30)
 }
 
 const shareImage = async () => {

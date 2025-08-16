@@ -27,22 +27,7 @@
       
       <ParallaxSlider />
       
-      <!-- Neue Kontakt CTA Sektion -->
-      <section class="contact-cta-section py-20 bg-gradient-to-r from-black via-gray-800 to-black">
-        <div class="container mx-auto px-6 text-center">
-          <h2 class="text-4xl font-light mb-6">BEREIT FÜR IHR TRAUMPROJEKT?</h2>
-          <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
-            Lassen Sie uns gemeinsam Ihre Vision verwirklichen. Kontaktieren Sie uns für eine persönliche Beratung.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <NuxtLink to="/kontakt" class="inline-block px-10 py-4 bg-white text-black font-medium hover:bg-gray-100 transition duration-300 transform hover:scale-105">
-              JETZT KONTAKT AUFNEHMEN
-            </NuxtLink>
-          </div>
-        </div>
-      </section>
-      
-      <ShowroomContact />
+      <LocationsMap />
     </template>
     
     <!-- Mobile Version -->
@@ -65,7 +50,6 @@
       <!-- Mobile Gallery -->
       <MobileGallery />
 
-      
       <!-- Mobile CTA Section -->
       <section class="cta-section py-12 bg-gradient-to-r from-gray-900 to-black">
         <div class="container mx-auto px-4 text-center">
@@ -76,29 +60,8 @@
         </div>
       </section>
       
-      <!-- Mobile Kontakt CTA Sektion -->
-      <section class="mobile-contact-cta py-12 bg-gradient-to-r from-black via-gray-800 to-black">
-        <div class="container mx-auto px-4 text-center">
-          <h2 class="text-2xl font-light mb-4">BEREIT FÜR IHR TRAUMPROJEKT?</h2>
-          <p class="text-sm text-gray-300 mb-6">
-            Kontaktieren Sie uns für eine persönliche Beratung.
-          </p>
-          <div class="space-y-3">
-            <NuxtLink to="/kontakt" class="block w-full py-3 bg-white text-black font-medium text-center">
-              JETZT KONTAKT AUFNEHMEN
-            </NuxtLink>
-            <NuxtLink to="/showroom" class="block w-full py-3 border border-white text-white text-center">
-              SHOWROOM BESUCHEN
-            </NuxtLink>
-          </div>
-        </div>
-      </section>
-      
       <!-- Mobile Interactive Map -->
       <MobileInteractiveMap />
-      
-      <!-- Mobile Contact -->
-      <MobileContactPremium />
       
       <!-- Mobile Video Player (optional) -->
       <MobileVideoPlayer v-if="showVideo" />
@@ -112,7 +75,6 @@
 import HeroSection from '~/components/website/heroSection.vue'
 import ColumnAnimation from '~/components/website/columnAnimation.vue'
 import ParallaxSlider from '~/components/website/parallaxSlider.vue'
-import ShowroomContact from '~/components/website/showroomContact.vue'
 
 // Mobile Components
 import MobileHero from '~/components/mobile/mobileHero.vue'
@@ -124,6 +86,7 @@ import MobileVideoPlayer from '~/components/mobile/mobileVideoPlayer.vue'
 
 // Device Detection
 import { useDevice } from '~/composables/useDevice'
+import LocationsMap from '~/components/website/locationsMap.vue'
 const { isMobile } = useDevice()
 
 // Optional: Control video display

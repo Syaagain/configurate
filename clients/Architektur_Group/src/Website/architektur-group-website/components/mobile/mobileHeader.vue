@@ -69,10 +69,6 @@
 
           <!-- Quick Actions -->
           <div class="quick-actions">
-            <button class="action-btn" @click="callUs">
-              <span class="material-icons">phone</span>
-              <span>Anrufen</span>
-            </button>
             <button class="action-btn" @click="openWhatsApp">
               <span class="material-icons">chat</span>
               <span>WhatsApp</span>
@@ -80,10 +76,6 @@
             <button class="action-btn" @click="navigateToContact">
               <span class="material-icons">contact_mail</span>
               <span>Kontakt</span>
-            </button>
-            <button class="action-btn" @click="shareApp">
-              <span class="material-icons">share</span>
-              <span>Teilen</span>
             </button>
           </div>
 
