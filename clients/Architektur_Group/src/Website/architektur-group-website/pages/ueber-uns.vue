@@ -25,12 +25,12 @@
       <div class="container">
         <div class="story-grid">
           <div class="story-content">
-            <span class="hero-badge animate-fade-in">UNSERE GESCHICHTE</span>
-            <h2 class="section-title story-title">
+            <span class="hero-badge animate-on-scroll">UNSERE GESCHICHTE</span>
+            <h2 class="section-title story-title animate-on-scroll-delayed">
               <span class="gradient-text title-line-1" data-text="3 GENERATIONEN">3 GENERATIONEN</span>
               <span class="title-line-2" data-text="HANDWERKSKUNST">HANDWERKSKUNST</span>
             </h2>
-            <p class="story-text">
+            <p class="story-text animate-on-scroll-delayed">
               Die Architektur Group, als langjährig familiengeführte Marke und Unternehmensgruppe, 
               repräsentiert Europas exklusivste Auswahl an Wand- und Bodenbelägen, Treppen, 
               Waschtischen und vielem mehr aus hochwertigen Natursteinen wie Edelmarmor, 
@@ -72,207 +72,56 @@
     </section>
 
     <!-- Business Units Section -->
-    <section class="units-section">
+    <section class="units-section" ref="unitsSection" :class="{ 'nudge-out': isNudging }">
       <div class="container">
         <div class="section-header">
-          <span class="hero-badge animate-fade-in">UNTERNEHMENSGRUPPE</span>
-          <h2 class="section-title" data-text="ALLES AUS EINER HAND">ALLES AUS EINER HAND</h2>
-          <p class="section-subtitle">
+          <span class="hero-badge animate-on-scroll">UNTERNEHMENSGRUPPE</span>
+          <h2 class="section-title animate-on-scroll-delayed" data-text="ALLES AUS EINER HAND">ALLES AUS EINER HAND</h2>
+          <p class="section-subtitle animate-on-scroll-delayed">
             Unser Leistungsangebot für Neubauten und Generalsanierungen
           </p>
         </div>
         
-        <LuxurySlider 
-          :units="businessUnits"
-          @unit-click="openUnitModal"
-        />
-      </div>
-    </section>
-
-    <!-- Showrooms Section -->
-    <section class="showrooms-section">
-      <div class="showroom-bg-pattern"></div>
-      <div class="container">
-        <div class="section-header">
-          <span class="hero-badge animate-fade-in">SHOWROOMS</span>
-          <h2 class="section-title" data-text="BESUCHEN SIE UNS">BESUCHEN SIE UNS</h2>
-          <p class="section-subtitle">
-            Über 2.500 verschiedene Natursteinsorten auf mehr als 2000m² Ausstellungsfläche
-          </p>
-        </div>
-        
-        <div class="showrooms-grid">
-          <!-- München Showroom -->
-          <div class="showroom-card munich" @mouseenter="playHoverSound">
-            <div class="card-image">
-              <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686576cf622e38e88f0236c5.png" alt="München">
-              <div class="image-overlay"></div>
+        <ClientOnly>
+          <LuxurySlider 
+            ref="luxurySliderRef"
+            :units="businessUnits"
+            :scroll-direction="scrollDirection"
+            :nudge-to-next-section="nudgeToNextSection"
+            @unit-click="openUnitModal"
+          />
+          <template #fallback>
+            <div class="slider-loading">
+              <div class="loading-spinner"></div>
+              <p>Lade Inhalte...</p>
             </div>
-            <div class="card-content">
-              <div class="location-badge">
-                <span class="material-icons">location_on</span>
-                MÜNCHEN / STARNBERG
-              </div>
-              <h3>Showroom München</h3>
-              <div class="showroom-info">
-                <div class="info-item">
-                  <span class="material-icons">square_foot</span>
-                  <span>2500m² Showroomfläche</span>
-                </div>
-                <div class="info-item">
-                  <span class="material-icons">home</span>
-                  <span>Am Hohenrand 9, 82335 Berg</span>
-                </div>
-                <div class="info-item">
-                  <span class="material-icons">phone</span>
-                  <span>+49 8171 / 3868770</span>
-                </div>
-                <div class="info-item">
-                  <span class="material-icons">schedule</span>
-                  <span>Di-Fr: 9-17 Uhr, Sa: 9-16 Uhr</span>
-                </div>
-              </div>
-              <div class="card-actions">
-                <button @click="openMap('munich')" class="action-btn primary">
-                  <span class="material-icons">map</span>
-                  ROUTE PLANEN
-                </button>
-                <button @click="bookAppointment('munich')" class="action-btn secondary">
-                  <span class="material-icons">calendar_today</span>
-                  TERMIN BUCHEN
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Düsseldorf Showroom -->
-          <div class="showroom-card dusseldorf" @mouseenter="playHoverSound">
-            <div class="card-image">
-              <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b1ceb7b78f5ed302d.png" alt="Düsseldorf">
-              <div class="image-overlay"></div>
-            </div>
-            <div class="card-content">
-              <div class="location-badge">
-                <span class="material-icons">location_on</span>
-                DÜSSELDORF / NEUSS
-              </div>
-              <h3>Showroom Düsseldorf</h3>
-              <div class="showroom-info">
-                <div class="info-item">
-                  <span class="material-icons">square_foot</span>
-                  <span>Europas größte Auswahl</span>
-                </div>
-                <div class="info-item">
-                  <span class="material-icons">inventory</span>
-                  <span>80.000m² Lagerfläche</span>
-                </div>
-                <div class="info-item">
-                  <span class="material-icons">phone</span>
-                  <span>+49 2131 / 1234567</span>
-                </div>
-                <div class="info-item">
-                  <span class="material-icons">schedule</span>
-                  <span>Di-Fr: 9-17 Uhr, Sa: 9-16 Uhr</span>
-                </div>
-              </div>
-              <div class="card-actions">
-                <button @click="openMap('dusseldorf')" class="action-btn primary">
-                  <span class="material-icons">map</span>
-                  ROUTE PLANEN
-                </button>
-                <button @click="bookAppointment('dusseldorf')" class="action-btn secondary">
-                  <span class="material-icons">calendar_today</span>
-                  TERMIN BUCHEN
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+          </template>
+        </ClientOnly>
       </div>
     </section>
 
     <!-- Interactive Locations Map -->
-    <section class="locations-section">
+    <section class="locations-section" ref="locationsSection" :class="{ 'nudge-in': isNudging }">
       <div class="container">
         <div class="section-header">
-          <span class="hero-badge animate-fade-in">INTERNATIONAL</span>
-          <h2 class="section-title" data-text="UNSERE STANDORTE">UNSERE STANDORTE</h2>
-          <p class="section-subtitle">Präsenz in ganz Europa für beste Erreichbarkeit</p>
+          <span class="hero-badge location-text-1" :class="{ 'fade-in-individually': isNudging }">INTERNATIONAL</span>
+          <h2 class="section-title location-text-2" :class="{ 'fade-in-individually': isNudging }" data-text="UNSERE STANDORTE">UNSERE STANDORTE</h2>
+          <p class="section-subtitle location-text-3" :class="{ 'fade-in-individually': isNudging }">Präsenz in ganz Europa für beste Erreichbarkeit</p>
         </div>
         
-        <div class="map-container">
-          <!-- Google Maps Embed -->
-          <div class="google-map">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5570665.339444434!2d5.866341973291837!3d50.503887287677804!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479e75f9a38c5fd9%3A0x10cb84a7db1987d!2sMunich%2C%20Germany!5e0!3m2!1sen!2sus!4v1706285439215!5m2!1sen!2sus"
-              width="100%"
-              height="500"
-              style="border:0; border-radius: 20px;"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-            
-            <!-- Custom Location Markers Overlay -->
-            <div class="location-markers-overlay">
-              <div 
-                v-for="location in locations" 
-                :key="location.id"
-                class="custom-marker"
-                :style="{ left: location.mapX + '%', top: location.mapY + '%' }"
-                @click="selectLocation(location)"
-                :class="{ active: selectedLocation?.id === location.id }"
-              >
-                <div class="marker-pulse"></div>
-                <div class="marker-dot"></div>
-                <div class="marker-label">{{ location.city }}</div>
+        <div class="map-container location-text-4" :class="{ 'fade-in-individually': isNudging }">
+          <ClientOnly>
+            <!-- Desktop Map -->
+            <LocationsMap v-if="!isMobile" />
+            <!-- Mobile Map -->
+            <MobileInteractiveMap v-else />
+            <template #fallback>
+              <div class="map-loading">
+                <div class="loading-spinner"></div>
+                <p>Lade Karte...</p>
               </div>
-            </div>
-          </div>
-          
-          <!-- Location Details -->
-          <transition name="slide-fade">
-            <div v-if="selectedLocation" class="location-details">
-              <h3>{{ selectedLocation.city }}</h3>
-              <p>{{ selectedLocation.country }}</p>
-              <div class="detail-info">
-                <span class="material-icons">{{ selectedLocation.icon }}</span>
-                <span>{{ selectedLocation.type }}</span>
-              </div>
-              <p class="detail-description">{{ selectedLocation.description }}</p>
-              <button @click="openGoogleMaps(selectedLocation)" class="location-btn">
-                <span class="material-icons">directions</span>
-                ROUTE PLANEN
-              </button>
-            </div>
-          </transition>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- Values Section -->
-    <section class="values-section">
-      <div class="container">
-        <div class="section-header">
-          <span class="hero-badge animate-fade-in">UNSERE WERTE</span>
-          <h2 class="section-title" data-text="WAS UNS AUSZEICHNET">WAS UNS AUSZEICHNET</h2>
-        </div>
-        
-        <div class="values-grid">
-          <div 
-            class="value-card" 
-            v-for="(value, index) in companyValues" 
-            :key="value.id"
-            :style="{ animationDelay: `${index * 0.1}s` }"
-          >
-            <div class="value-icon">
-              <span class="material-icons">{{ value.icon }}</span>
-            </div>
-            <h3>{{ value.title }}</h3>
-            <p>{{ value.description }}</p>
-            <div class="value-number">{{ String(index + 1).padStart(2, '0') }}</div>
-          </div>
+            </template>
+          </ClientOnly>
         </div>
       </div>
     </section>
@@ -281,20 +130,20 @@
     <section class="team-section">
       <div class="container">
         <div class="section-header">
-          <span class="hero-badge animate-fade-in">UNSER TEAM</span>
-          <h2 class="section-title" data-text="EXPERTEN MIT LEIDENSCHAFT">EXPERTEN MIT LEIDENSCHAFT</h2>
-          <p class="section-subtitle">
+          <span class="hero-badge animate-on-scroll">UNSER TEAM</span>
+          <h2 class="section-title animate-on-scroll-delayed" data-text="EXPERTEN MIT LEIDENSCHAFT">EXPERTEN MIT LEIDENSCHAFT</h2>
+          <p class="section-subtitle animate-on-scroll-delayed">
             Speziell geschulte Innenarchitekten und Designer stehen Ihnen zur Seite
           </p>
         </div>
         
-        <div class="team-showcase">
+        <div class="team-showcase animate-on-scroll-slow">
           <div class="showcase-main">
-            <div class="main-image">
+            <div class="main-image animate-on-scroll">
               <img src="https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686576cf622e38e88f0236c5.png" alt="Team">
               <div class="image-overlay"></div>
             </div>
-            <div class="main-content">
+            <div class="main-content animate-on-scroll-delayed">
               <h3>Gemeinsam für Ihre Vision</h3>
               <p>
                 Unser Team aus erfahrenen Handwerkern, Designern und Beratern arbeitet 
@@ -367,13 +216,44 @@
           <button class="modal-close" @click="closeModals">
             <span class="material-icons">close</span>
           </button>
+          
+          <!-- Image Carousel - Full Width at Top -->
+          <div class="modal-carousel" v-if="selectedUnit">
+            <div class="carousel-container">
+              <div 
+                class="carousel-track"
+                :style="{ transform: `translateX(-${currentCarouselIndex * 100}%)` }"
+              >
+                <div 
+                  v-for="(image, index) in selectedUnit.carouselImages" 
+                  :key="index"
+                  class="carousel-slide"
+                >
+                  <img :src="image" :alt="`${selectedUnit.name} Image ${index + 1}`">
+                </div>
+              </div>
+              
+              <!-- Carousel Indicators -->
+              <div class="carousel-indicators">
+                <button 
+                  v-for="(image, index) in selectedUnit.carouselImages" 
+                  :key="index"
+                  :class="['carousel-dot', { active: currentCarouselIndex === index }]"
+                  @click="goToCarouselSlide(index)"
+                ></button>
+              </div>
+            </div>
+          </div>
+          
           <div class="modal-body" v-if="selectedUnit">
             <div class="modal-header">
-              <div class="modal-icon">
-                <span class="material-icons">{{ selectedUnit.icon }}</span>
-              </div>
-              <h2>{{ selectedUnit.name }}</h2>
               <p class="modal-subtitle">{{ selectedUnit.description }}</p>
+            </div>
+            
+            <!-- Full Description -->
+            <div class="modal-description">
+              <h3>Über diesen Service</h3>
+              <p>{{ selectedUnit.fullDescription }}</p>
             </div>
             
             <div class="modal-features">
@@ -387,9 +267,13 @@
             </div>
             
             <div class="modal-cta">
-              <p>Interessiert an unseren {{ selectedUnit.name }} Services?</p>
+              <div class="cta-highlight">
+                <h3>Interessiert an unserem {{ selectedUnit.name }} Service?</h3>
+                <p>Lassen Sie uns gemeinsam Ihr Projekt realisieren</p>
+              </div>
               <div class="modal-buttons">
                 <NuxtLink to="/kontakt" class="modal-btn primary">
+                  <span class="btn-icon material-icons">phone</span>
                   BERATUNG ANFRAGEN
                   <span class="material-icons">arrow_forward</span>
                 </NuxtLink>
@@ -408,7 +292,9 @@
 <script setup>
 import { ref, reactive, onMounted, onUnmounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import LuxurySlider from '~/components/LuxurySlider.vue'
+import LuxurySlider from '~/components/website/LuxurySlider.vue'
+import LocationsMap from '~/components/website/locationsMap.vue'
+import MobileInteractiveMap from '~/components/mobile/mobileInteractiveMap.vue'
 
 // Fix imports and page meta
 definePageMeta({
@@ -424,15 +310,28 @@ const selectedLocation = ref(null)
 const visibleTimeline = ref([])
 const showUnitModal = ref(false)
 const selectedUnit = ref(null)
+const scrollDirection = ref('down') // Track scroll direction ('up' or 'down')
+const currentSlideIndex = ref(0)
+const totalSlides = ref(4) // Based on businessUnits length
+const isMobile = ref(false)
+const isNudging = ref(false) // New state for nudge animation
+const isSmoothScrolling = ref(false) // State for smooth scroll animation
+
+// Carousel state
+const currentCarouselIndex = ref(0)
+let carouselInterval = null
+
+// Intersection Observer für Scroll-Animationen
+let scrollAnimationObserver = null
 
 // Refs for parallax
 const heroBg = ref(null)
 const heroContent = ref(null)
 const heroSubheading = ref(null)
+const luxurySliderRef = ref(null)
+const unitsSection = ref(null)
+const locationsSection = ref(null)
 const ticking = ref(false)
-
-// Hero Title Animation
-const heroTitle = ['ARCHITEKTUR', 'GROUP']
 
 // Timeline Data
 const timeline = [
@@ -471,6 +370,13 @@ const businessUnits = [
     icon: 'layers',
     image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686576cf622e38e88f0236c5.png',
     description: 'Meister-Fachbetrieb seit 1957 in 3. Generation',
+    fullDescription: 'Als Meister-Fachbetrieb mit über 65 Jahren Erfahrung führen wir Premium-Verlegungen von Natursteinen, Keramik und High-Tech Feinsteinzeug aus. Unsere Spezialität liegt in der fugenlosen Design-Verlegung, die höchste handwerkliche Präzision erfordert. Von exklusiven Edelmarmor-Böden bis hin zu großformatigen Wandverkleidungen – wir setzen Ihre Visionen mit perfekter Ausführung um.',
+    carouselImages: [
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80',
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
+      'https://images.unsplash.com/photo-1615873968403-89e068629265?w=800&q=80',
+      'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800&q=80'
+    ],
     features: [
       'Fugenlose Design-Verlegung',
       'Innen- und Außenbereich',
@@ -483,6 +389,13 @@ const businessUnits = [
     icon: 'bathtub',
     image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b1ceb7b78f5ed302d.png',
     description: 'Vollumfängliche Badezimmergestaltungen',
+    fullDescription: 'Unsere Bädermanufaktur erschafft Wellnessoasen der Extraklasse. Von luxuriösen Walk-In Duschen mit rahmenloser Verglasung bis hin zu maßgefertigten Waschtischen aus edelstem Naturstein. Jedes Badezimmer wird individuell geplant und mit höchster Präzision ausgeführt. Wir kombinieren moderne Technik mit zeitlosem Design für ultimativen Komfort.',
+    carouselImages: [
+      'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80',
+      'https://images.unsplash.com/photo-1631889993959-41b4e9c6e3c5?w=800&q=80',
+      'https://images.unsplash.com/photo-1620626011761-996317b8d101?w=800&q=80',
+      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80'
+    ],
     features: [
       'Walk-In Duschen',
       'Waschtischgestaltungen',
@@ -493,8 +406,15 @@ const businessUnits = [
     id: 3,
     name: 'Exclusive Galabau',
     icon: 'park',
-    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b70b0803723582ed6.png', // Added image
+    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1c5b70b0803723582ed6.png',
     description: 'Garten- und Landschaftsbau der Extraklasse',
+    fullDescription: 'Unser Galabau-Team verwandelt Außenbereiche in exklusive Wohlfühlräume. Von eleganten Terrassenanlagen mit Natursteinbelägen über maßgeschneiderte Poollandschaften bis hin zu kompletter Gartenarchitektur. Wir schaffen harmonische Übergänge zwischen Innen- und Außenraum und setzen dabei auf nachhaltige, hochwertige Materialien und durchdachte Gestaltungskonzepte.',
+    carouselImages: [
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+      'https://images.unsplash.com/photo-1544373345-2516e8570bb4?w=800&q=80',
+      'https://images.unsplash.com/photo-1553799933-4fa3d6f715c1?w=800&q=80',
+      'https://images.unsplash.com/photo-1566493896773-91918dd40065?w=800&q=80'
+    ],
     features: [
       'Terrassengestaltung',
       'Poolbau',
@@ -505,8 +425,15 @@ const businessUnits = [
     id: 4,
     name: 'Architektur Services',
     icon: 'architecture',
-    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png', // Added image
+    image: 'https://storage.googleapis.com/msgsndr/1VKw2Q0PPRKRbEKpruef/media/686d1e976f2c95bfc4fb1f56.png',
     description: 'Komplettservice aus einer Hand',
+    fullDescription: 'Als ganzheitlicher Architektur-Service begleiten wir Sie von der ersten Idee bis zur schlüsselfertigen Übergabe. Unser erfahrenes Team aus Architekten, Ingenieuren und Projektleitern sorgt für reibungslose Abläufe und höchste Qualitätsstandards. Ob Neubau oder Renovierung – wir koordinieren alle Gewerke und garantieren termingerechte, budgetkonforme Umsetzung.',
+    carouselImages: [
+      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80',
+      'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=800&q=80',
+      'https://images.unsplash.com/photo-1582063289852-62e3ba2747f8?w=800&q=80'
+    ],
     features: [
       'Projektleitung',
       'Innenarchitektur',
@@ -515,119 +442,448 @@ const businessUnits = [
   }
 ]
 
-// Locations with Google Maps positions
-const locations = [
-  {
-    id: 1,
-    city: 'München',
-    country: 'Deutschland',
-    x: 52,
-    y: 48,
-    mapX: 60,
-    mapY: 55,
-    type: 'Showroom & Hauptsitz',
-    icon: 'business',
-    description: '2500m² Showroom mit Europas größter Natursteinauswahl',
-    address: 'Am Hohenrand 9, 82335 Berg'
-  },
-  {
-    id: 2,
-    city: 'Düsseldorf',
-    country: 'Deutschland',
-    x: 48,
-    y: 42,
-    mapX: 40,
-    mapY: 40,
-    type: 'Showroom & Lager',
-    icon: 'warehouse',
-    description: '80.000m² Lagerfläche für sofortige Verfügbarkeit',
-    address: 'Düsseldorf, Deutschland'
-  },
-  {
-    id: 3,
-    city: 'Zürich',
-    country: 'Schweiz',
-    x: 50,
-    y: 55,
-    mapX: 55,
-    mapY: 65,
-    type: 'Vertriebsbüro',
-    icon: 'store',
-    description: 'Beratung und Vertrieb für die Schweiz',
-    address: 'Zürich, Schweiz'
-  },
-  {
-    id: 4,
-    city: 'Côte d\'Azur',
-    country: 'Frankreich',
-    x: 45,
-    y: 65,
-    mapX: 45,
-    mapY: 75,
-    type: 'Partner Showroom',
-    icon: 'handshake',
-    description: 'Exklusive Präsenz an der französischen Riviera',
-    address: 'Nice, Frankreich'
-  },
-  {
-    id: 5,
-    city: 'Bergamo',
-    country: 'Italien',
-    x: 55,
-    y: 60,
-    mapX: 58,
-    mapY: 70,
-    type: 'Produktionspartner',
-    icon: 'factory',
-    description: 'Direkte Zusammenarbeit mit italienischen Steinbrüchen',
-    address: 'Bergamo, Italien'
-  }
-]
+// Carousel functions
+const startCarousel = () => {
+  if (carouselInterval) clearInterval(carouselInterval)
+  carouselInterval = setInterval(() => {
+    if (selectedUnit.value && selectedUnit.value.carouselImages) {
+      currentCarouselIndex.value = (currentCarouselIndex.value + 1) % selectedUnit.value.carouselImages.length
+    }
+  }, 3000) // Change image every 3 seconds
+}
 
-
-// Company Values
-const companyValues = [
-  {
-    id: 1,
-    icon: 'star',
-    title: 'Exzellenz',
-    description: 'Höchste Qualität in Material und Verarbeitung'
-  },
-  {
-    id: 2,
-    icon: 'handshake',
-    title: 'Vertrauen',
-    description: '67 Jahre Familientradition und Zuverlässigkeit'
-  },
-  {
-    id: 3,
-    icon: 'lightbulb',
-    title: 'Innovation',
-    description: 'Modernste Technologien und patentierte Verfahren'
-  },
-  {
-    id: 4,
-    icon: 'favorite',
-    title: 'Leidenschaft',
-    description: 'Begeisterung für außergewöhnliches Design'
-  },
-  {
-    id: 5,
-    icon: 'eco',
-    title: 'Nachhaltigkeit',
-    description: 'Verantwortungsvoller Umgang mit Ressourcen'
-  },
-  {
-    id: 6,
-    icon: 'group',
-    title: 'Partnerschaft',
-    description: 'Gemeinsam zu Ihrem Traumprojekt'
+const stopCarousel = () => {
+  if (carouselInterval) {
+    clearInterval(carouselInterval)
+    carouselInterval = null
   }
-]
+}
+
+const goToCarouselSlide = (index) => {
+  currentCarouselIndex.value = index
+}
+
+// Methods
+const openUnitModal = (unit) => {
+  selectedUnit.value = unit
+  currentCarouselIndex.value = 0
+  showUnitModal.value = true
+  if (process.client) {
+    document.body.style.overflow = 'hidden'
+  }
+  startCarousel()
+}
+
+const closeModals = () => {
+  stopCarousel()
+  showUnitModal.value = false
+  selectedUnit.value = null
+  if (process.client) {
+    document.body.style.overflow = 'auto'
+  }
+}
+
+const scrollToContent = () => {
+  const storySection = document.querySelector('.story-section')
+  if (storySection) {
+    storySection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
+// Mobile detection function
+const checkMobile = () => {
+  if (process.client) {
+    isMobile.value = window.innerWidth <= 768
+  }
+}
+
+// Specific transition from locations-section to units-section
+const transitionToUnitsSection = () => {
+  console.log('LOCATIONS → UNITS TRANSITION - Starting fade transition')
+  
+  // Get both sections
+  const unitsSection = document.querySelector('.units-section')
+  const locationsSection = document.querySelector('.locations-section')
+  
+  if (!unitsSection || !locationsSection) return
+  
+  // Get hero badges
+  const unitsBadge = unitsSection.querySelector('.hero-badge')
+  const locationsBadge = locationsSection.querySelector('.hero-badge')
+  
+  if (!unitsBadge || !locationsBadge) return
+  
+  console.log('Transitioning from locations to units section')
+  
+  // Start fade transition
+  isNudging.value = true
+  
+  // Prepare units section for fade-in from top
+  unitsSection.style.transition = ''
+  unitsSection.style.opacity = '0'
+  unitsSection.style.transform = 'translateY(-60px)'
+  
+  // Apply fade-out to locations section - fade down and out (faster)
+  locationsSection.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+  locationsSection.style.opacity = '0'
+  locationsSection.style.transform = 'translateY(60px)'
+  
+  // Calculate scroll position to place units badge at exactly 10% from top
+  const viewportHeight = window.innerHeight
+  const targetBadgePositionFromTop = viewportHeight * 0.1 // 10% from top
+  const unitsBadgeRect = unitsBadge.getBoundingClientRect()
+  
+  // Calculate target scroll to position badge at exactly 10% from top
+  const targetScroll = window.scrollY + unitsBadgeRect.top - targetBadgePositionFromTop
+  
+  console.log('Units Badge Positioning (10% target):', {
+    viewportHeight,
+    targetPosition: targetBadgePositionFromTop,
+    currentBadgeTop: unitsBadgeRect.top,
+    scrollOffset: unitsBadgeRect.top - targetBadgePositionFromTop,
+    finalTargetScroll: targetScroll
+  })
+  
+  // Prevent scroll events during transition
+  document.body.style.overflow = 'hidden'
+  
+  // Faster fade timing - start fade in earlier
+  setTimeout(() => {
+    // Instantly scroll to target position while sections are fading
+    window.scrollTo({
+      top: targetScroll,
+      behavior: 'auto' // Instant scroll during transition
+    })
+    
+    // Start fade-in of units section from top (faster)
+    unitsSection.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    unitsSection.style.opacity = '1'
+    unitsSection.style.transform = 'translateY(0)'
+    
+    console.log('Faded to units section with badge positioned at 10% from top')
+    
+  }, 200) // Start fade-in earlier (200ms instead of 400ms)
+  
+  // Reset all transforms after full transition (faster cleanup)
+  setTimeout(() => {
+    locationsSection.style.opacity = '1'
+    locationsSection.style.transform = 'translateY(0)'
+    locationsSection.style.transition = ''
+    unitsSection.style.transition = ''
+    document.body.style.overflow = 'auto' // Re-enable scrolling
+    isNudging.value = false
+  }, 1000) // Faster cleanup (1000ms instead of 1600ms)
+}
+
+// nudgeToNextSection() - only for units → locations transition
+// Fade transition from units-section to locations-section
+const nudgeToNextSection = () => {
+  console.log('UNITS → LOCATIONS TRANSITION - Starting fade transition')
+  
+  // Get both sections
+  const unitsSection = document.querySelector('.units-section')
+  const locationsSection = document.querySelector('.locations-section')
+  
+  if (!unitsSection || !locationsSection) return
+  
+  // Determine which section is currently visible
+  const unitsBadge = unitsSection.querySelector('.hero-badge')
+  const locationsBadge = locationsSection.querySelector('.hero-badge')
+  
+  if (!unitsBadge || !locationsBadge) return
+  
+  // Check which badge is currently more visible (closer to top)
+  const unitsBadgeRect = unitsBadge.getBoundingClientRect()
+  const locationsBadgeRect = locationsBadge.getBoundingClientRect()
+  
+  // This function is primarily for units → locations (from mobile slider)
+  const isInUnitsSection = unitsBadgeRect.top < window.innerHeight * 0.5
+  
+  if (isInUnitsSection) {
+    // FORWARD: Units → Locations
+    console.log('Forward transition: Units → Locations')
+    
+    const currentSection = unitsSection
+    const targetSection = locationsSection
+    const targetBadge = locationsBadge
+    
+    // Start fade transition
+    isNudging.value = true
+    
+    // Prepare target section for fade-in from bottom
+    targetSection.style.transition = ''
+    targetSection.style.opacity = '0'
+    targetSection.style.transform = 'translateY(60px)'
+    
+    // Apply fade-out to current section - fade up and out (faster)
+    currentSection.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    currentSection.style.opacity = '0'
+    currentSection.style.transform = 'translateY(-60px)'
+    
+    // Calculate scroll position to place locations badge at exactly 10% from top
+    const viewportHeight = window.innerHeight
+    const targetBadgePositionFromTop = viewportHeight * 0.1 // 10% from top
+    const targetBadgeRect = targetBadge.getBoundingClientRect()
+    
+    // Calculate target scroll to position badge at exactly 10% from top
+    const targetScroll = window.scrollY + targetBadgeRect.top - targetBadgePositionFromTop
+    
+    console.log('Locations Badge Positioning (10% target):', {
+      viewportHeight,
+      targetPosition: targetBadgePositionFromTop,
+      currentBadgeTop: targetBadgeRect.top,
+      scrollOffset: targetBadgeRect.top - targetBadgePositionFromTop,
+      finalTargetScroll: targetScroll
+    })
+    
+    // Prevent scroll events during transition
+    document.body.style.overflow = 'hidden'
+    
+    // Faster fade timing - start fade in earlier
+    setTimeout(() => {
+      // Instantly scroll to target position while sections are fading
+      window.scrollTo({
+        top: targetScroll,
+        behavior: 'auto' // Instant scroll during transition
+      })
+      
+      // Start fade-in of target section from bottom (faster)
+      targetSection.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+      targetSection.style.opacity = '1'
+      targetSection.style.transform = 'translateY(0)'
+      
+      console.log('Faded to locations section with badge positioned at 10% from top')
+      
+    }, 200) // Start fade-in earlier (200ms instead of 400ms)
+    
+    // Reset all transforms after full transition (faster cleanup)
+    setTimeout(() => {
+      currentSection.style.opacity = '1'
+      currentSection.style.transform = 'translateY(0)'
+      currentSection.style.transition = ''
+      targetSection.style.transition = ''
+      document.body.style.overflow = 'auto' // Re-enable scrolling
+      isNudging.value = false
+    }, 1000) // Faster cleanup (1000ms instead of 1600ms)
+  } else {
+    console.log('Warning: nudgeToNextSection called from locations section - use transitionToUnitsSection instead')
+  }
+}
+
+// Handle wheel events for mobile slider navigation and scroll blocking
+const handleWheel = (event) => {
+  console.log('Wheel:', { deltaY: event.deltaY, currentSlide: currentSlideIndex.value, totalSlides: totalSlides.value })
+  
+  // Block fast scrolling from locations to units section
+  if (event.deltaY < -100 && !isNudging.value) { // Fast upward scroll
+    const locationsSection = document.querySelector('.locations-section')
+    const unitsSection = document.querySelector('.units-section')
+    
+    if (locationsSection && unitsSection) {
+      const locationsBadge = locationsSection.querySelector('.hero-badge')
+      const unitsBadge = unitsSection.querySelector('.hero-badge')
+      
+      if (locationsBadge && unitsBadge) {
+        const locationsBadgeRect = locationsBadge.getBoundingClientRect()
+        const unitsBadgeRect = unitsBadge.getBoundingClientRect()
+        const viewportHeight = window.innerHeight
+        
+        // Check if user is in locations section
+        const isInLocationsSection = locationsBadgeRect.top < viewportHeight * 0.8
+        
+        // Block if trying to fast scroll to units section without proper transition
+        if (isInLocationsSection && unitsBadgeRect.bottom > 0) {
+          console.log('🚫 WHEEL BLOCKED: Fast scroll to units section prevented')
+          event.preventDefault()
+          return
+        }
+      }
+    }
+  }
+  
+  // Handle mobile wheel events normally for other cases
+  if (isMobile.value) {
+    // Let the mobile slider handle its own navigation through touch events
+    // The wheel events should not interfere with touch-based navigation
+  }
+}
+
+// Handle slider change events
+const handleSliderChange = (swiper) => {
+  // Only update if this is a legitimate slide change, not a reset
+  if (swiper && swiper.activeIndex !== undefined) {
+    const newIndex = swiper.activeIndex
+    console.log('Slide changed from', currentSlideIndex.value, 'to', newIndex)
+    currentSlideIndex.value = newIndex
+  }
+  // Keine automatische Entsperrung mehr - nur über die spezifischen Scroll-Aktionen
+}
+
+// Enhanced smooth scroll function with easing
+const smoothScrollTo = (targetPosition, duration = 800) => {
+  if (isSmoothScrolling.value) return // Prevent multiple simultaneous smooth scrolls
+  
+  const startPosition = window.scrollY
+  const distance = targetPosition - startPosition
+  const startTime = performance.now()
+  
+  isSmoothScrolling.value = true
+  
+  // Easing function (ease-out cubic)
+  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
+  
+  const animate = (currentTime) => {
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    const easedProgress = easeOutCubic(progress)
+    
+    const currentPosition = startPosition + (distance * easedProgress)
+    window.scrollTo(0, currentPosition)
+    
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      isSmoothScrolling.value = false
+      console.log('✅ Smooth scroll completed')
+    }
+  }
+  
+  requestAnimationFrame(animate)
+}
 
 // Update the handleScroll function
 const handleScroll = () => {
-  scrollY.value = window.scrollY
+  const currentScrollY = window.scrollY
+  const previousScrollY = scrollY.value
+  scrollY.value = currentScrollY
+  
+  // Determine scroll direction
+  if (currentScrollY > previousScrollY) {
+    scrollDirection.value = 'down'
+  } else if (currentScrollY < previousScrollY) {
+    scrollDirection.value = 'up'
+  }
+
+  // Check for smooth scroll stop when units section hero badge reaches top 10% (MOBILE ONLY)
+  if (isMobile.value) { // Only apply smooth scroll stop on mobile devices
+    const unitsSection = document.querySelector('.units-section')
+    if (unitsSection && !isNudging.value && !isSmoothScrolling.value) {
+      const unitsBadge = unitsSection.querySelector('.hero-badge')
+      if (unitsBadge) {
+        const unitsBadgeRect = unitsBadge.getBoundingClientRect()
+        const viewportHeight = window.innerHeight
+        const topTenPercent = viewportHeight * 0.1 // 10% from top
+        const badgeTop = unitsBadgeRect.top
+        
+        // Check if we should bypass smooth scroll stop
+        // Bypass when mobile luxury slider is on "Premium Fliesen Design" (index 0) 
+        // and user is trying to scroll up (to previous slider)
+        const isOnPremiumFliesenDesign = currentSlideIndex.value === 0 // "Premium Fliesen Design" is at index 0
+        const isScrollingUp = scrollDirection.value === 'up'
+        const shouldBypassForSliderNavigation = isOnPremiumFliesenDesign && isScrollingUp && isMobile.value
+        
+        // Enhanced approach zone detection for smoother stopping
+        const approachZone = 60 // Larger approach zone for earlier detection
+        const snapZone = 15 // Smaller snap zone for precise stopping
+        
+        const distanceFromTarget = Math.abs(badgeTop - topTenPercent)
+        const isInApproachZone = badgeTop <= topTenPercent + approachZone && badgeTop >= topTenPercent - approachZone
+        const isInSnapZone = distanceFromTarget <= snapZone
+        
+        // Only apply smooth scroll stop if NOT bypassing AND in approach zone
+        if (!shouldBypassForSliderNavigation && isInApproachZone) {
+          // Calculate exact position where badge should be at 10%
+          const targetScrollPosition = window.scrollY + (badgeTop - topTenPercent)
+          
+          if (isInSnapZone) {
+            console.log('🎯 PRECISION STOP: Units badge in snap zone - smooth scrolling to 10% (MOBILE)')
+            
+            // Use enhanced smooth scroll with shorter duration for nearby targets
+            smoothScrollTo(targetScrollPosition, 400)
+            return // Prevent further scroll processing
+            
+          } else {
+            // In approach zone but not snap zone - gentle deceleration
+            const decelerationFactor = Math.max(0.3, 1 - (approachZone - distanceFromTarget) / approachZone)
+            
+            console.log('⚡ APPROACH ZONE: Gentle deceleration (MOBILE)', {
+              distanceFromTarget,
+              decelerationFactor,
+              badgeTop,
+              targetPosition: topTenPercent
+            })
+            
+            // Gentle scroll adjustment (optional micro-adjustment)
+            if (distanceFromTarget > snapZone && distanceFromTarget < 30) {
+              smoothScrollTo(targetScrollPosition, 600)
+              return
+            }
+          }
+        } else if (shouldBypassForSliderNavigation) {
+          console.log('🔄 BYPASS: On Premium Fliesen Design slide, allowing upward scroll for slider navigation (MOBILE)')
+          // Don't return here - allow the function to continue to the transition logic
+        }
+      }
+    }
+  }
+
+  // Check for locations-section → units-section transition when hero badge reaches top 15% (MOBILE ONLY)
+  if (scrollDirection.value === 'up' && !isNudging.value && isMobile.value) {
+    const locationsSection = document.querySelector('.locations-section')
+    const unitsSection = document.querySelector('.units-section')
+    
+    if (locationsSection && unitsSection) {
+      const locationsBadge = locationsSection.querySelector('.hero-badge')
+      const unitsBadge = unitsSection.querySelector('.hero-badge')
+      
+      if (locationsBadge && unitsBadge) {
+        const locationsBadgeRect = locationsBadge.getBoundingClientRect()
+        const unitsBadgeRect = unitsBadge.getBoundingClientRect()
+        const viewportHeight = window.innerHeight
+        const topFifteenPercent = viewportHeight * 0.15 
+        
+        // Check if user is in locations section
+        const isInLocationsSection = locationsBadgeRect.top < viewportHeight * 0.8
+        
+        // Only trigger transition when badge is exactly at 15% AND visible on screen
+        const badgeTop = locationsBadgeRect.top
+        const badgeIsVisible = badgeTop >= 0 && badgeTop <= viewportHeight // Badge is in viewport
+        const badgeReachedTriggerPoint = badgeTop <= topFifteenPercent && badgeTop >= topFifteenPercent - 10 // Within 10px tolerance of 15%
+        const canTriggerTransition = badgeIsVisible && badgeReachedTriggerPoint
+        
+        // BLOCK: Prevent direct scrolling to units section from locations (MOBILE ONLY)
+        if (isInLocationsSection && !canTriggerTransition && unitsBadgeRect.bottom > 0) {
+          console.log('🚫 BLOCKED: Direct scroll to units section prevented - use transition instead (MOBILE)')
+          // Prevent scroll by resetting to previous position
+          window.scrollTo({
+            top: previousScrollY,
+            behavior: 'auto'
+          })
+          return // Stop further scroll processing
+        }
+        
+        // Debug logging
+        console.log('Badge Position Debug (MOBILE):', {
+          badgeTop: badgeTop,
+          topFifteenPercent,
+          badgeIsVisible,
+          badgeReachedTriggerPoint,
+          canTriggerTransition,
+          isInLocationsSection,
+          scrollDirection: scrollDirection.value,
+          isNudging: isNudging.value
+        })
+        
+        if (canTriggerTransition) {
+          console.log('🎯 BADGE TRIGGER: Locations badge reached exactly 15% while visible - triggering transition to units! (MOBILE)')
+          transitionToUnitsSection() // Use specific function for locations → units
+          return // Prevent normal scroll handling during transition
+        } else if (!badgeIsVisible && scrollDirection.value === 'up') {
+          console.log('❌ Badge out of view - no transition triggered on scroll up (MOBILE)')
+        }
+      }
+    }
+  }
   
   const timelineEl = document.querySelector('.timeline')
   if (timelineEl) {
@@ -646,6 +902,18 @@ const handleScroll = () => {
       })
     }
 
+    // Position the timeline line correctly relative to the first marker
+    const firstStepMarker = timelineEl.querySelector('.step-marker')
+    if (firstStepMarker) {
+      const firstStepMarkerRect = firstStepMarker.getBoundingClientRect()
+      const timelineLineLeft = firstStepMarkerRect.left + firstStepMarkerRect.width/2 - timelineRect.left
+      
+      const timelineLine = timelineEl.querySelector('.timeline-line')
+      if (timelineLine) {
+        timelineLine.style.left = `${timelineLineLeft}px`
+      }
+    }
+    
     // Update timeline line height
     const firstDot = timelineEl.querySelector('.timeline-dot')
     const lastDot = timelineEl.querySelectorAll('.timeline-dot')[timeline.length - 1]
@@ -699,30 +967,82 @@ const animateNumbers = () => {
   })
 }
 
+// Intersection Observer für Scroll-Animationen
+const initScrollAnimations = () => {
+  if (!process.client) return
+  
+  // Konfiguration für den Observer
+  const observerOptions = {
+    root: null,
+    rootMargin: '-10% 0px -10% 0px', // Element muss 10% im Viewport sein
+    threshold: 0.1
+  }
+  
+  // Observer Callback
+  const observerCallback = (entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Element ist sichtbar - Animation starten
+        entry.target.classList.add('is-visible')
+        
+        console.log('🎯 Animation triggered for:', entry.target.className)
+      }
+    })
+  }
+  
+  // Observer erstellen
+  scrollAnimationObserver = new IntersectionObserver(observerCallback, observerOptions)
+  
+  // Alle animierbaren Elemente finden und observieren
+  const animatableElements = document.querySelectorAll('.animate-on-scroll, .animate-on-scroll-delayed, .animate-on-scroll-slow')
+  
+  animatableElements.forEach(element => {
+    scrollAnimationObserver.observe(element)
+  })
+  
+  console.log(`📊 Initialized scroll animations for ${animatableElements.length} elements`)
+}
+
+// Observer cleanup
+const cleanupScrollAnimations = () => {
+  if (scrollAnimationObserver) {
+    scrollAnimationObserver.disconnect()
+    scrollAnimationObserver = null
+  }
+}
+
 // Lifecycle
 onMounted(() => {
-  window.addEventListener('scroll', handleScroll, { passive: true })
-  window.addEventListener('scroll', requestTick, { passive: true })
-  updateParallax()
-  
-  // Auto-rotate business units
-  const interval = setInterval(() => {
-    nextUnit()
-  }, 5000)
-
-  return () => {
-    clearInterval(interval)
-    window.removeEventListener('scroll', handleScroll)
-    window.removeEventListener('scroll', requestTick)
+  checkMobile()
+  if (process.client) {
+    window.addEventListener('resize', checkMobile)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('scroll', requestTick, { passive: true })
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    
+    // Scroll-Animationen initialisieren (mit Delay für DOM-Rendering)
+    setTimeout(() => {
+      initScrollAnimations()
+    }, 100)
   }
+  updateParallax()
 })
 
 onUnmounted(() => {
-  document.body.style.overflow = 'auto'
+  if (process.client) {
+    window.removeEventListener('resize', checkMobile)
+    window.removeEventListener('scroll', handleScroll)
+    window.removeEventListener('scroll', requestTick)
+    window.removeEventListener('wheel', handleWheel)
+    document.body.style.overflow = 'auto'
+    
+    // Scroll-Animationen cleanup
+    cleanupScrollAnimations()
+  }
 })
 
 function updateParallax() {
-  if (!heroBg.value || !heroContent.value || !heroSubheading.value) return
+  if (!process.client || !heroBg.value || !heroContent.value || !heroSubheading.value) return
 
   const scrollY = window.scrollY
   const viewportHeight = window.innerHeight
@@ -809,7 +1129,7 @@ function requestTick() {
   will-change: transform;
 }
 
-/* Removed duplicate styles for .hero-badge */
+
 .hero-badge {
   display: inline-block;
   padding: 1rem 3rem;
@@ -961,23 +1281,7 @@ function requestTick() {
   position: relative;
   overflow: hidden;
   clip-path: polygon(15px 0, 100% 0, calc(100% - 15px) 100%, 0 100%);
-  animation: badgePulse 3s infinite;
   transition: all 0.4s ease;
-}
-
-@keyframes badgePulse {
-  0%, 100% { 
-    box-shadow: 
-      0 0 20px rgba(164, 113, 72, 0.5),
-      inset 0 0 20px rgba(164, 113, 72, 0.1);
-    transform: scale(1);
-  }
-  50% { 
-    box-shadow: 
-      0 0 40px rgba(164, 113, 72, 0.8),
-      inset 0 0 30px rgba(164, 113, 72, 0.2);
-    transform: scale(1.05);
-  }
 }
 
 .hero-badge::before {
@@ -988,7 +1292,7 @@ function requestTick() {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(164, 113, 72, 0.5), transparent);
-  animation: sweep 3s infinite;
+  animation: sweep 3s forwards;
 }
 
 @keyframes sweep {
@@ -1031,6 +1335,44 @@ function requestTick() {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Hero-Subheading Style Animation für alle Elemente */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variationen für unterschiedliche Timing */
+.animate-on-scroll-delayed {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s,
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+}
+
+.animate-on-scroll-delayed.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-on-scroll-slow {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-on-scroll-slow.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .scroll-indicator {
@@ -1202,9 +1544,16 @@ function requestTick() {
   position: left;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  
+  /* Always ensure text is visible with solid color */
+  color: var(--primary-light);
+  
+  /* Enhanced visibility and styling */
+  text-shadow: 
+    0 0 20px rgba(250, 250, 248, 0.3),
+    0 0 40px rgba(164, 113, 72, 0.2),
+    2px 2px 4px rgba(0, 0, 0, 0.8);
+  
   transition: transform 0.3s ease;
 }
 
@@ -1233,6 +1582,12 @@ function requestTick() {
 .articles-grid,
 .luxury-slider {
   margin-top: 0rem; /* Increased top margin for content following subtitles */
+}
+
+/* Make luxury-slider match section header width */
+.luxury-slider {
+  max-width: 1400px;
+  margin-left: 0 !important;
 }
 
 /* Story Section Title - ULTRA PREMIUM STYLING */
@@ -1266,6 +1621,7 @@ function requestTick() {
   );
   background-size: 400% 100%;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: white;
   animation: slideInLeft 1s cubic-bezier(0.68, -0.55, 0.265, 1.55),
             gradientMove 6s linear infinite;
@@ -1295,6 +1651,7 @@ function requestTick() {
   letter-spacing: 0.2em;
   background: linear-gradient(135deg, #FAFAF8 0%, #a47148 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: none;
 }
@@ -1385,8 +1742,46 @@ function requestTick() {
   display: block; /* Added to ensure line break works */
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - IMPROVED */
 @media (max-width: 768px) {
+  .hero {
+    height: 100vh; /* Ensure full height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 30%; /* Adjusted for mobile */
+    left: 5%;
+    right: 5%;
+    max-width: none;
+    text-align: left
+  }
+
+  .hero-subheading {
+    position: absolute;
+    bottom: 25%; /* Moved closer to content */
+    left: 5%;
+    right: 5%;
+    width: auto;
+    max-width: none;
+    text-align: left;
+  }
+
+  .hero-subheading p {
+    font-size: clamp(1rem, 4vw, 1.4rem);
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+    text-align: center;
+  }
+
+  
+
   .section-title {
     font-size: clamp(2rem, 5vw, 3rem);
   }
@@ -1400,16 +1795,62 @@ function requestTick() {
     letter-spacing: 0.1em;
   }
   
-  .galabau-title {
-    font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  .cta-buttons {
+    flex-direction: column;
+    gap: 1rem;
   }
   
-  .cta-title {
-    font-size: clamp(2.5rem, 6vw, 4rem) !important;
+  .quick-contact {
+    flex-direction: column;
+    gap: 1rem;
   }
   
-  .cta-title .gradient-text {
-    font-size: clamp(3rem, 7vw, 5rem);
+  .modal-body {
+    padding: 2rem;
+  }
+  
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+  /* Timeline adjustments for mobile */
+  .timeline {
+    padding-left: 2rem;
+  }
+
+  .timeline-step {
+    grid-template-columns: 30px 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    top: 25%;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .hero-subheading {
+    bottom: 20%;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .hero-subheading p {
+    padding: 0.75rem 1rem;
+  }
+
+  .about-page {
+    padding-top: 60px;
+  }
+  
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
   }
 }
 
@@ -1471,7 +1912,7 @@ function requestTick() {
   to { opacity: 1; }
 }
 
-/* Timeline */
+/* Timeline - IMPROVED ALIGNMENT */
 .timeline {
   position: relative;
   padding-left: 3rem;
@@ -1481,11 +1922,12 @@ function requestTick() {
 
 .timeline-line {
   position: absolute;
-  left: 68px;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 2px;
   background: rgba(255, 255, 255, 0.1);
   z-index: 0;
-  transform: translateX(-50%);
 }
 
 .timeline-progress {
@@ -1512,10 +1954,12 @@ function requestTick() {
 
 .step-marker {
   position: relative;
-  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   height: 20px;
   margin-top: 8px;
-  transform: translateX(10px); /* Center dot on line */
 }
 
 .timeline-dot {
@@ -1531,11 +1975,26 @@ function requestTick() {
 
 .marker-pulse {
   position: absolute;
-  inset: -10px;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translate(-50%, -50%);
   border: 2px solid var(--primary-gold);
   border-radius: 50%;
   animation: pulse 2s infinite;
   z-index: 2;
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
 }
 
 .timeline-step.active {
@@ -1595,6 +2054,7 @@ function requestTick() {
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-gold) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.5rem;
 }
@@ -1655,11 +2115,80 @@ function requestTick() {
 
 /* Business Units Section */
 .units-section {
-  min-height: 100vh;
   padding: 6rem 0;
-  padding-bottom: calc(90vh + 6rem);
   background: #000; /* Changed from gradient to solid black */
   position: relative; /* Added to create new stacking context */
+  z-index: 1; /* Ensure it's above the fixed hero background */
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Nudge out animation for units section */
+.units-section.nudge-out {
+  transform: translateY(-100vh);
+  opacity: 0;
+}
+
+/* Locations section animations */
+.locations-section {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  position: relative;
+  z-index: 1; /* Ensure it's above the fixed hero background */
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Nudge in animation for locations section */
+.locations-section.nudge-in {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Default state for locations section (when not nudging) */
+.locations-section:not(.nudge-in) {
+  transform: translateY(50px);
+  opacity: 0.8;
+}
+
+.map-container {
+  margin-top: 4rem;
+  position: relative;
+}
+
+/* Individual text fade-in animations */
+.fade-in-individually {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.location-text-1.fade-in-individually {
+  animation-delay: 0.1s;
+}
+
+.location-text-2.fade-in-individually {
+  animation-delay: 0.3s;
+}
+
+.location-text-3.fade-in-individually {
+  animation-delay: 0.5s;
+}
+
+.location-text-4.fade-in-individually {
+  animation-delay: 0.7s;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .units-carousel {
@@ -1921,263 +2450,6 @@ function requestTick() {
   transform: translateY(-2px);
 }
 
-/* Locations Section - Updated */
-.locations-section {
-  padding: 6rem 0;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-}
-
-.map-container {
-  margin-top:  4rem;
-  position: relative;
-}
-
-.google-map {
-  position: relative;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0; /* Changed from margin: 0 auto */
-  border-radius: 20px;
-  overflow: hidden;
-  border: 2px solid var(--border-color);
-}
-
-.google-map iframe {
-  width: 100%;
-  height: 500px;
-  filter: grayscale(50%) contrast(1.1);
-  transition: filter 0.3s ease;
-}
-
-.google-map:hover iframe {
-  filter: grayscale(0%) contrast(1);
-}
-
-.location-markers-overlay {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.custom-marker {
-  position: absolute;
-  cursor: pointer;
-  pointer-events: all;
-  transition: all 0.3s ease;
-}
-
-.custom-marker .marker-dot {
-  width: 20px;
-  height: 20px;
-  background: var(--primary-gold);
-  border-radius: 50%;
-  border: 3px solid var(--bg-dark);
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 0 20px rgba(164, 113, 72, 0.5);
-}
-
-.custom-marker .marker-pulse {
-  position: absolute;
-   inset: -15px;
-  border: 2px solid var(--primary-gold);
-  border-radius: 50%;
-  animation: markerPulse 2s infinite;
-}
-
-@keyframes markerPulse {
-  0% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(2.5);
-    opacity: 0;
-  }
-}
-
-.custom-marker .marker-label {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-dark);
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border: 1px solid var(--primary-gold);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.custom-marker:hover .marker-label,
-.custom-marker.active .marker-label {
-  opacity: 1;
-}
-
-.custom-marker.active .marker-dot {
-  background: var(--primary-light);
-  transform: scale(1.5);
-  box-shadow: 0 0 30px rgba(250, 250, 248, 0.8);
-}
-
-.location-details {
-  margin-top: 3rem;
- 
-  padding: 2.5rem;
-  background: linear-gradient(135deg, rgba(164, 113, 72, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.location-details h3 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: var(--primary-light);
-}
-
-.location-details p {
-  color: #999;
-  margin-bottom: 1rem;
-}
-
-.detail-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-}
-
-.detail-info .material-icons {
-  color: var(--primary-gold);
-  font-size: 1.5rem;
-}
-
-.detail-description {
-  color: #ccc;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.location-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
-  color: var(--bg-dark);
-  border: none;
-  border-radius: 50px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.location-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.4);
-}
-
-
-/* Values Section */
-.values-section {
-  padding: 6rem 0;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-}
-
-.values-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 4rem;
-}
-
-.value-card {
-  position: relative;
-  padding: 3rem 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  text-align: center;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  animation: valueCardIn 0.8s ease-out backwards;
-  overflow: hidden;
-}
-
-@keyframes valueCardIn {
-  from {
-    opacity: 0;
-    transform: translateY(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.value-card:hover {
-  transform: translateY(-10px);
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 30px 60px rgba(164, 113, 72, 0.3);
-}
-
-.value-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  background: rgba(164, 113, 72, 0.1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.value-icon .material-icons {
-  font-size: 2.5rem;
-  color: var(--primary-gold);
-  transition: all 0.3s ease;
-}
-
-.value-icon.hovered {
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
-  transform: rotateY(180deg);
-}
-
-.value-icon.hovered .material-icons {
-  color: var(--bg-dark);
-}
-
-.value-card h3 {
-  font-size:  1.5rem;
-  margin-bottom: 1rem;
-  color: var(--primary-light);
-}
-
-.value-card p {
-  color: #ccc;
-  line-height: 1.6;
-}
-
-.value-number {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  font-size: 3rem;
-  font-weight: 700;
-  color: rgba(164, 113, 72, 0.1);
-}
-
 /* Team Section */
 .team-section {
   padding: 6rem 0;
@@ -2397,10 +2669,21 @@ function requestTick() {
   width: 90%;
   max-height: 90vh;
   overflow-y: auto;
-  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.95) 0%, 
+    rgba(26, 26, 26, 0.9) 50%, 
+    rgba(10, 10, 10, 0.95) 100%);
   border-radius: 20px;
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--primary-gold);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(164, 113, 72, 0.3),
+    inset 0 1px 0 rgba(164, 113, 72, 0.2);
+  backdrop-filter: blur(20px);
   animation: modalIn 0.4s ease-out;
+  position: relative;
+  padding: 0;
+  color: var(--primary-light);
 }
 
 @keyframes modalIn {
@@ -2420,24 +2703,129 @@ function requestTick() {
   right: 2rem;
   width: 50px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--primary-gold);
   border-radius: 50%;
-  color: var(--primary-light);
+  color: var(--primary-gold);
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(10px);
+  z-index: 10;
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
+  background: var(--primary-gold);
+  color: var(--bg-dark);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 0 20px rgba(164, 113, 72, 0.4);
 }
 
 .modal-body {
-  padding: 4rem;
+  padding: 3rem;
+}
+
+/* Modal Carousel */
+.modal-carousel {
+  margin: 0;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.carousel-slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 5;
+}
+
+.carousel-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.carousel-dot.active {
+  background: var(--primary-gold);
+  border-color: var(--primary-gold);
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(164, 113, 72, 0.6);
+}
+
+.carousel-dot:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.modal-description {
+  margin-bottom: 3rem;
+}
+
+.modal-description h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-description h3::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: var(--primary-gold);
+  border-radius: 2px;
+}
+
+.modal-description p {
+  color: rgba(250, 250, 248, 0.8);
+  line-height: 1.8;
+  font-size: 1.1rem;
+  font-weight: 300;
 }
 
 .modal-header {
@@ -2445,29 +2833,11 @@ function requestTick() {
   margin-bottom: 3rem;
 }
 
-.modal-header .modal-icon {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto 2rem;
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
-  border-radius: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  color: var(--bg-dark);
-}
-
-.modal-header h2 {
-  font-size: 2.5rem;
-  font-weight: 300;
-  margin-bottom: 1rem;
-  color: var(--primary-light);
-}
-
 .modal-subtitle {
   font-size: 1.2rem;
-  color: #ccc;
+  color: rgba(250, 250, 248, 0.7);
+  font-weight: 300;
+  letter-spacing: 0.05em;
 }
 
 .modal-features {
@@ -2488,12 +2858,40 @@ function requestTick() {
 
 .feature-card {
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.4) 0%, 
+    rgba(26, 26, 26, 0.2) 100%);
   border-radius: 15px;
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(164, 113, 72, 0.3);
   display: flex;
   align-items: flex-start;
   gap: 1rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.feature-card:hover {
+  border-color: var(--primary-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(164, 113, 72, 0.2);
+}
+
+.feature-card:hover::before {
+  opacity: 1;
 }
 
 .feature-card .material-icons {
@@ -2503,57 +2901,133 @@ function requestTick() {
 }
 
 .feature-card p {
-  color: #ccc;
+  color: rgba(250, 250, 248, 0.8);
   line-height: 1.6;
+  font-weight: 300;
+  margin: 0;
 }
 
 .modal-cta {
   text-align: center;
-  padding: 2rem;
-  background: rgba(164, 113, 72, 0.05);
-  border-radius: 15px;
+  padding: 3rem;
+  background: linear-gradient(135deg, 
+    rgba(164, 113, 72, 0.1) 0%, 
+    rgba(0, 0, 0, 0.2) 50%, 
+    rgba(164, 113, 72, 0.05) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(164, 113, 72, 0.3);
+  margin-top: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.modal-cta p {
-  font-size: 1.2rem;
-  color: #ccc;
-  margin-bottom: 2rem;
+.modal-cta::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+}
+
+.cta-highlight {
+  margin-bottom: 2.5rem;
+}
+
+.cta-highlight h3 {
+  font-size: 1.8rem;
+  font-weight: 300;
+  margin-bottom: 1rem;
+  color: var(--primary-light);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cta-highlight p {
+  font-size: 1.1rem;
+  color: rgba(250, 250, 248, 0.7);
+  font-style: italic;
+  margin: 0;
 }
 
 .modal-buttons {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .modal-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem 2rem;
-  font-size: 0.95rem;
-  font-weight: 500;
+  gap: 0.8rem;
+  padding: 1.5rem 3rem;
+  font-size: 1rem;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border-radius: 50px;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.modal-btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .modal-btn.primary {
-  background: linear-gradient(135deg, var(--primary-gold), var(--primary-light));
+  background: linear-gradient(135deg, var(--primary-gold) 0%, #ffd700 100%);
   color: var(--bg-dark);
+  border: none;
+  box-shadow: 
+    0 8px 25px rgba(164, 113, 72, 0.4),
+    0 0 20px rgba(255, 215, 0, 0.2);
+  font-weight: 700;
+}
+
+.modal-btn.primary:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 
+    0 15px 35px rgba(164, 113, 72, 0.6),
+    0 0 30px rgba(255, 215, 0, 0.3);
+  background: linear-gradient(135deg, #ffd700 0%, var(--primary-gold) 100%);
+}
+
+.modal-btn.primary .btn-icon {
+  font-size: 1.2rem;
 }
 
 .modal-btn.secondary {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.3);
   color: var(--primary-light);
-  border: 2px solid var(--primary-light);
+  border: 2px solid rgba(164, 113, 72, 0.5);
+  backdrop-filter: blur(10px);
 }
 
-.modal-btn:hover {
+.modal-btn.secondary:hover {
+  background: rgba(164, 113, 72, 0.1);
+  border-color: var(--primary-gold);
+  color: var(--primary-gold);
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(164, 113, 72, 0.3);
+  box-shadow: 0 10px 25px rgba(164, 113, 72, 0.3);
 }
 
 /* Transitions */
@@ -2589,53 +3063,70 @@ function requestTick() {
     gap: 4rem;
   }
   
-  .stats-cards {
-    gap: 1.5rem;
-  }
-  
-  .galabau-content {
-    grid-template-columns: 1fr;
-  }
-  
   .showcase-main {
     grid-template-columns: 1fr;
-  }
-  
-  .google-map iframe {
-    height: 400px;
   }
 }
 
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 3rem;
+  .hero {
+    height: 100vh; /* Ensure full height */
+    display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    justify-content: center;
   }
   
+
+  .hero-content {
+    position: absolute;
+    top: 30%; /* Adjusted for mobile */
+    left: 5%;
+    right: 5%;
+    max-width: none;
+    
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+    text-align: center;
+  }
+
+  .hero-badge {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.75rem 2rem;
+    font-size: 0.875rem;
+  }
+
   .section-title {
-    font-size: 2rem;
+    font-size: clamp(2rem, 5vw, 3rem);
+    /* Ensure mobile titles are also visible */
+    color: var(--primary-light);
+    text-shadow: 
+      0 0 15px rgba(250, 250, 248, 0.4),
+      0 0 30px rgba(164, 113, 72, 0.3),
+      1px 1px 3px rgba(0, 0, 0, 0.9);
   }
   
-  .showrooms-grid {
-    grid-template-columns: 1fr;
+  .story-title .title-line-1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
   }
   
-  .values-grid {
-    grid-template-columns: 1fr;
+  .story-title .title-line-2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 0.1em;
   }
   
   .cta-buttons {
     flex-direction: column;
+    gap: 1rem;
   }
   
   .quick-contact {
     flex-direction: column;
     gap: 1rem;
-  }
-  
-  .carousel-nav {
-    flex-wrap: wrap;
+    align-items: center;
+    text-align: center;
   }
   
   .modal-body {
@@ -2645,23 +3136,39 @@ function requestTick() {
   .modal-buttons {
     flex-direction: column;
   }
-  
-  .google-map iframe {
-    height: 350px;
+
+  /* Timeline adjustments for mobile */
+  .timeline {
+    padding-left: 2rem;
   }
-  
-  .location-markers-overlay {
-    display: none; /* Hide custom markers on mobile for better UX */
+
+  .timeline-step {
+    grid-template-columns: 30px 1fr;
+    gap: 1rem;
   }
+
+  /* No need to adjust step-marker positioning since it now uses flexbox centering */
 }
 
 @media (max-width: 480px) {
+  .hero-content {
+    top: 25%;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .hero-subheading {
+    bottom: 20%;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .hero-subheading p {
+    padding: 0.75rem 1rem;
+  }
+
   .about-page {
     padding-top: 60px;
-  }
-  
-  .hero-section {
-    min-height: calc(100vh - 60px);
   }
   
   .container {
@@ -2669,34 +3176,36 @@ function requestTick() {
   }
   
   .hero-title {
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
-  
-  .stats-cards {
-    gap: 1rem;
-  }
-  
-  .stat-card {
-    padding: 2rem 1.5rem;
-  }
-  
-  .stat-card .stat-number {
-    font-size: 2.5rem;
-  }
-  
-  .stat-card .stat-icon {
-    width: 50px;
-    height: 50px;
-    top: 1.5rem;
-    right: 1.5rem;
-  }
-  
-  .stat-card .stat-icon .material-icons {
-    font-size: 1.5rem;
-  }
-  
-  .google-map iframe {
-    height: 300px;
-  }
+}
+</style>
+
+<!-- Loading states for ClientOnly components -->
+<style scoped>
+.slider-loading,
+.map-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  color: var(--primary-light);
+  opacity: 0.6;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(164, 113, 72, 0.3);
+  border-top: 3px solid var(--primary-gold);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
